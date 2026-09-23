@@ -8406,3 +8406,9 @@ Execution notes: what each task found that the plan didn't expect, and where the
 - **Task 9**: the React SPA shell renders on the server and hydrates cleanly (three hydration cases, no warnings); axe passes on `/` and `/?open=2026-S2` with the sibling-landmark layout. Broken percent-encoding in a link gets Astro's 400 (accepted: never a 500).
 - **Task 10**: add by class number or course code, the chooser (focus in, Cancel back to the input), drop, pending and network handling; component tests green; axe covers the chooser state.
 - **Task 11**: browse classes — in-browser search, filters, sort and paging links, annotations, bulk add, URL sync, live count; 253 tests, no todos left; axe covers the catalogue state.
+- **Task 12** (`108567a`, `410cf8e`, `2793d54`):
+  - Browser pass: a skip link, the phone-width table overflow, the career-warning article and a favicon.
+  - Docs: the README with before/after crops, PROCESS.md, and a reflection draft.
+  - Deploy: the first deploy went to Fly from the worktree, because CI waits for the repo to go public. flyctl came through mise.
+  - Live link check: every README image answered 500. Astro's `/_image` needs `sharp`, and the Dockerfile prunes it away. The images are now raw `<img>` tags served from `public/`.
+  - Live checks: the probes pass, an enrolment survives a reload and a redeploy, and the link check covers 39 links in 1.2 s.

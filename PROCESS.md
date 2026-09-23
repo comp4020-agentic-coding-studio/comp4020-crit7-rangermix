@@ -129,6 +129,14 @@ test the spec lists, so the contract existed before any code did.
 
   Each got a failing test before the fix. After them, axe with contrast on
   reports no violations.
+- **The live link check caught what local tests couldn't.**
+  - After the first deploy, every README image on `/readme/` returned 500.
+  - Astro had sent them through its image optimiser, which needs `sharp`, and
+    the Dockerfile prunes `sharp` away. Locally it resolves, so every local
+    test passed.
+  - Now they're plain files from `public/`, pinned by a test that fails on any
+    optimiser URL
+    ([`2793d54`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/commit/2793d54)).
 
 ### How I know it works
 
@@ -138,3 +146,15 @@ component tests. The contract tests cover persistence across a reload, every
 add path and its message, the 24-unit cap, drop deadlines, sandbox isolation,
 malformed links (never a 500) and a racing double submit. The real-browser pass
 repeated the core flow, keyboard-only use and the phone layout by hand.
+
+The repo stays private until the cutoff, and CI only runs once it's public, so
+M1 was deployed from the worktree with `flyctl`. Then the checks CI would run
+were repeated against the live site on 24 September 2026:
+
+- `/` answers 200.
+- `/api/events` streams `: connected`.
+- A same-origin form POST isn't refused; a cross-site one gets 403.
+- An enrolment made with a cookie jar was still there after a reload, and after
+  a redeploy.
+- The link check (`linkinator --recurse`, same-origin only) scanned 39 links in
+  1.2 seconds, so it adds seconds, not minutes, to the deploy job.
