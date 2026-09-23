@@ -37,8 +37,8 @@ function Courses({ courses, browseSession, busy, pending, onAdd, onBrowse }: Omi
             </a>
             {c.times > 1 && <span className="req-course__times"> ×{c.times}</span>}
             <span className="req-course__title"> {c.title}</span>
-          </span>
-          <span className="req-course__status">{c.text}</span>
+          </span>{" "}
+          <span className="req-course__status">{c.text}</span>{" "}
           {c.add && (
             <button type="button" className="button button--small" disabled={busy} onClick={() => onAdd(c)}>
               {pending === `req:${c.code}` ? "Adding…" : c.add.label}
@@ -62,7 +62,7 @@ export function RequirementsSidebar({ requirements: req, ...rest }: Props) {
     <aside className="requirements" aria-labelledby="requirements-heading">
       <details open={open} onToggle={(e) => setOpen(e.currentTarget.open)}>
         <summary className="requirements__summary">
-          <h2 id="requirements-heading">Your requirements</h2>
+          <h2 id="requirements-heading">Your requirements</h2>{" "}
           <span className="requirements__tally">
             Tracked: {s.done} of {s.total} units done · {s.enrolled} enrolled
           </span>

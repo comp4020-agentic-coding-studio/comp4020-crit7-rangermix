@@ -55,6 +55,13 @@ describe("F4: enrolment details unfold in place", () => {
     expect(sessionRow(doc, "2027-S1").textContent).toContain("No classes in First Semester 2027 yet. Add one below, use your requirements list, or browse classes.");
   });
 
+  it("keeps words apart in row and class summaries, so screen readers don't read '202627' or '6 unitsEnrolled'", async () => {
+    const doc = await new Visitor().page("/");
+    const s2 = sessionRow(doc, "2026-S2");
+    expect(s2.querySelector("summary")?.textContent).toMatch(/Second Semester 2026\s+27 Jul–30 Oct\s+Now\s+exams 5–21 Nov/);
+    expect(s2.querySelector('[data-class="8707"] summary')?.textContent).toMatch(/6 units\s+Enrolled$/);
+  });
+
   it("shows a sandbox's new enrolment under its session on a fresh page load (crit: persists across reload)", async () => {
     const [target] = singleClassCourses("2027-S1", 1);
     const v = new Visitor();

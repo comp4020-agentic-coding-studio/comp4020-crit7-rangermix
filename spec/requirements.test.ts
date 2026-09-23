@@ -34,6 +34,13 @@ describe("F5: requirements sidebar", () => {
     expect(aside?.querySelector(".requirements__notes > summary")?.textContent).toMatch(/^Other rules, not tracked \(\d+\)$/);
   });
 
+  it("keeps words apart in the sidebar, so a course's title and status don't run together", async () => {
+    const doc = await new Visitor().page("/");
+    const aside = doc.querySelector("aside");
+    expect(aside?.querySelector("summary")?.textContent).toMatch(/Your requirements\s+Tracked:/);
+    expect(aside?.querySelector('[data-course="COMP6442"]')?.textContent).toMatch(/COMP6442\s+\S[^·]*\S\s+Enrolled · Second Semester 2026 \(now\)/);
+  });
+
   it("shows COMP8800 Enrolled (1 of 2) and 30 units enrolled after adding it", async () => {
     const { body } = await new Visitor().postJson<WriteResponse>("/api/enrol", { session: "2027-S1", entry: "COMP8800" });
     expect(status(body.view, "COMP8800")?.text).toBe("Enrolled · First Semester 2027 (1 of 2)");

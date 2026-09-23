@@ -23,11 +23,10 @@ export function SessionRow({ session, open, onToggle, children }: Props) {
         if (isOpen !== open) onToggle(session.id, isOpen);
       }}
     >
+      {/* Real spaces between the parts, so the summary's accessible name reads as words, not "202627 Jul". */}
       <summary className="session__summary">
-        <h3 className="session__name">{session.name}</h3>
-        <span className="session__dates">{fmtRange(session.startDate, session.endDate)}</span>
-        <span className={`badge badge--${session.badge}`}>{BADGE[session.badge]}</span>
-        <span className="session__key-dates">{session.keyDates}</span>
+        <h3 className="session__name">{session.name}</h3> <span className="session__dates">{fmtRange(session.startDate, session.endDate)}</span>{" "}
+        <span className={`badge badge--${session.badge}`}>{BADGE[session.badge]}</span> <span className="session__key-dates">{session.keyDates}</span>
       </summary>
       <div className="session__body">{children}</div>
     </details>

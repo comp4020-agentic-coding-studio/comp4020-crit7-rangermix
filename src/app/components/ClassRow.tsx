@@ -31,7 +31,7 @@ export function ClassRow({ enrolment: e, busy, pending, onDrop }: Props) {
           {" "}
           · class {e.classNumber} · {e.mode} · {fmtUnits(e.units)}
           {e.topic ? ` · ${e.topic}` : ""}
-        </span>
+        </span>{" "}
         <span className="class__state">{stateText(e)}</span>
       </summary>
       <dl className="class__facts">

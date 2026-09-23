@@ -27,3 +27,6 @@ mise.local.toml
 
 # the P&C crawler's raw cache (scripts/pc/fetch.ts); only the normalised snapshot is committed
 .cache/
+
+# Playwright MCP snapshots and logs from browser passes
+.playwright-mcp/
