@@ -20,6 +20,19 @@ export interface View {
   marks: Record<string, CourseMark>;
   /** Courses in the student's tracked requirement groups ("Required" in the catalogue). */
   requiredCodes: string[];
+  demo: DemoView;
+}
+
+export interface DemoView {
+  /** The date the view is computed for. */
+  today: string;
+  /** The sandbox's date setting; null means the real date. */
+  override: string | null;
+  realToday: string;
+  /** The span of the loaded sessions: the date input's limits (spec §11.2). */
+  minDate: string;
+  maxDate: string;
+  programs: { code: string; name: string; plans: { code: string; name: string }[] }[];
 }
 
 export interface StudentView {

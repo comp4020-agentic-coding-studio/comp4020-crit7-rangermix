@@ -4,6 +4,7 @@ import type { AppProps } from "../lib/types";
 import { AddClass } from "./components/AddClass";
 import { Catalogue } from "./components/Catalogue";
 import { ClassChooser } from "./components/ClassChooser";
+import { DemoSettings } from "./components/DemoSettings";
 import { EnrolmentDetails } from "./components/EnrolmentDetails";
 import { Notices } from "./components/Notices";
 import { RequirementsSidebar } from "./components/RequirementsSidebar";
@@ -48,11 +49,12 @@ export default function EnrolmentApp(props: AppProps) {
 
   return (
     <div className="app">
+      {/* The demo bar and the requirements come before the sessions in reading order (phone layout), so keyboard users can skip them. */}
+      <a className="skip-link" href="#sessions-heading">
+        Skip to sessions
+      </a>
+      <DemoSettings demo={view.demo} busy={busy} pending={state.pending} onApply={(s) => void actions.applySettings(s)} />
       <header className="site-header">
-        {/* The requirements come before the sessions in reading order (phone layout), so keyboard users can skip them. */}
-        <a className="skip-link" href="#sessions-heading">
-          Skip to sessions
-        </a>
         <SiteNav student={view.student} busy={busy} resetPending={state.pending === "reset"} onReset={() => void actions.reset()} />
         <h1>Enrolment</h1>
         <noscript>

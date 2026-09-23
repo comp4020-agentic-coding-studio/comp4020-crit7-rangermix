@@ -21,7 +21,7 @@ export interface StudentRecord {
   programCode: string;
   rulesYear: number;
   commencedSessionId: string;
-  /** M2's date setting; always null in M1. */
+  /** M2's date setting (spec §11.3); null means the real date. */
   today: string | null;
   /** The student's major or specialisation (one in scope). */
   plans: string[];
@@ -38,7 +38,7 @@ function load(row: t.StudentRow | undefined): StudentRecord | null {
     programCode: row.programCode,
     rulesYear: row.rulesYear,
     commencedSessionId: row.commencedSessionId,
-    today: null,
+    today: row.today,
     plans: plans.map((p) => p.planCode),
   };
 }
@@ -127,4 +127,25 @@ export function resetSandbox(cookies: AstroCookies, programCode: string): Studen
     copyHistory(tx, tpl.id, mine.id);
   });
   return byId(mine.id);
+}
+
+export interface Settings {
+  today?: string | null;
+  programCode?: string;
+  planCode?: string;
+}
+
+/** Stores the demo settings on the sandbox (spec §11.3, S1). The enrolment history is never touched. */
+export function applySettings(student: StudentRecord, settings: Settings): StudentRecord {
+  db.transaction((tx) => {
+    const set: { today?: string | null; programCode?: string } = {};
+    if (settings.today !== undefined) set.today = settings.today;
+    if (settings.programCode !== undefined) set.programCode = settings.programCode;
+    if (Object.keys(set).length > 0) tx.update(t.students).set(set).where(eq(t.students.id, student.id)).run();
+    if (settings.planCode !== undefined) {
+      tx.delete(t.studentPlans).where(eq(t.studentPlans.studentId, student.id)).run();
+      tx.insert(t.studentPlans).values({ studentId: student.id, planCode: settings.planCode }).run();
+    }
+  });
+  return byId(student.id);
 }

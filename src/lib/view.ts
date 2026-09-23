@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import snapshot from "../data/pc/snapshot.json";
-import { today as todayFor } from "./clock";
+import { realToday, today as todayFor } from "./clock";
 import { db } from "./db";
 import { addDays, fmtDate, fmtDay, fmtRange } from "./format";
 import { classKey, type Ref, ref } from "./ref";
@@ -190,6 +190,11 @@ function marks(records: EnrolmentRecord[], today: string): Record<string, Course
   return out;
 }
 
+/** The dates the demo can be set to: the span of the loaded sessions (spec §11.2). */
+export function demoRange(r: Ref = ref()): { min: string; max: string } {
+  return { min: r.sessions[0].startDate, max: r.sessions.map((s) => s.endDate).sort()[r.sessions.length - 1] };
+}
+
 export function buildView(student: StudentRecord): View {
   const r = ref();
   const today = todayFor(student);
@@ -216,5 +221,17 @@ export function buildView(student: StudentRecord): View {
     requirements: requirements.view,
     marks: marks(records, today),
     requiredCodes: requirements.required,
+    demo: {
+      today,
+      override: student.today,
+      realToday: realToday(),
+      minDate: demoRange(r).min,
+      maxDate: demoRange(r).max,
+      programs: [...r.programPlans].map(([code, plans]) => ({
+        code,
+        name: r.plans.get(code)!.name,
+        plans: plans.map((p) => ({ code: p, name: r.plans.get(p)!.name })),
+      })),
+    },
   };
 }

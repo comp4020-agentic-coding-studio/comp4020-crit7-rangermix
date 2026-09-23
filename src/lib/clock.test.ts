@@ -25,4 +25,9 @@ describe("today", () => {
     vi.stubEnv("APP_TODAY", "tomorrow");
     expect(realToday()).toBe(canberraDate(new Date()));
   });
+  it("puts a student's demo date first (spec §11.4)", () => {
+    vi.stubEnv("APP_TODAY", "2026-09-24");
+    expect(today({ today: "2027-03-02" })).toBe("2027-03-02");
+    expect(today({ today: null })).toBe("2026-09-24");
+  });
 });

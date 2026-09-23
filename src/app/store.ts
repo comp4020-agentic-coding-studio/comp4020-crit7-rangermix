@@ -184,6 +184,16 @@ export function useEnrolment(props: AppProps) {
         }
       },
 
+      async applySettings(settings: { today?: string | null; programCode?: string; planCode?: string }): Promise<void> {
+        const r = await write("settings", () => api.saveSettings(settings));
+        if (r?.ok) {
+          closeChooser();
+          written(r.data);
+        } else if (r) {
+          failed(r.message);
+        }
+      },
+
       /** Cancel returns focus to the session's input (spec §6.6). */
       cancelChooser(): void {
         const sessionId = latest.current.chooser?.sessionId;

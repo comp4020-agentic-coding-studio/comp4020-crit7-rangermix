@@ -146,6 +146,8 @@ export const students = sqliteTable("students", {
     .notNull()
     .references(() => sessions.id),
   createdAt: text("created_at").notNull(),
+  /** M2's date setting (spec §11.3); null means the real date. */
+  today: text("today"),
 });
 
 export const studentPlans = sqliteTable(

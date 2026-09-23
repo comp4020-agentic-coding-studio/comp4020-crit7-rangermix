@@ -19,7 +19,7 @@ export function realToday(): string {
   return fixed && ISO_DATE.test(fixed) ? fixed : canberraDate();
 }
 
-/** The date a student's page is computed for. */
-export function today(_student?: { today?: string | null }): string {
-  return realToday();
+/** The date a student's page is computed for: M2's date setting first, else the real date (spec §11.4). */
+export function today(student?: { today?: string | null }): string {
+  return student?.today ?? realToday();
 }

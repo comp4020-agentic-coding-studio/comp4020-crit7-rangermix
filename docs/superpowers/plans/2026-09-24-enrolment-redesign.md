@@ -8412,3 +8412,8 @@ Execution notes: what each task found that the plan didn't expect, and where the
   - Deploy: the first deploy went to Fly from the worktree, because CI waits for the repo to go public. flyctl came through mise.
   - Live link check: every README image answered 500. Astro's `/_image` needs `sharp`, and the Dockerfile prunes it away. The images are now raw `<img>` tags served from `public/`.
   - Live checks: the probes pass, an enrolment survives a reload and a redeploy, and the link check covers 39 links in 1.2 s.
+- **Task 13**: the date setting.
+  - `students.today` (migration 0003); `today(student)` puts it first.
+  - `POST /api/demo/settings` and the pinned bar.
+  - The skip link moved ahead of the bar, so it's still the first Tab stop.
+  - 266 tests.

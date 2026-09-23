@@ -37,3 +37,4 @@ export const enrolEntry = (session: string, entry: string) => call<WriteResponse
 export const enrolClasses = (session: string, classNumbers: number[]) => call<WriteResponse>("/api/enrol", { session, classNumbers });
 export const dropClass = (session: string, classNumber: number) => call<WriteResponse>("/api/drop", { session, classNumber });
 export const resetDemo = (programCode?: string) => call<WriteResponse>("/api/demo/reset", programCode ? { programCode } : {});
+export const saveSettings = (settings: { today?: string | null; programCode?: string; planCode?: string }) => call<WriteResponse>("/api/demo/settings", settings);

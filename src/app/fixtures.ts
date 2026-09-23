@@ -116,6 +116,14 @@ export function makeView(patch: Partial<View> = {}): View {
     requirements: REQUIREMENTS,
     marks: { COMP6442: { completed: null, enrolledIn: ["2026-S2"] } },
     requiredCodes: ["COMP8800", "COMP6442"],
+    demo: {
+      today: "2026-09-24",
+      override: null,
+      realToday: "2026-09-24",
+      minDate: "2026-01-01",
+      maxDate: "2027-12-31",
+      programs: [{ code: "7722XVCOMP", name: "Master of Computing (Advanced)", plans: [{ code: "ARTIF-SPEC", name: "Artificial Intelligence" }] }],
+    },
     ...patch,
   };
 }
