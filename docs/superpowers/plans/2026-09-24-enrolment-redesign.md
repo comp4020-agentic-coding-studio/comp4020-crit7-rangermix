@@ -8395,3 +8395,9 @@ Deploy as in Task 12 Step 6. Re-run the four CI probes, then one M2 scenario aga
 
 Execution notes: what each task found that the plan didn't expect, and where the work stands. Append one short entry per task as it lands, with its commit.
 
+- **Task 1** (`3d20cf6`): React 19.3 + `@astrojs/react` 7.0 installed as runtime deps; Vite deduped to 8.3.0. `pnpm check` green.
+- **Task 2** (`4ead7f7`): parsers green on the first run; the VCOMP groups came out exactly as predicted.
+- **Task 3** (`049ac3d`): crawl run on 2026-09-24 — 194 requests, no retries, 167 courses; COMP4801 (linked from AACOM/AACRD) has no page in 2026 or 2027.
+- **Task 4** (`512f506`): snapshot 166 courses / 341 classes / 20 plans / 114 groups. Real data forced three parser fixes (TBA-dated rows left out and recorded; "On Campus"/"Online" group rows aren't topics; R1 notes for "Note:", exclusion lists and unreachable unit groups). The 2027 drop-without-failure dates are now published and in `calendar.json`. ANUHub cross-check: 27 of 28 agree (COMP6996 isn't a P&C course). No 2027 course has classes of different topics, so the topic test in Task 8 will be skipped.
+- **Task 5** (`8efc307`): schema + two migrations, boot seeding, template u7000001 (fourth S1 course by rule: COMP6240, class 3730).
+- **Task 6**: types and pure rules green (41 tests).
