@@ -43,6 +43,17 @@ describe("F3: sessions show dates and Now/Next", () => {
   });
 });
 
+describe("keyboard", () => {
+  it("starts with a link that skips past the requirements to the sessions", async () => {
+    const doc = await new Visitor().page("/");
+    const first = doc.querySelector("a[href], button, input, select, summary");
+    expect(first?.textContent).toBe("Skip to sessions");
+    const target = doc.getElementById((first?.getAttribute("href") ?? "").slice(1));
+    expect(target?.textContent).toBe("Sessions");
+    expect(target?.getAttribute("tabindex")).toBe("-1");
+  });
+});
+
 describe("F4: enrolment details unfold in place", () => {
   it("renders each session's details as a <details> element on /, not a link to another page", async () => {
     const doc = await new Visitor().page("/");

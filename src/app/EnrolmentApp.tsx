@@ -49,6 +49,10 @@ export default function EnrolmentApp(props: AppProps) {
   return (
     <div className="app">
       <header className="site-header">
+        {/* The requirements come before the sessions in reading order (phone layout), so keyboard users can skip them. */}
+        <a className="skip-link" href="#sessions-heading">
+          Skip to sessions
+        </a>
         <SiteNav student={view.student} busy={busy} resetPending={state.pending === "reset"} onReset={() => void actions.reset()} />
         <h1>Enrolment</h1>
         <noscript>

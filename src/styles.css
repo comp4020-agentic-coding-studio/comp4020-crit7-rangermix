@@ -38,7 +38,13 @@ h4 { font-size: 0.95rem; }
 .demo-bar { grid-area: demo; }
 .site-header { grid-area: header; }
 .requirements { grid-area: aside; }
-.primary { grid-area: main; min-width: 0; display: grid; gap: 1.5rem; align-content: start; }
+/* minmax(0, 1fr) and min-width: 0 let a wide table scroll inside its own region instead of widening the page on phones. */
+.primary { grid-area: main; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; align-content: start; }
+.primary > * { min-width: 0; }
+.skip-link { position: absolute; left: -9999px; top: 0.5rem; z-index: 20; background: var(--paper); padding: 0.4rem 0.75rem; border: 2px solid var(--accent); border-radius: var(--radius); font-weight: 600; }
+.skip-link:focus { left: 1rem; }
+#sessions-heading:focus { outline: none; }
+#sessions-heading:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .site-footer { grid-area: footer; color: var(--muted); font-size: 0.875rem; border-top: 1px solid var(--line); padding-top: 0.75rem; }
 @media (min-width: 960px) {
   .app { grid-template-columns: minmax(0, 1fr) 22rem; grid-template-areas: "demo demo" "header header" "main aside" "footer footer"; }

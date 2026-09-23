@@ -29,7 +29,9 @@ export function SessionList({ sessions, nextSemesterId, open, onToggle, renderDe
   const earlier = sessions.filter((s) => s.earlier);
   return (
     <section className="sessions" aria-labelledby="sessions-heading">
-      <h2 id="sessions-heading">Sessions</h2>
+      <h2 id="sessions-heading" tabIndex={-1}>
+        Sessions
+      </h2>
       {nextSemesterId === null && <p className="sessions__note">No next semester in the loaded data (2026–2027)</p>}
       {earlier.length > 0 && (
         <details className="earlier">

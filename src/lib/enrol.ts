@@ -53,6 +53,7 @@ export function resolveEntry(raw: string, sessionId: string, today: string): Ent
 }
 
 const CAREER: Record<Career, string> = { UGRD: "undergraduate", PGRD: "postgraduate", RSCH: "research" };
+const A_CAREER: Record<Career, string> = { UGRD: "an undergraduate", PGRD: "a postgraduate", RSCH: "a research" };
 const refused = (courseCode: string | null, classNumber: number, message: string): Outcome => ({ ok: false, courseCode, classNumber, message, warning: null });
 
 /** Enrols each class in turn, in one transaction (spec §9). Repeated class numbers are processed once. */
@@ -94,7 +95,7 @@ export function enrolClasses(student: { id: number; programCareer: Career }, ses
       const warning =
         course.career === student.programCareer
           ? null
-          : `${course.code} is a ${CAREER[course.career]} course and your program is ${CAREER[student.programCareer]}, so it may not count towards your degree.`;
+          : `${course.code} is ${A_CAREER[course.career]} course and your program is ${CAREER[student.programCareer]}, so it may not count towards your degree.`;
       return { ok: true, courseCode: course.code, classNumber: n, message: `Enrolled: ${course.code} ${course.title} (class ${n}, ${fmtUnits(course.units)})`, warning };
     }),
   );

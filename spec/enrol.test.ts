@@ -128,7 +128,7 @@ describe("rules", () => {
     expect(ug, "an undergraduate course with one First Semester 2027 class").toBeDefined();
     const { body } = await new Visitor().postJson<WriteResponse>("/api/enrol", { session: S1, classNumbers: [ug?.classNumber] });
     expect(body.outcomes[0]).toMatchObject({ ok: true });
-    expect(body.outcomes[0].warning).toContain("undergraduate");
+    expect(body.outcomes[0].warning).toContain("is an undergraduate course and your program is postgraduate");
   });
 });
 
