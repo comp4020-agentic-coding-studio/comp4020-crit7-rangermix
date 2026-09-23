@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { fmtDate } from "../lib/format";
 import type { AppProps } from "../lib/types";
 import { AddClass } from "./components/AddClass";
+import { Catalogue } from "./components/Catalogue";
 import { ClassChooser } from "./components/ClassChooser";
 import { EnrolmentDetails } from "./components/EnrolmentDetails";
 import { Notices } from "./components/Notices";
@@ -38,6 +39,12 @@ export default function EnrolmentApp(props: AppProps) {
     document.addEventListener("visibilitychange", onShow);
     return () => document.removeEventListener("visibilitychange", onShow);
   }, [actions]);
+
+  // A session's classes are fetched once per visit, when the catalogue shows that session (spec §6.4).
+  useEffect(() => {
+    const id = url.browse;
+    if (id && !state.catalogues[id] && state.loadingCatalogue !== id && state.catalogueFailed !== id) void actions.loadCatalogue(id);
+  }, [url.browse, state.catalogues, state.loadingCatalogue, state.catalogueFailed, actions]);
 
   return (
     <div className="app">
@@ -82,6 +89,23 @@ export default function EnrolmentApp(props: AppProps) {
               )}
             </EnrolmentDetails>
           )}
+        />
+        <Catalogue
+          view={view}
+          browse={url.browse}
+          defaultSession={browseSession}
+          filters={url.filters}
+          data={url.browse ? (state.catalogues[url.browse] ?? null) : null}
+          loading={state.loadingCatalogue !== null}
+          failed={url.browse !== null && state.catalogueFailed === url.browse}
+          busy={busy}
+          pending={state.pending}
+          hrefFor={(filters) => `/${toQuery({ ...url, browse: url.browse ?? browseSession, filters }, view.nextSemesterId)}`}
+          onOpen={(isOpen) => (isOpen ? actions.openCatalogue(url.browse ?? browseSession) : actions.setUrl({ browse: null }))}
+          onSession={actions.openCatalogue}
+          onFilters={(filters) => actions.setUrl({ filters })}
+          onRetry={actions.retryCatalogue}
+          onAdd={(sessionId, classNumbers) => actions.enrolClasses(sessionId, classNumbers, "bulk")}
         />
       </main>
       <footer className="site-footer">

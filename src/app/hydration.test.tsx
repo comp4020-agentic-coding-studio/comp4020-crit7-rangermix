@@ -6,6 +6,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import EnrolmentApp from "./EnrolmentApp";
 import { appProps, CATALOGUE, POGO_CHOOSER, urlState } from "./fixtures";
 
+// This test drives act() itself, without Testing Library (which would set this flag), so it declares the act environment.
+(globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+
 afterEach(() => {
   vi.restoreAllMocks();
   document.body.innerHTML = "";

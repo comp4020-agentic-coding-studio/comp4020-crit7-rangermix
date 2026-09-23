@@ -11,8 +11,19 @@ describe("malformed links to /", () => {
     ["/?choose=garbage", "class chooser"],
     ["/?choose=COMP8020&term=2027-S1", "class chooser"],
     ["/?choose=POGO8062&term=nope", "isn't in the prototype's data"],
+    ["/?browse=nope", "isn't in the prototype's data"],
+    ["/?browse=2027-S1&page=abc", "isn't a page number"],
+    ["/?browse=2027-S1&page=-1", "isn't a page number"],
+    ["/?browse=2027-S1&level=7", "level"],
+    ["/?browse=2027-S1&sort=bogus", "sorted by code"],
+    [`/?browse=2027-S1&q=${"x".repeat(5000)}`, "cut to 100 characters"],
   ])("renders %s with a notice", async (path, words) => {
     expect(notices(await new Visitor().page(path))).toContain(words);
+  });
+
+  it("clamps a page past the end without an error", async () => {
+    const doc = await new Visitor().page("/?browse=2027-S1&page=999");
+    expect(doc.querySelectorAll(".results tbody tr").length).toBeGreaterThan(0);
   });
 
   it("answers a link with broken percent-encoding with Astro's 400, never a 500", async () => {
