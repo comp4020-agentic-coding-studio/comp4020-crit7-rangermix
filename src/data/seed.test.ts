@@ -12,9 +12,10 @@ function fresh() {
   return { client, db };
 }
 const count = (client: Database.Database, table: string): number => (client.prepare(`select count(*) as n from ${table}`).get() as { n: number }).n;
+const TEMPLATE_ENROLMENTS = BUNDLED.templates.reduce((n, t) => n + t.enrolments.length, 0);
 
 describe("seed (spec §8.5)", () => {
-  it("loads the snapshot, the calendar and the template student", () => {
+  it("loads the snapshot, the calendar and the template students", () => {
     const { client, db } = fresh();
     seed(db);
     expect(count(client, "sessions")).toBe(12);
@@ -22,8 +23,8 @@ describe("seed (spec §8.5)", () => {
     expect(count(client, "classes")).toBe(BUNDLED.classes.length);
     expect(count(client, "plans")).toBe(20);
     expect(count(client, "program_plans")).toBe(25);
-    expect(count(client, "students")).toBe(1);
-    expect(count(client, "enrolments")).toBe(8);
+    expect(count(client, "students")).toBe(5);
+    expect(count(client, "enrolments")).toBe(TEMPLATE_ENROLMENTS);
     expect(client.prepare("select max_takes from courses where code = 'COMP8800'").get()).toEqual({ max_takes: 2 });
     expect(client.prepare("pragma foreign_key_check").all()).toEqual([]);
   });
@@ -33,8 +34,8 @@ describe("seed (spec §8.5)", () => {
     seed(db);
     seed(db);
     expect(count(client, "classes")).toBe(BUNDLED.classes.length);
-    expect(count(client, "students")).toBe(1);
-    expect(count(client, "enrolments")).toBe(8);
+    expect(count(client, "students")).toBe(5);
+    expect(count(client, "enrolments")).toBe(TEMPLATE_ENROLMENTS);
     expect(count(client, "requirement_groups")).toBe(BUNDLED.requirements.reduce((n, r) => n + r.groups.length, 0));
   });
 
@@ -49,7 +50,7 @@ describe("seed (spec §8.5)", () => {
     const sid = (client.prepare("select id from students where token is not null").get() as { id: number }).id;
     client.prepare("insert into enrolments (student_id, session_id, class_number, status, enrolled_on) values (?, ?, ?, 'enrolled', '2026-09-24')").run(sid, cls?.sessionId, cls?.classNumber);
     seed(db);
-    expect(count(client, "enrolments")).toBe(9);
+    expect(count(client, "enrolments")).toBe(TEMPLATE_ENROLMENTS + 1);
   });
 
   it("refuses a class whose session has no calendar row", () => {

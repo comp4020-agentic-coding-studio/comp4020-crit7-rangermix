@@ -1,0 +1,18 @@
+{
+  "uid": "u7000002",
+  "name": "Demo Student",
+  "programCode": "7706XMCOMP",
+  "plans": ["DTSC-SPEC"],
+  "rulesYear": 2026,
+  "commencedSessionId": "2026-S1",
+  "enrolments": [
+    { "sessionId": "2026-S1", "classNumber": 3724, "courseCode": "COMP6710", "grade": "D", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S1", "classNumber": 2491, "courseCode": "MATH6005", "grade": "CR", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S1", "classNumber": 3730, "courseCode": "COMP6240", "grade": "HD", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S1", "classNumber": 4131, "courseCode": "COMP8280", "grade": "D", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S2", "classNumber": 8707, "courseCode": "COMP6442", "grade": null, "enrolledOn": "2026-07-13" },
+    { "sessionId": "2026-S2", "classNumber": 8708, "courseCode": "COMP6120", "grade": null, "enrolledOn": "2026-07-13" },
+    { "sessionId": "2026-S2", "classNumber": 8714, "courseCode": "COMP8430", "grade": null, "enrolledOn": "2026-07-13" },
+    { "sessionId": "2026-S2", "classNumber": 8719, "courseCode": "COMP6670", "grade": null, "enrolledOn": "2026-07-13" }
+  ]
+}

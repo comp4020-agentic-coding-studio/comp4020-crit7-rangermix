@@ -1,0 +1,18 @@
+{
+  "uid": "u7000003",
+  "name": "Demo Student",
+  "programCode": "BCOMP",
+  "plans": ["SOFT-MAJ"],
+  "rulesYear": 2026,
+  "commencedSessionId": "2026-S1",
+  "enrolments": [
+    { "sessionId": "2026-S1", "classNumber": 3695, "courseCode": "COMP1100", "grade": "CR", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S1", "classNumber": 3412, "courseCode": "MATH1005", "grade": "D", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S1", "classNumber": 2941, "courseCode": "STAT1008", "grade": "HD", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S1", "classNumber": 3409, "courseCode": "MATH1013", "grade": "P", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S2", "classNumber": 8671, "courseCode": "COMP1110", "grade": null, "enrolledOn": "2026-07-13" },
+    { "sessionId": "2026-S2", "classNumber": 8673, "courseCode": "COMP1600", "grade": null, "enrolledOn": "2026-07-13" },
+    { "sessionId": "2026-S2", "classNumber": 8679, "courseCode": "COMP2400", "grade": null, "enrolledOn": "2026-07-13" },
+    { "sessionId": "2026-S2", "classNumber": 8680, "courseCode": "COMP2610", "grade": null, "enrolledOn": "2026-07-13" }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "uid": "u7000005",
+  "name": "Demo Student",
+  "programCode": "AACRD",
+  "plans": ["THCS-SPEC"],
+  "rulesYear": 2026,
+  "commencedSessionId": "2026-S1",
+  "enrolments": [
+    { "sessionId": "2026-S1", "classNumber": 3696, "courseCode": "COMP1130", "grade": "HD", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S1", "classNumber": 3452, "courseCode": "MATH1115", "grade": "D", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S1", "classNumber": 3412, "courseCode": "MATH1005", "grade": "HD", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S1", "classNumber": 3358, "courseCode": "STAT1003", "grade": "CR", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S2", "classNumber": 8672, "courseCode": "COMP1140", "grade": null, "enrolledOn": "2026-07-13" },
+    { "sessionId": "2026-S2", "classNumber": 8408, "courseCode": "MATH1116", "grade": null, "enrolledOn": "2026-07-13" },
+    { "sessionId": "2026-S2", "classNumber": 8673, "courseCode": "COMP1600", "grade": null, "enrolledOn": "2026-07-13" },
+    { "sessionId": "2026-S2", "classNumber": 8680, "courseCode": "COMP2610", "grade": null, "enrolledOn": "2026-07-13" }
+  ]
+}

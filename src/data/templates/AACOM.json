@@ -1,0 +1,18 @@
+{
+  "uid": "u7000004",
+  "name": "Demo Student",
+  "programCode": "AACOM",
+  "plans": ["ARIN-SPEC"],
+  "rulesYear": 2026,
+  "commencedSessionId": "2026-S1",
+  "enrolments": [
+    { "sessionId": "2026-S1", "classNumber": 3696, "courseCode": "COMP1130", "grade": "HD", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S1", "classNumber": 3452, "courseCode": "MATH1115", "grade": "D", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S1", "classNumber": 3358, "courseCode": "STAT1003", "grade": "CR", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S1", "classNumber": 4014, "courseCode": "ENGN1211", "grade": "D", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S2", "classNumber": 8672, "courseCode": "COMP1140", "grade": null, "enrolledOn": "2026-07-13" },
+    { "sessionId": "2026-S2", "classNumber": 8673, "courseCode": "COMP1600", "grade": null, "enrolledOn": "2026-07-13" },
+    { "sessionId": "2026-S2", "classNumber": 8679, "courseCode": "COMP2400", "grade": null, "enrolledOn": "2026-07-13" },
+    { "sessionId": "2026-S2", "classNumber": 8416, "courseCode": "MATH2301", "grade": null, "enrolledOn": "2026-07-13" }
+  ]
+}

@@ -1,4 +1,8 @@
+import mcomp from "./7706XMCOMP.json";
 import vcomp from "./7722XVCOMP.json";
+import aacom from "./AACOM.json";
+import aacrd from "./AACRD.json";
+import bcomp from "./BCOMP.json";
 
 // Template students: the only invented data (spec §8.5). One per program,
 // keyed by programCode; a sandbox is a clone of one (spec §5.2). Provenance
@@ -22,5 +26,5 @@ export interface Template {
   enrolments: TemplateEnrolment[];
 }
 
-export const TEMPLATES: Template[] = [vcomp];
+export const TEMPLATES: Template[] = [vcomp, mcomp, bcomp, aacom, aacrd];
 export const DEFAULT_PROGRAM = "7722XVCOMP";

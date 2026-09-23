@@ -8417,3 +8417,7 @@ Execution notes: what each task found that the plan didn't expect, and where the
   - `POST /api/demo/settings` and the pinned bar.
   - The skip link moved ahead of the bar, so it's still the first Tab stop.
   - 266 tests.
+- **Task 14**: program and plan settings, with the pair check (422), and Reset per program.
+  - Four more template students were picked by the rules. Each history also follows P&C's printed requisites.
+  - The seed test's counts now come from the templates.
+  - 278 tests.

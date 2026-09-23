@@ -53,9 +53,9 @@ export default function EnrolmentApp(props: AppProps) {
       <a className="skip-link" href="#sessions-heading">
         Skip to sessions
       </a>
-      <DemoSettings demo={view.demo} busy={busy} pending={state.pending} onApply={(s) => void actions.applySettings(s)} />
+      <DemoSettings demo={view.demo} student={view.student} busy={busy} pending={state.pending} onApply={(s) => void actions.applySettings(s)} onReset={(code) => void actions.reset(code)} />
       <header className="site-header">
-        <SiteNav student={view.student} busy={busy} resetPending={state.pending === "reset"} onReset={() => void actions.reset()} />
+        <SiteNav student={view.student} busy={busy} resetPending={state.pending === "reset"} onReset={null} />
         <h1>Enrolment</h1>
         <noscript>
           <p className="noscript">Changes need JavaScript. Without it you can still read your enrolment.</p>
