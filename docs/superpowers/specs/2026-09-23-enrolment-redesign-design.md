@@ -1,7 +1,8 @@
 # Enrolment redesign — design spec
 
-Status: **draft for review, revision 3** (no implementation yet) ·
-2026-09-24 · crit 7 ("Build the ANU system you wish existed")
+Status: **approved, revision 3** · 2026-09-24 · crit 7 ("Build the ANU
+system you wish existed"). The implementation plan is
+[`docs/superpowers/plans/2026-09-24-enrolment-redesign.md`](../plans/2026-09-24-enrolment-redesign.md).
 
 Research behind this spec:
 
@@ -99,7 +100,7 @@ correction.
 | D10 | Two milestones. **M1** is F1–F5 (this spec's core). **M2** is the demo settings bar (§11), built only after M1 ships. M1 keeps the seams M2 needs (§11.4), so M2 adds code without reworking M1. | User requirement. |
 | D11 | **Data scope**: all COMP courses offered in 2026–2027; five programs with up to five plans each (§8.1); every course their requirements name; three multi-class examples. | User requirement. 2025 is left out because the demo student commenced in 2026. The programs, plans and years were confirmed on 2026-09-24 (§14). |
 | D12 | Sessions are keyed by a readable slug (`2027-S1`), not ANUHub's PeopleSoft term codes. | P&C doesn't publish term codes, and the 2027 codes could only be guessed. A slug also makes URLs readable (`/?open=2027-S1`). |
-| D13 | The page is a **single-page application**. `/` server-renders the React app with the initial state; React then hydrates it and handles every later interaction through a JSON API, without page loads. Session, filter and chooser state stays in the URL. | User decision (2026-09-24), replacing revision 2's server-rendered page with region swaps. The server-rendered first paint is what the invariant tests and link checker see, since they run with scripts disabled (§4.1). |
+| D13 | The page is a **single-page application** in React 19. `/` server-renders the React app with the initial state; React then hydrates it and handles every later interaction through a JSON API, without page loads. Session, filter and chooser state stays in the URL. | User decision (2026-09-24), replacing revision 2's server-rendered page with region swaps. The server-rendered first paint is what the invariant tests and link checker see, since they run with scripts disabled (§4.1). |
 | D14 | **The agent builds and runs the crawler** during P1, and anyone can re-run it. The app and CI never run it. | User decision (2026-09-24). |
 
 ## 2. Grounding — the current system
@@ -1342,11 +1343,14 @@ Revision 2's questions were answered on 2026-09-24:
    (§11.3).
 4. **Years**: 2026–2027 only. Yes.
 
-Still open (the spec assumes the default):
+Revision 3's questions were answered on 2026-09-24, when the user
+approved this spec:
 
-1. **Framework**: React 19 (default, §4.1 a2), or Svelte 5?
-2. **M2 templates**: the plans picked for the four new template students
-   (§11.3). Keep them?
+1. **Framework**: React 19 (§4.1 a2). User decision.
+2. **M2 templates**: the §11.3 picks stay. The user left the choice to the
+   agent, and the agent kept them.
+
+No questions are open.
 
 ## Sources
 
