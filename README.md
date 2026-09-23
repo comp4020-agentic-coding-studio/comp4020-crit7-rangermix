@@ -33,24 +33,28 @@ answers:
 | Search needs a career and a subject area, and adds one class per click. | Every filter is optional, search covers codes, titles and descriptions, and several classes can be added at once. |
 | Program requirements live on another site, as prose. | A sidebar tracks the program's and major's course lists, with each course's status and a one-click Add. |
 
-![ANUHub's session list: sessions and a program, with no dates](public/readme/before-sessions.png)
+<img src="public/readme/before-sessions.png" alt="ANUHub's session list: sessions and a program, with no dates">
 
-![ANUHub's class list: titles cut short, no class dates, no unit total](public/readme/before-class-list.png)
+<img src="public/readme/before-class-list.png" alt="ANUHub's class list: titles cut short, no class dates, no unit total">
 
-![ANUHub's Add Class step: a class number box, then Search, then Continue](public/readme/before-add-class.png)
+<img src="public/readme/before-add-class.png" alt="ANUHub's Add Class step: a class number box, then Search, then Continue">
 
-![ANUHub's class search results: one Add Class button per row](public/readme/before-class-search.png)
+<img src="public/readme/before-class-search.png" alt="ANUHub's class search results: one Add Class button per row">
 
 *Before: crops of the live ANUHub pages, 24 September 2026, reproduced with
 the student's permission.*
 
-![The redesign: sessions with dates and Now/Next badges beside the requirements sidebar](public/readme/after-sessions.png)
+<img src="public/readme/after-sessions.png" alt="The redesign: sessions with dates and Now/Next badges beside the requirements sidebar">
 
-![Typing POGO8062 opens a chooser in place, with each class's mode and dates](public/readme/after-chooser.png)
+<img src="public/readme/after-chooser.png" alt="Typing POGO8062 opens a chooser in place, with each class's mode and dates">
 
-![Browse classes: a filtered table, row annotations and a bulk-add bar](public/readme/after-browse.png)
+<img src="public/readme/after-browse.png" alt="Browse classes: a filtered table, row annotations and a bulk-add bar">
 
-![The phone layout: requirements collapsed above the sessions](public/readme/after-phone.png)
+<img src="public/readme/after-phone.png" alt="The phone layout: requirements collapsed above the sessions">
+
+<!-- Images are raw <img> tags, not ![](…): Astro would send ![](…) images
+through its /_image optimiser, which the deployed image can't run. -->
+
 
 **What is enforced, and where.** The rules above are pinned by contract
 tests that run against the built server (`spec/`): the badges and dates, the
