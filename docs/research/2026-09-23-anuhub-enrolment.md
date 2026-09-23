@@ -643,7 +643,13 @@ These were seen read-only in a signed-in postgraduate student session, at
 https://selfservice.sas.anu.edu.au/psp/sscsprod/EMPLOYEE/SA/c/ANU_ISIS.ANU_ENROLMENT.GBL.
 Only structure, labels and public class data are recorded here. There is no
 name, student ID, program, grade or enrolment. Nothing was added, dropped or
-submitted. The screenshots taken show personal data and are not committed.
+submitted. The screenshots taken are not committed yet. At the user's
+direction (2026-09-24), unblurred crops of them go into the README's
+"before" images at build phase P6.
+
+Programs & Courses, not ANUHub, is the source of truth for course data in
+the prototype. Its public data is in
+[`2026-09-24-programs-and-courses.md`](2026-09-24-programs-and-courses.md).
 
 The component name `ANU_ISIS.ANU_ENROLMENT.GBL` confirms the §1h inference:
 this is an ANU-built page, not delivered Fluid Class Search and Enroll.
