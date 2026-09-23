@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { ApiErrorBody, View, WriteResponse } from "../src/lib/types";
-import { sandboxCount, singleClassCourses, Visitor } from "./helpers";
+import { sandboxCount, singleClassCourses, snapshot, Visitor } from "./helpers";
 
 const S1 = "2027-S1";
 const live = (view: View): number[] =>
@@ -72,5 +72,25 @@ describe("sandbox", () => {
 });
 
 describe("D6: every course fact traces to the snapshot", () => {
-  it.todo("every course code and class number on / exists in the committed snapshot");
+  it("every course code and class number on / exists in the committed snapshot", async () => {
+    const doc = await new Visitor().page("/?open=2026-S1,2026-S2,2027-S1");
+    const known = new Set(snapshot.courses.map((c) => c.code));
+    // Text node by node: textContent glues neighbouring elements ("2026" + "COMP6240"), which hides codes from \b.
+    const found = new Set<string>();
+    const walker = doc.createTreeWalker(doc.body, 4 /* NodeFilter.SHOW_TEXT */);
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) for (const m of n.textContent?.match(/\b[A-Z]{4}\d{4}\b/g) ?? []) found.add(m);
+    const codes = [...found];
+    expect(codes).toEqual(expect.arrayContaining(["COMP6240", "COMP8020", "COMP8800", "COMP6250"]));
+    expect(codes.filter((c) => !known.has(c))).toEqual([]);
+    for (const row of doc.querySelectorAll("details[data-session]")) {
+      const sessionId = row.getAttribute("data-session");
+      for (const el of row.querySelectorAll("[data-class]")) {
+        const n = Number(el.getAttribute("data-class"));
+        expect(
+          snapshot.classes.some((c) => c.sessionId === sessionId && c.classNumber === n),
+          `${sessionId} class ${n}`,
+        ).toBe(true);
+      }
+    }
+  });
 });

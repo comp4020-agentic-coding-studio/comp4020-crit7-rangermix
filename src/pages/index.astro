@@ -1,12 +1,36 @@
 ---
-import { asc } from "drizzle-orm";
-import { db } from "../lib/db";
-import { sessions } from "../lib/schema";
+import EnrolmentApp from "../app/EnrolmentApp";
+import { openSessions, parseQuery } from "../app/url";
+import { catalogueFor, chooserFor, facetsFor } from "../lib/catalogue";
+import { studentFor } from "../lib/student";
+import type { AppProps } from "../lib/types";
+import { buildView } from "../lib/view";
 import "../styles.css";
 
-// Interim page while the enrolment SPA is built (plan Task 9 replaces it):
-// it proves the seeded data is wired end to end.
-const rows = db.select().from(sessions).orderBy(asc(sessions.startDate)).all();
+// The whole app, server-rendered for this browser's student and hydrated
+// (spec D13). It stays server-rendered, and renders the same page on POST,
+// which the deploy CI's origin probe needs (spec §4.2).
+const view = buildView(studentFor(Astro.cookies));
+const names = new Map(view.sessions.map((s) => [s.id, s.name]));
+const { state: url, problems } = parseQuery(Astro.url.searchParams, {
+  sessionIds: view.sessions.map((s) => s.id),
+  nextId: view.nextSemesterId,
+  sessionName: (id) => names.get(id) ?? id,
+  facets: (id) => {
+    const f = facetsFor(id);
+    return f && { subjects: f.subjects.map((s) => s.code), careers: f.careers, levels: f.levels, modes: f.modes };
+  },
+  canChoose: (code, term) => chooserFor(code, term, view.today) !== null,
+});
+const chooser = url.choose && url.term ? chooserFor(url.choose, url.term, view.today) : null;
+if (chooser) url.open = [...new Set([...openSessions(url, view.nextSemesterId), chooser.sessionId])];
+const props: AppProps = {
+  view,
+  url,
+  notices: problems.map((text) => ({ tone: "info" as const, text })),
+  catalogue: url.browse ? catalogueFor(url.browse, view.today) : null,
+  chooser,
+};
 ---
 
 <!doctype html>
@@ -14,14 +38,13 @@ const rows = db.select().from(sessions).orderBy(asc(sessions.startDate)).all();
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A redesign of ANU's class enrolment page: add by class number or course code, browse every class, and see your program requirements, on one page."
+    />
     <title>Enrolment · ANU enrolment redesign (prototype)</title>
   </head>
   <body>
-    <nav aria-label="Site"><a href="/">Enrolment</a> <a href="/readme/">About</a></nav>
-    <main>
-      <h1>Enrolment</h1>
-      <p>The enrolment page is being rebuilt. The sessions it will cover:</p>
-      <ul>{rows.map((s) => <li>{s.name}: {s.startDate} to {s.endDate}</li>)}</ul>
-    </main>
+    <EnrolmentApp client:load {...props} />
   </body>
 </html>
