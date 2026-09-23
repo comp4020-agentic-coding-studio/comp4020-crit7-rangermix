@@ -105,6 +105,24 @@ describe("parseCoursePage (COMP8020)", () => {
   });
 });
 
+describe("parseCoursePage (real-data edge cases from the 2026-09-24 crawl)", () => {
+  it("leaves out a class whose enrolment dates are TBA, records it, and keeps the course", () => {
+    const page = parseCoursePage(fixture("course/REGN8050"));
+    expect(page.code).toBe("REGN8050");
+    expect(page.offerings.map((o) => o.classNumber)).not.toContain(1839);
+    expect(page.skipped).toContainEqual(expect.objectContaining({ year: 2027, classNumber: 1839, reason: expect.stringContaining("TBA") }));
+    expect(page.offerings.length).toBeGreaterThan(0);
+  });
+
+  it("doesn't read a delivery group row (On Campus, Online) as a topic", () => {
+    for (const code of ["POGO8062", "REGN8050"]) {
+      const page = parseCoursePage(fixture(`course/${code}`));
+      expect(page.offerings.length).toBeGreaterThan(0);
+      expect(page.offerings.map((o) => o.topic)).toEqual(page.offerings.map(() => null));
+    }
+  });
+});
+
 describe("parsePlanPage (7722XVCOMP)", () => {
   const page = parsePlanPage(fixture("program/7722XVCOMP"));
 
@@ -173,6 +191,25 @@ describe("requirementGroups (R1, spec §8.3)", () => {
   it("makes a run of courses with no heading a note", () => {
     const [g] = requirementGroups([[line("COMP6442"), line("COMP6445")]], unitsOf, once);
     expect(g).toMatchObject({ rule: "note", courses: [{ code: "COMP6442", times: 1 }, { code: "COMP6445", times: 1 }] });
+  });
+
+  it("makes a sentence that excludes its linked courses a note (SOFT-SPEC)", () => {
+    const text = "6 units from completion of an 8000-level course from the subject area COMP Computing, excluding the project courses (COMP8715, COMP8800, COMP8830).";
+    const [g] = requirementGroups([[para(text, ["COMP8715", "COMP8800", "COMP8830"])]], (c) => (c === "COMP8800" ? 12 : 6), once);
+    expect(g.rule).toBe("note");
+  });
+
+  it("makes a paragraph that starts 'Note:' a note (SOFT-SPEC)", () => {
+    const [g] = requirementGroups([[para("Note: MCOMP students who complete COMP6120 as part of their program rules need to replace it with 6 units of 6000/8000 COMP.", ["COMP6120"])]], () => 6, once);
+    expect(g.rule).toBe("note");
+  });
+
+  it("makes a units group its courses can't reach a note, never an unmeetable rule (AACOM's honours options)", () => {
+    const text = "24 units from completion of COMP4550 Computing Research Project, which must be completed twice, in consecutive semesters (12+12 units)";
+    const [g] = requirementGroups([[{ text, codes: ["COMP4550"], lead: "COMP4550" }]], () => 12, once);
+    expect(g.rule).toBe("note");
+    const [h] = requirementGroups([[para(text, ["COMP4550"])]], () => 12, once);
+    expect(h.rule).toBe("note");
   });
 
   it("merges consecutive plain paragraphs in a chunk into one note, one line each", () => {

@@ -1,0 +1,15 @@
+{
+  "fetchedOn": "2026-09-24",
+  "source": "https://programsandcourses.anu.edu.au",
+  "years": [
+    2026,
+    2027
+  ],
+  "rulesYear": 2026,
+  "counts": {
+    "courses": 166,
+    "classes": 341,
+    "plans": 20,
+    "requirementGroups": 114
+  }
+}

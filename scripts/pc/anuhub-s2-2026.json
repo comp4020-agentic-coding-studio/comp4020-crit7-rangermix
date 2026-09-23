@@ -1,0 +1,33 @@
+{
+  "source": "ANUHub Class Search, Second Semester 2026, Postgraduate, COMP — read-only view on 2026-09-24 (docs/research/2026-09-23-anuhub-enrolment.md §8e). Structure only: class numbers and course codes, not anyone's enrolment.",
+  "classes": [
+    { "classNumber": 8665, "courseCode": "COMP6996" },
+    { "classNumber": 8693, "courseCode": "COMP6390" },
+    { "classNumber": 8695, "courseCode": "COMP8620" },
+    { "classNumber": 8697, "courseCode": "COMP6490" },
+    { "classNumber": 8699, "courseCode": "COMP8691" },
+    { "classNumber": 8702, "courseCode": "COMP6710" },
+    { "classNumber": 8703, "courseCode": "COMP6260" },
+    { "classNumber": 8706, "courseCode": "COMP6730" },
+    { "classNumber": 8707, "courseCode": "COMP6442" },
+    { "classNumber": 8708, "courseCode": "COMP6120" },
+    { "classNumber": 8709, "courseCode": "COMP6310" },
+    { "classNumber": 8710, "courseCode": "COMP6240" },
+    { "classNumber": 8711, "courseCode": "COMP6261" },
+    { "classNumber": 8712, "courseCode": "COMP6330" },
+    { "classNumber": 8713, "courseCode": "COMP6464" },
+    { "classNumber": 8714, "courseCode": "COMP8430" },
+    { "classNumber": 8716, "courseCode": "COMP8715" },
+    { "classNumber": 8718, "courseCode": "COMP6466" },
+    { "classNumber": 8719, "courseCode": "COMP6670" },
+    { "classNumber": 8721, "courseCode": "COMP8800" },
+    { "classNumber": 8722, "courseCode": "COMP8830" },
+    { "classNumber": 8725, "courseCode": "COMP8820" },
+    { "classNumber": 9010, "courseCode": "COMP6034" },
+    { "classNumber": 9012, "courseCode": "COMP8011" },
+    { "classNumber": 9013, "courseCode": "COMP8045" },
+    { "classNumber": 9055, "courseCode": "COMP7710" },
+    { "classNumber": 9057, "courseCode": "COMP8020" },
+    { "classNumber": 9072, "courseCode": "COMP8280" }
+  ]
+}

@@ -80,6 +80,14 @@ export interface Offering {
   topic: string | null;
 }
 
+/** A class row P&C lists without usable dates (e.g. "TBA"): left out of the snapshot and recorded. */
+export interface SkippedClass {
+  year: number;
+  sessionName: string;
+  classNumber: number;
+  reason: string;
+}
+
 export interface CoursePage {
   code: string;
   title: string;
@@ -90,6 +98,7 @@ export interface CoursePage {
   description: string;
   requisites: string | null;
   offerings: Offering[];
+  skipped: SkippedClass[];
 }
 
 export function parseCoursePage(html: string): CoursePage {
@@ -106,22 +115,28 @@ export function parseCoursePage(html: string): CoursePage {
     mode: s.get("mode of delivery") || null,
     description: paragraphsOf(d.getElementById("introduction")),
     requisites: squash(d.querySelector("div.requisite")?.textContent) || null,
-    offerings: offerings(d, code),
+    ...offerings(d, code),
   };
 }
+
+const DATE = /^\d{1,2} [A-Za-z]{3,} \d{4}$/;
+/** Group rows that name a delivery mode rather than a topic: P&C uses them to group a course's classes by mode. */
+const DELIVERY_GROUP = /^(on[ -]?campus|off[ -]?campus|online|in[ -]?person|remote|hybrid)$/i;
 
 /**
  * The "Offerings, Dates and Class Summary Links" tables: one tab per year,
  * an h3 per session, a table of classes under it. A one-cell row names the
- * topic of the classes below it.
+ * topic of the classes below it, unless it only names their delivery mode.
+ * A class whose dates aren't published ("TBA") is left out and recorded.
  */
-function offerings(d: Document, code: string): Offering[] {
+function offerings(d: Document, code: string): { offerings: Offering[]; skipped: SkippedClass[] } {
   const tabYears = new Map<string, number>();
   for (const a of d.querySelectorAll('.course-tab a[href^="#course-tab-"]')) {
     const year = Number(squash(a.textContent));
     if (Number.isInteger(year) && year > 2000) tabYears.set((a.getAttribute("href") ?? "").slice(1), year);
   }
   const out: Offering[] = [];
+  const skipped: SkippedClass[] = [];
   for (const [tabId, year] of tabYears) {
     const tab = d.getElementById(tabId);
     if (!tab) continue;
@@ -141,13 +156,20 @@ function offerings(d: Document, code: string): Offering[] {
       for (const tr of el.querySelectorAll("tbody tr")) {
         const cells = [...tr.querySelectorAll("td")];
         if (cells.length === 1) {
-          topic = squash(cells[0].textContent) || null;
+          const label = squash(cells[0].textContent);
+          topic = label && !DELIVERY_GROUP.test(label) ? label : null;
           continue;
         }
         if (cells.length < 6) continue;
         const cell = (i: number): string => squash(cells[i]?.textContent);
         const classNumber = Number(cell(at.number));
         if (!Number.isInteger(classNumber) || classNumber <= 0) throw new Error(`${code}: bad class number "${cell(at.number)}"`);
+        const dates = [cell(at.start), cell(at.enrol), cell(at.census), cell(at.end)];
+        const unpublished = [...new Set(dates.filter((t) => !DATE.test(t)))];
+        if (unpublished.length > 0) {
+          skipped.push({ year, sessionName, classNumber, reason: `P&C lists its dates as ${unpublished.map((t) => `"${t}"`).join(", ")}` });
+          continue;
+        }
         out.push({
           year,
           sessionName,
@@ -162,7 +184,7 @@ function offerings(d: Document, code: string): Offering[] {
       }
     }
   }
-  return out;
+  return { offerings: out, skipped };
 }
 
 export interface RequirementItem {
@@ -350,6 +372,8 @@ function classify(
   const courses = [...new Set(codes)].map((code) => ({ code, times: timesOf(code) }));
   const note: ParsedGroup = { label: "Note", rule: "note", minUnits: null, text: heading, courses };
   if (courses.length === 0 || /a maximum of/i.test(heading)) return note;
+  // A note by its own words, or a sentence whose links are exclusions ("excluding COMP8715 …"): never a course list.
+  if (/^note\b/i.test(heading) || /\bexclud|\bexcept\b|\bother than\b/i.test(heading)) return note;
   const n = Number(heading.match(/(\d+)\s*units/i)?.[1] ?? Number.NaN);
   const units = courses.map((c) => unitsOf(c.code));
   const total = units.every((u) => u !== undefined) ? courses.reduce((sum, c, k) => sum + (units[k] as number) * c.times, 0) : Number.NaN;
@@ -357,6 +381,8 @@ function classify(
   if (/compulsory/i.test(heading)) return all("Compulsory");
   if (n === total) return all("All of");
   if (Number.isFinite(n) && /one of the following|a minimum of|units from/i.test(heading)) {
+    // The listed courses can't make up N units, so this isn't a plain course list (AACOM's "completed twice" honours options).
+    if (total < n) return note;
     return { label: /one of/i.test(heading) ? `${n} units from one of` : `${n} units from`, rule: "units", minUnits: n, text: heading, courses };
   }
   if (/the following courses/i.test(heading)) return all("All of");

@@ -1,0 +1,8 @@
+{
+  "times": [
+    { "plan": "7722XVCOMP", "code": "COMP8800", "times": 2, "why": "P&C: \"COMP8800 Advanced Computing Research Project, which must be taken twice, in consecutive semesters (12+12 units)\"" },
+    { "plan": "SOFT-MAJ", "code": "COMP3500", "times": 2, "why": "P&C lists COMP3500 as 6+6 units: taken twice" },
+    { "plan": "AACRD", "code": "COMP3770", "times": 2, "why": "P&C lists COMP3770 as 6+6 units: taken twice" },
+    { "plan": "AACRD", "code": "COMP4550", "times": 2, "why": "P&C lists COMP4550 as 12+12 units: taken twice" }
+  ]
+}

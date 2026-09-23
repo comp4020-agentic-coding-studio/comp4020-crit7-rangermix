@@ -1,0 +1,2001 @@
+[
+  {
+    "planCode": "7706XMCOMP",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "The Master of Computing requires the completion of 96 units, of which:",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "A minimum of 24 units must come from completion of 8000-level COMP courses.",
+        "courses": []
+      },
+      {
+        "position": 3,
+        "label": "Compulsory",
+        "rule": "all",
+        "minUnits": null,
+        "text": "30 units from completion of the following compulsory courses:",
+        "courses": [
+          {
+            "code": "COMP6120",
+            "times": 1
+          },
+          {
+            "code": "COMP6442",
+            "times": 1
+          },
+          {
+            "code": "COMP7710",
+            "times": 1
+          },
+          {
+            "code": "COMP8280",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 4,
+        "label": "6 units from",
+        "rule": "units",
+        "minUnits": 6,
+        "text": "A minimum of 6 units from completion of foundational courses in the following list:",
+        "courses": [
+          {
+            "code": "MATH6005",
+            "times": 1
+          },
+          {
+            "code": "COMP6260",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 5,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "A maximum of 12 units from completion of project courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP8715",
+            "times": 1
+          },
+          {
+            "code": "COMP8830",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 6,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "24 units from the completion of one of the following Specialisations:\nArtificial Intelligence\nComputer Systems\nComputational Foundations\nData Science\nHuman Centred and Creative Computing\nMachine Learning\nSoftware Development\n18 units from completion of further 6000, 7000 or 8000 level courses from the following subject areas:\nCOMP Computer Science\nENGN Engineering\n6 units from completion of elective courses offered by ANU.",
+        "courses": []
+      }
+    ]
+  },
+  {
+    "planCode": "7722XVCOMP",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "The Master of Computing (Advanced) requires the completion of 96 units, of which:",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "A minimum of 48 units must come from completion of 8000-level COMP courses\nThe 96 units must consist of:",
+        "courses": []
+      },
+      {
+        "position": 3,
+        "label": "6 units from one of",
+        "rule": "units",
+        "minUnits": 6,
+        "text": "6 units from the completion of one of the following courses:",
+        "courses": [
+          {
+            "code": "COMP6250",
+            "times": 1
+          },
+          {
+            "code": "COMP8260",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 4,
+        "label": "Compulsory",
+        "rule": "all",
+        "minUnits": null,
+        "text": "12 units from completion of the following compulsory courses:",
+        "courses": [
+          {
+            "code": "COMP6442",
+            "times": 1
+          },
+          {
+            "code": "COMP6445",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 5,
+        "label": "All of",
+        "rule": "all",
+        "minUnits": null,
+        "text": "24 units from completion of",
+        "courses": [
+          {
+            "code": "COMP8800",
+            "times": 2
+          }
+        ]
+      },
+      {
+        "position": 6,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "24 units from the completion of one of the following Specialisations:\nArtificial Intelligence\nComputer Systems\nCyber Security\nComputational Foundations\nData Science\nHuman Centred and Creative Computing\nMachine Learning\nSoftware Development",
+        "courses": []
+      },
+      {
+        "position": 7,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "18 units from completion of further 6000, 7000 or 8000 level courses from the subject area COMP Computer Science or ENGN Engineering",
+        "courses": []
+      },
+      {
+        "position": 8,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "12 units from completion of elective courses offered by ANU",
+        "courses": []
+      },
+      {
+        "position": 9,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "Students who do not achieve a GPA of 6 in the first 48 units of courses attempted will be automatically transferred to the Master of Computing.",
+        "courses": []
+      },
+      {
+        "position": 10,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "Students who do not have the approval of an identified supervisor for COMP8800 by week 1 of their final two semesters will be automatically transferred to the Master of Computing.",
+        "courses": [
+          {
+            "code": "COMP8800",
+            "times": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "planCode": "AACOM",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "The Bachelor of Advanced Computing (Honours) requires completion of 192 units, of which:\nA maximum of 60 units may come from completion of 1000-level courses\nA minimum of 48 units that come from the completion of 4000-level courses from the subject area COMP Computer Science.\nA minimum of 12 units of courses tagged as Transdisciplinary Problem-Solving\nThe 192 units must include:",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "6 units from completion of a course from the following list:\nCOMP1100 Programming as Problem Solving (6 units) / COMP1130 Programming as Problem Solving (Advanced) (6 units)",
+        "courses": [
+          {
+            "code": "COMP1100",
+            "times": 1
+          },
+          {
+            "code": "COMP1130",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 3,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "6 units from completion of a course from the following list:\nCOMP1110 Structured Programming (6 units) / COMP1140 Structured Programming (Advanced) (6 units)",
+        "courses": [
+          {
+            "code": "COMP1110",
+            "times": 1
+          },
+          {
+            "code": "COMP1140",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 4,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "6 units from completion of a course from the following list:\nMATH1005 Discrete Mathematical Models (6 units) / MATH2222 Introduction to Mathematical Thinking: Problem-Solving and Proofs (6 units)",
+        "courses": [
+          {
+            "code": "MATH1005",
+            "times": 1
+          },
+          {
+            "code": "MATH2222",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 5,
+        "label": "Compulsory",
+        "rule": "all",
+        "minUnits": null,
+        "text": "48 units from completion of compulsory courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP2100",
+            "times": 1
+          },
+          {
+            "code": "COMP2120",
+            "times": 1
+          },
+          {
+            "code": "COMP2300",
+            "times": 1
+          },
+          {
+            "code": "COMP2310",
+            "times": 1
+          },
+          {
+            "code": "COMP2400",
+            "times": 1
+          },
+          {
+            "code": "COMP3600",
+            "times": 1
+          },
+          {
+            "code": "COMP3630",
+            "times": 1
+          },
+          {
+            "code": "COMP4450",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 6,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "24 units from the completion of one of the following specialisations:\nArtificial Intelligence\nHuman-Centred and Creative Computing\nMachine Learning\nSystems and Architecture\nTheoretical Computer Science",
+        "courses": []
+      },
+      {
+        "position": 7,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "18 units from the completion of 3000 or 4000-level courses from the subject area COMP Computer Science",
+        "courses": []
+      },
+      {
+        "position": 8,
+        "label": "12 units from",
+        "rule": "units",
+        "minUnits": 12,
+        "text": "12 units from completion of Information and Communications Technology-related courses from the following list:",
+        "courses": [
+          {
+            "code": "ARTH2181",
+            "times": 1
+          },
+          {
+            "code": "ASIA3032",
+            "times": 1
+          },
+          {
+            "code": "DESN2010",
+            "times": 1
+          },
+          {
+            "code": "ENGN1211",
+            "times": 1
+          },
+          {
+            "code": "ENVS2015",
+            "times": 1
+          },
+          {
+            "code": "INFS2024",
+            "times": 1
+          },
+          {
+            "code": "INFS3002",
+            "times": 1
+          },
+          {
+            "code": "INFS3024",
+            "times": 1
+          },
+          {
+            "code": "MATH1013",
+            "times": 1
+          },
+          {
+            "code": "MATH1115",
+            "times": 1
+          },
+          {
+            "code": "MATH2301",
+            "times": 1
+          },
+          {
+            "code": "MATH2307",
+            "times": 1
+          },
+          {
+            "code": "MGMT2009",
+            "times": 1
+          },
+          {
+            "code": "MUSI3309",
+            "times": 1
+          },
+          {
+            "code": "SCOM3029",
+            "times": 1
+          },
+          {
+            "code": "SOCY2038",
+            "times": 1
+          },
+          {
+            "code": "SOCY2166",
+            "times": 1
+          },
+          {
+            "code": "STAT1003",
+            "times": 1
+          },
+          {
+            "code": "STAT1008",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 9,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "Either:",
+        "courses": []
+      },
+      {
+        "position": 10,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "24 units from completion of COMP4550 Computing Research Project, which must be completed twice, in consecutive semesters (12+12 units)",
+        "courses": [
+          {
+            "code": "COMP4550",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 11,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "OR",
+        "courses": []
+      },
+      {
+        "position": 12,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "12 units from COMP4500 Software Engineering Team Project, which must be completed twice, in consecutive semesters (6+6 units)",
+        "courses": [
+          {
+            "code": "COMP4500",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 13,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "AND 12 units from the completion of further 4000-level courses from the subject area COMP Computer Science",
+        "courses": []
+      },
+      {
+        "position": 14,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "OR",
+        "courses": [
+          {
+            "code": "COMP4820",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 15,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "AND 12 units from the completion of further 4000-level courses from the subject area COMP Computer Science\nA minimum of 48 units from completion of elective courses offered by ANU",
+        "courses": []
+      },
+      {
+        "position": 16,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "Honours Calculation",
+        "courses": []
+      },
+      {
+        "position": 17,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "The APM will then be used to determine the final grade according to the ANU Honours grading scale, found at http://www.anu.edu.au/students/program-administration/assessments-exams/grading-scale.",
+        "courses": []
+      }
+    ]
+  },
+  {
+    "planCode": "AACRD",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "The Bachelor of Advanced Computing (Research and Development) (Honours) requires completion of 192 units, of which:\nA maximum of 60 units may come from completion of 1000-level courses\nA minimum of 48 units must come from completion of 4000-level courses from the subject area COMP\nA minimum of 12 units of courses tagged as Transdisciplinary Problem-Solving",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "The 192 units must include:",
+        "courses": []
+      },
+      {
+        "position": 3,
+        "label": "Compulsory",
+        "rule": "all",
+        "minUnits": null,
+        "text": "78 units from completion of compulsory courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP1130",
+            "times": 1
+          },
+          {
+            "code": "COMP1140",
+            "times": 1
+          },
+          {
+            "code": "COMP2100",
+            "times": 1
+          },
+          {
+            "code": "COMP2300",
+            "times": 1
+          },
+          {
+            "code": "COMP2550",
+            "times": 1
+          },
+          {
+            "code": "COMP3600",
+            "times": 1
+          },
+          {
+            "code": "COMP3630",
+            "times": 1
+          },
+          {
+            "code": "COMP3770",
+            "times": 2
+          },
+          {
+            "code": "COMP4550",
+            "times": 2
+          }
+        ]
+      },
+      {
+        "position": 4,
+        "label": "18 units from",
+        "rule": "units",
+        "minUnits": 18,
+        "text": "18 units from completion of courses from the following list:",
+        "courses": [
+          {
+            "code": "MATH1005",
+            "times": 1
+          },
+          {
+            "code": "MATH1013",
+            "times": 1
+          },
+          {
+            "code": "MATH1014",
+            "times": 1
+          },
+          {
+            "code": "MATH1115",
+            "times": 1
+          },
+          {
+            "code": "MATH1116",
+            "times": 1
+          },
+          {
+            "code": "MATH2222",
+            "times": 1
+          },
+          {
+            "code": "STAT1003",
+            "times": 1
+          },
+          {
+            "code": "STAT1008",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 5,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "24 units from the completion of 4000-level courses from the subject area COMP Computer Science",
+        "courses": []
+      },
+      {
+        "position": 6,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "12 units of Transdisciplinary Problem-Solving tagged courses",
+        "courses": []
+      },
+      {
+        "position": 7,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "12 units from completion of elective courses offered by ANU, which may include courses in the subject area COMP Computer Science\nA minimum of 48 units from completion of elective courses offered by ANU",
+        "courses": []
+      },
+      {
+        "position": 8,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "After the first four periods of enrolment students must achieve a minimum 75% Weighted Average Mark in Computing courses. Students who do not achieve a minimum 75% Weighted Average Mark will be transferred to the Bachelor of Advanced Computing (Honours).",
+        "courses": []
+      },
+      {
+        "position": 9,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "To continue into the final year of the program students must have completed 144 units and achieved a minimum 80% Weighted Average Mark calculated from the courses that contribute to the final Honours grade calculation. Students who do not achieve this 80% Weighted Average Mark will be automatically transferred to the Bachelor of Advanced Computing (Honours) degree.",
+        "courses": []
+      },
+      {
+        "position": 10,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "To graduate with the Bachelor of Advanced Computing (Research and Development) (Honours) students must achieve a minimum 80% final Honours mark. Students who do not achieve a minimum 80% final Honours mark will be transferred to the Bachelor of Advanced Computing (Honours) degree program prior to graduating.",
+        "courses": []
+      },
+      {
+        "position": 11,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "Honours Calculation",
+        "courses": []
+      },
+      {
+        "position": 12,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "The APM will then be used to determine the final grade according to the ANU Honours grading scale, found at http://www.anu.edu.au/students/program-administration/assessments-exams/grading-scale.",
+        "courses": []
+      }
+    ]
+  },
+  {
+    "planCode": "ARIN-SPEC",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "This specialisation requires the completion of 24 units, which must consist of a minimum of 12 units of 4000 level courses.",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "Compulsory",
+        "rule": "all",
+        "minUnits": null,
+        "text": "24 units from completion of the following compulsory courses:",
+        "courses": [
+          {
+            "code": "COMP2620",
+            "times": 1
+          },
+          {
+            "code": "COMP3620",
+            "times": 1
+          },
+          {
+            "code": "COMP4620",
+            "times": 1
+          },
+          {
+            "code": "COMP4691",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 3,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "This Specialisation is incompatible with the Computing and Mathematical Foundations minor, the Intelligent Systems major, and the Advanced Intelligent Systems major.\nThis specialisation is only available to students studying BAC (AACOM) and BACR&D (AACRD).",
+        "courses": []
+      }
+    ]
+  },
+  {
+    "planCode": "ARTIF-SPEC",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "This Specialization requires the completion of 24 units, which must consist of a minimum of 12 units of 8000 level courses.",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "All of",
+        "rule": "all",
+        "minUnits": null,
+        "text": "The 24 units must consist of:",
+        "courses": [
+          {
+            "code": "COMP6262",
+            "times": 1
+          },
+          {
+            "code": "COMP6320",
+            "times": 1
+          },
+          {
+            "code": "COMP8620",
+            "times": 1
+          },
+          {
+            "code": "COMP8691",
+            "times": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "planCode": "BCOMP",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "The Bachelor of Computing requires completion of 144 units, of which:\nA minimum of 12 units must come from completion of courses tagged as Transdisciplinary Problem-Solving\nA minimum of 24 units must come from completion of 3000 and 4000-level COMP courses\nA maximum of 60 units may come from completion of 1000-level courses",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "A minimum of 96 units from completion of courses from the following lists:",
+        "courses": []
+      },
+      {
+        "position": 3,
+        "label": "6 units from",
+        "rule": "units",
+        "minUnits": 6,
+        "text": "6 units from completion of a course from the following list:",
+        "courses": [
+          {
+            "code": "COMP1100",
+            "times": 1
+          },
+          {
+            "code": "COMP1130",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 4,
+        "label": "6 units from",
+        "rule": "units",
+        "minUnits": 6,
+        "text": "6 units from completion of a course from the following list:",
+        "courses": [
+          {
+            "code": "COMP1110",
+            "times": 1
+          },
+          {
+            "code": "COMP1140",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 5,
+        "label": "6 units from",
+        "rule": "units",
+        "minUnits": 6,
+        "text": "6 units from completion of a course from the following list:",
+        "courses": [
+          {
+            "code": "MATH1005",
+            "times": 1
+          },
+          {
+            "code": "MATH2222",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 6,
+        "label": "Compulsory",
+        "rule": "all",
+        "minUnits": null,
+        "text": "24 units from the completion of the following compulsory courses:",
+        "courses": [
+          {
+            "code": "COMP1600",
+            "times": 1
+          },
+          {
+            "code": "COMP2100",
+            "times": 1
+          },
+          {
+            "code": "COMP2300",
+            "times": 1
+          },
+          {
+            "code": "COMP2400",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 7,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "48 units from completion of courses from the subject area COMP Computer Science\nOR completion of one of the following computing majors:\nCOMS-MAJ Computer systems\nCSEC-MAJ Cyber Security\nDTSC-MAJ Data Science\nHCCC-MAJ Human-Centred and Creative Computing\nINFS-MAJ Information Systems\nINSY-MAJ Intelligent Systems\nSOFT-MAJ Software Development",
+        "courses": []
+      },
+      {
+        "position": 8,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "AND",
+        "courses": []
+      },
+      {
+        "position": 9,
+        "label": "6 units from",
+        "rule": "units",
+        "minUnits": 6,
+        "text": "6 units from completion of Information and Communications Technology-related courses from the following list:",
+        "courses": [
+          {
+            "code": "ARTH2181",
+            "times": 1
+          },
+          {
+            "code": "ASIA3032",
+            "times": 1
+          },
+          {
+            "code": "DESN2010",
+            "times": 1
+          },
+          {
+            "code": "ENGN1211",
+            "times": 1
+          },
+          {
+            "code": "ENVS2015",
+            "times": 1
+          },
+          {
+            "code": "INFS2024",
+            "times": 1
+          },
+          {
+            "code": "INFS3002",
+            "times": 1
+          },
+          {
+            "code": "INFS3024",
+            "times": 1
+          },
+          {
+            "code": "MATH1013",
+            "times": 1
+          },
+          {
+            "code": "MATH1115",
+            "times": 1
+          },
+          {
+            "code": "MATH2301",
+            "times": 1
+          },
+          {
+            "code": "MATH2307",
+            "times": 1
+          },
+          {
+            "code": "MGMT2009",
+            "times": 1
+          },
+          {
+            "code": "MUSI3309",
+            "times": 1
+          },
+          {
+            "code": "SCOM3029",
+            "times": 1
+          },
+          {
+            "code": "SOCY2038",
+            "times": 1
+          },
+          {
+            "code": "SOCY2166",
+            "times": 1
+          },
+          {
+            "code": "STAT1003",
+            "times": 1
+          },
+          {
+            "code": "STAT1008",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 10,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "A minimum of 48 units from completion of elective courses offered by ANU",
+        "courses": []
+      }
+    ]
+  },
+  {
+    "planCode": "CMSY-SPEC",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "This specialisation requires the completion of 24 units, which must consist of a minimum of 12 units of 8000-level courses.\nThe 24 units must consist of:",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "12 units from",
+        "rule": "units",
+        "minUnits": 12,
+        "text": "A minimum of 12 units from completion of courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP8300",
+            "times": 1
+          },
+          {
+            "code": "COMP8045",
+            "times": 1
+          },
+          {
+            "code": "COMP8712",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 3,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "A maximum of 12 units from completion of courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP6300",
+            "times": 1
+          },
+          {
+            "code": "COMP6310",
+            "times": 1
+          },
+          {
+            "code": "COMP6330",
+            "times": 1
+          },
+          {
+            "code": "COMP6331",
+            "times": 1
+          },
+          {
+            "code": "COMP6361",
+            "times": 1
+          },
+          {
+            "code": "COMP6464",
+            "times": 1
+          },
+          {
+            "code": "ENGN6213",
+            "times": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "planCode": "COMS-MAJ",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "The COMS major requires the completion of 48 units, of which:\nA maximum of 18 units may come from completion of 1000-level courses\nA minimum of 18 units must come from completion of 3000 and 4000-level courses",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "Compulsory",
+        "rule": "all",
+        "minUnits": null,
+        "text": "24 units from completion of the following compulsory courses:",
+        "courses": [
+          {
+            "code": "COMP2310",
+            "times": 1
+          },
+          {
+            "code": "COMP3300",
+            "times": 1
+          },
+          {
+            "code": "COMP3310",
+            "times": 1
+          },
+          {
+            "code": "ENGN4213",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 3,
+        "label": "6 units from",
+        "rule": "units",
+        "minUnits": 6,
+        "text": "A minimum of 6 units from the completion of a course from the following list:",
+        "courses": [
+          {
+            "code": "COMP3320",
+            "times": 1
+          },
+          {
+            "code": "COMP3610",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 4,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "A maximum of 18 units from completion of courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP4045",
+            "times": 1
+          },
+          {
+            "code": "COMP4300",
+            "times": 1
+          },
+          {
+            "code": "COMP4712",
+            "times": 1
+          },
+          {
+            "code": "ENGN1218",
+            "times": 1
+          },
+          {
+            "code": "ENGN2218",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 5,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "This Major is incompatible with the Systems and Architecture Specialisation.",
+        "courses": []
+      }
+    ]
+  },
+  {
+    "planCode": "CSEC-MAJ",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "This major requires the completion of 48 units, including,",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "A minimum of 18 units from completion of 3000 or 4000 level courses.",
+        "courses": []
+      },
+      {
+        "position": 3,
+        "label": "Compulsory",
+        "rule": "all",
+        "minUnits": null,
+        "text": "36 units from completion of the following compulsory courses:",
+        "courses": [
+          {
+            "code": "COMP2120",
+            "times": 1
+          },
+          {
+            "code": "COMP2310",
+            "times": 1
+          },
+          {
+            "code": "COMP2700",
+            "times": 1
+          },
+          {
+            "code": "COMP3300",
+            "times": 1
+          },
+          {
+            "code": "COMP3310",
+            "times": 1
+          },
+          {
+            "code": "COMP3704",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 4,
+        "label": "6 units from",
+        "rule": "units",
+        "minUnits": 6,
+        "text": "A minimum of 6 units from completion of courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP4130",
+            "times": 1
+          },
+          {
+            "code": "COMP4703",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 5,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "A maximum of 6 units from completion of courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP4011",
+            "times": 1
+          },
+          {
+            "code": "COMP4045",
+            "times": 1
+          },
+          {
+            "code": "COMP4712",
+            "times": 1
+          },
+          {
+            "code": "CRIM2010",
+            "times": 1
+          },
+          {
+            "code": "MATH3301",
+            "times": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "planCode": "DTSC-MAJ",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "The DTSC major requires the completion of 48 units, of which:\nA maximum of 18 units may come from completion of 1000-level courses\nA minimum of 18 units must come from completion of 3000 and 4000-level courses",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "Compulsory",
+        "rule": "all",
+        "minUnits": null,
+        "text": "12 units from completion of the following compulsory courses:",
+        "courses": [
+          {
+            "code": "COMP3425",
+            "times": 1
+          },
+          {
+            "code": "COMP3430",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 3,
+        "label": "36 units from",
+        "rule": "units",
+        "minUnits": 36,
+        "text": "36 units from completion of courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP2120",
+            "times": 1
+          },
+          {
+            "code": "COMP2700",
+            "times": 1
+          },
+          {
+            "code": "COMP3670",
+            "times": 1
+          },
+          {
+            "code": "COMP4650",
+            "times": 1
+          },
+          {
+            "code": "COMP4880",
+            "times": 1
+          },
+          {
+            "code": "MATH2307",
+            "times": 1
+          },
+          {
+            "code": "SOCR3001",
+            "times": 1
+          },
+          {
+            "code": "STAT1003",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 4,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "This major is not available to BADAN students.",
+        "courses": []
+      }
+    ]
+  },
+  {
+    "planCode": "DTSC-SPEC",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "This specialisation requires the completion of 24 units, which must consist of 12 units of 8000-level courses",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "Compulsory",
+        "rule": "all",
+        "minUnits": null,
+        "text": "18 units from completion of the following compulsory courses:",
+        "courses": [
+          {
+            "code": "COMP6240",
+            "times": 1
+          },
+          {
+            "code": "COMP8410",
+            "times": 1
+          },
+          {
+            "code": "COMP8430",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 3,
+        "label": "6 units from",
+        "rule": "units",
+        "minUnits": 6,
+        "text": "6 units from completion of courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP6490",
+            "times": 1
+          },
+          {
+            "code": "COMP6670",
+            "times": 1
+          },
+          {
+            "code": "COMP8600",
+            "times": 1
+          },
+          {
+            "code": "COMP8650",
+            "times": 1
+          },
+          {
+            "code": "COMP8880",
+            "times": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "planCode": "HCCC-SPEC",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "Advice to Students\nThis Undergraduate Specialisation requires the completion of 24 units, which must include a minimum of 12 units of 4000-level courses:\nThis specialisation is only available to students studying BAC (AACOM) and BACR&D (AACRD).",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "The 24 units must consist of:",
+        "courses": [
+          {
+            "code": "COMP3900",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 3,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "AND",
+        "courses": []
+      },
+      {
+        "position": 4,
+        "label": "12 units from",
+        "rule": "units",
+        "minUnits": 12,
+        "text": "A minimum of 12 units from completion of courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP4350",
+            "times": 1
+          },
+          {
+            "code": "COMP4528",
+            "times": 1
+          },
+          {
+            "code": "COMP4610",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 5,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "AND",
+        "courses": []
+      },
+      {
+        "position": 6,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "A maximum of 6 units from completion of courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP3540",
+            "times": 1
+          },
+          {
+            "code": "COMP3670",
+            "times": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "planCode": "INSY-MAJ",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "The INSY major requires the completion of 48 units, of which:\nA maximum of 18 units may come from completion of 1000-level courses\nA minimum of 18 units must come from completion of 3000 and 4000-level courses",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "Compulsory",
+        "rule": "all",
+        "minUnits": null,
+        "text": "18 units from completion of the following compulsory courses:",
+        "courses": [
+          {
+            "code": "COMP2620",
+            "times": 1
+          },
+          {
+            "code": "COMP3620",
+            "times": 1
+          },
+          {
+            "code": "COMP3670",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 3,
+        "label": "12 units from",
+        "rule": "units",
+        "minUnits": 12,
+        "text": "A minimum of 12 units from completion of Intelligent Systems courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP3600",
+            "times": 1
+          },
+          {
+            "code": "COMP4620",
+            "times": 1
+          },
+          {
+            "code": "COMP4670",
+            "times": 1
+          },
+          {
+            "code": "COMP4680",
+            "times": 1
+          },
+          {
+            "code": "COMP4691",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 4,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "A maximum of 18 units from completion of courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP4528",
+            "times": 1
+          },
+          {
+            "code": "COMP4610",
+            "times": 1
+          },
+          {
+            "code": "COMP4650",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 5,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "This Major is incompatible with the Artificial Intelligence Specialisation and the Machine Learning Specialisation.",
+        "courses": []
+      }
+    ]
+  },
+  {
+    "planCode": "MACL-SPEC",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "This specialisation requires the completion of 24 units, which must consist of a minimum of 12 units of 4000-level courses.",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "24 units from",
+        "rule": "units",
+        "minUnits": 24,
+        "text": "24 units from completion of courses from the list:",
+        "courses": [
+          {
+            "code": "COMP3670",
+            "times": 1
+          },
+          {
+            "code": "COMP4528",
+            "times": 1
+          },
+          {
+            "code": "COMP4650",
+            "times": 1
+          },
+          {
+            "code": "COMP4670",
+            "times": 1
+          },
+          {
+            "code": "COMP4680",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 3,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "This Specialisation is incompatible with the Intelligent Systems major, and the Advanced Intelligent Systems major.\nThis specialisation is only available to students studying BAC (AACOM) and BACR&D (AACRD).",
+        "courses": []
+      }
+    ]
+  },
+  {
+    "planCode": "MCHL-SPEC",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "This Specialisation requires the completion of 24 units from the following list which must include:\nA minimum of 12 units of 8000-level courses.",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "COMP6261 Information Theory\nCOMP6490 Document Analysis\nCOMP6528 Computer Vision\nCOMP6670 Introduction to Machine Learning\nCOMP8600 Statistical Machine Learning\nCOMP8650 Advanced Topics in Machine Learning\nCOMP8880 Computational Methods for Network Science",
+        "courses": [
+          {
+            "code": "COMP6261",
+            "times": 1
+          },
+          {
+            "code": "COMP6490",
+            "times": 1
+          },
+          {
+            "code": "COMP6528",
+            "times": 1
+          },
+          {
+            "code": "COMP6670",
+            "times": 1
+          },
+          {
+            "code": "COMP8600",
+            "times": 1
+          },
+          {
+            "code": "COMP8650",
+            "times": 1
+          },
+          {
+            "code": "COMP8880",
+            "times": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "planCode": "SOFT-MAJ",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "The SOFT major requires the completion of 48 units, which must consist of:\nA maximum of 18 units may come from completion of 1000-level courses\nA minimum of 18 units must come from completion of 3000 and 4000-level courses",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "Compulsory",
+        "rule": "all",
+        "minUnits": null,
+        "text": "24 units from the completion of the following compulsory courses:",
+        "courses": [
+          {
+            "code": "COMP2120",
+            "times": 1
+          },
+          {
+            "code": "COMP3500",
+            "times": 2
+          },
+          {
+            "code": "COMP4130",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 3,
+        "label": "12 units from",
+        "rule": "units",
+        "minUnits": 12,
+        "text": "A minimum of 12 units from the following list:",
+        "courses": [
+          {
+            "code": "COMP3600",
+            "times": 1
+          },
+          {
+            "code": "COMP3610",
+            "times": 1
+          },
+          {
+            "code": "COMP3900",
+            "times": 1
+          },
+          {
+            "code": "INFS3024",
+            "times": 1
+          },
+          {
+            "code": "INFS3059",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 4,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "A maximum of 12 units from the following list:",
+        "courses": [
+          {
+            "code": "ASIA3032",
+            "times": 1
+          },
+          {
+            "code": "COMP2700",
+            "times": 1
+          },
+          {
+            "code": "ENGN1211",
+            "times": 1
+          },
+          {
+            "code": "ENGN2300",
+            "times": 1
+          },
+          {
+            "code": "INFS3002",
+            "times": 1
+          },
+          {
+            "code": "MGMT2009",
+            "times": 1
+          },
+          {
+            "code": "SCOM3029",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 5,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "The SOFT-MAJ is not available to Bachelor of Engineering in Software Engineering(AENSE/ASENG) or Bachelor of Advanced Computing(AACOM) or Bachelor of Advanced Computing Research and Development (AACRD) students.",
+        "courses": []
+      }
+    ]
+  },
+  {
+    "planCode": "SOFT-SPEC",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "This specialisation requires the completion of 24 units, which must consist of a minimum of 12 units of 8000-level courses.\nThe 24 units must consist of:",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "Compulsory",
+        "rule": "all",
+        "minUnits": null,
+        "text": "12 units from completion of the following compulsory courses:",
+        "courses": [
+          {
+            "code": "COMP6120",
+            "times": 1
+          },
+          {
+            "code": "ENGN8100",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 3,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "6 units from completion of an 8000-level course from the subject area COMP Computing, excluding the project courses (COMP8715, COMP8800, COMP8830).",
+        "courses": [
+          {
+            "code": "COMP8715",
+            "times": 1
+          },
+          {
+            "code": "COMP8800",
+            "times": 1
+          },
+          {
+            "code": "COMP8830",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 4,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "A maximum of 12 units from completion of courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP6240",
+            "times": 1
+          },
+          {
+            "code": "COMP6331",
+            "times": 1
+          },
+          {
+            "code": "COMP6390",
+            "times": 1
+          },
+          {
+            "code": "INFS8004",
+            "times": 1
+          },
+          {
+            "code": "INFS8205",
+            "times": 1
+          },
+          {
+            "code": "LAWS8445",
+            "times": 1
+          },
+          {
+            "code": "MGMT7020",
+            "times": 1
+          },
+          {
+            "code": "REGN8014",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 5,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "Note: MCOMP students who complete COMP6120 as part of their program rules need to replace it with 6 units of 6000/8000 COMP.",
+        "courses": [
+          {
+            "code": "COMP6120",
+            "times": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "planCode": "SYAR-SPEC",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "This specialisation requires the completion of 24 units, which must consist of a minimum of 12 units of 4000 level courses.",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "12 units from",
+        "rule": "units",
+        "minUnits": 12,
+        "text": "A minimum of 12 units from completion of courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP4045",
+            "times": 1
+          },
+          {
+            "code": "COMP4300",
+            "times": 1
+          },
+          {
+            "code": "COMP4712",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 3,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "A maximum of 12 units from completion of courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP3300",
+            "times": 1
+          },
+          {
+            "code": "COMP3310",
+            "times": 1
+          },
+          {
+            "code": "COMP3320",
+            "times": 1
+          },
+          {
+            "code": "COMP3610",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 4,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "This specialisation is incompatible with the Computer Systems (COMS) Major.\nThis specialisation is only available to students studying BAC (AACOM) and BACR&D (AACRD).",
+        "courses": []
+      }
+    ]
+  },
+  {
+    "planCode": "THCS-SPEC",
+    "rulesYear": 2026,
+    "groups": [
+      {
+        "position": 1,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "This specialisation requires the completion of 24 units, of which:\nA minimum of 12 units must come from the completion of 4000-level courses.",
+        "courses": []
+      },
+      {
+        "position": 2,
+        "label": "12 units from",
+        "rule": "units",
+        "minUnits": 12,
+        "text": "A minimum of 12 units from completion of the following courses:",
+        "courses": [
+          {
+            "code": "COMP4011",
+            "times": 1
+          },
+          {
+            "code": "COMP4600",
+            "times": 1
+          },
+          {
+            "code": "MATH4343",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 3,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "A maximum of 12 units from completion of courses from the following list:",
+        "courses": [
+          {
+            "code": "COMP2620",
+            "times": 1
+          },
+          {
+            "code": "COMP3610",
+            "times": 1
+          },
+          {
+            "code": "COMP3630",
+            "times": 1
+          },
+          {
+            "code": "COMP4712",
+            "times": 1
+          }
+        ]
+      },
+      {
+        "position": 4,
+        "label": "Note",
+        "rule": "note",
+        "minUnits": null,
+        "text": "This specialisation is only available to students studying Bachelor of Advanced Computing (AACOM) and Bachelor of Advanced Computing Research & Development (AACRD).",
+        "courses": []
+      }
+    ]
+  }
+]

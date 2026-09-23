@@ -1,0 +1,331 @@
+{
+  "plans": [
+    {
+      "code": "BCOMP",
+      "name": "Bachelor of Computing",
+      "kind": "program",
+      "career": "UGRD",
+      "units": 144,
+      "acronym": "BCMPT",
+      "postNominal": "BComp",
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/program/BCOMP"
+    },
+    {
+      "code": "AACOM",
+      "name": "Bachelor of Advanced Computing (Honours)",
+      "kind": "program",
+      "career": "UGRD",
+      "units": 192,
+      "acronym": "BACMP(H)",
+      "postNominal": "BAdvCompHons",
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/program/AACOM"
+    },
+    {
+      "code": "AACRD",
+      "name": "Bachelor of Advanced Computing (Research and Development) (Honours)",
+      "kind": "program",
+      "career": "UGRD",
+      "units": 192,
+      "acronym": "BACR&DH",
+      "postNominal": "BAdvComp(R&D)(H)",
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/program/AACRD"
+    },
+    {
+      "code": "7706XMCOMP",
+      "name": "Master of Computing",
+      "kind": "program",
+      "career": "PGRD",
+      "units": 96,
+      "acronym": "MCOMP",
+      "postNominal": "MComp",
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/program/7706XMCOMP"
+    },
+    {
+      "code": "7722XVCOMP",
+      "name": "Master of Computing (Advanced)",
+      "kind": "program",
+      "career": "PGRD",
+      "units": 96,
+      "acronym": "MCOMPADV",
+      "postNominal": "MCompAdv",
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/program/7722XVCOMP"
+    },
+    {
+      "code": "COMS-MAJ",
+      "name": "Computer Systems",
+      "kind": "major",
+      "career": "UGRD",
+      "units": 48,
+      "acronym": "COMS",
+      "postNominal": null,
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/major/COMS-MAJ"
+    },
+    {
+      "code": "CSEC-MAJ",
+      "name": "Cyber Security",
+      "kind": "major",
+      "career": "UGRD",
+      "units": 48,
+      "acronym": "CSEC",
+      "postNominal": null,
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/major/CSEC-MAJ"
+    },
+    {
+      "code": "DTSC-MAJ",
+      "name": "Data Science",
+      "kind": "major",
+      "career": "UGRD",
+      "units": 48,
+      "acronym": "DTSC",
+      "postNominal": null,
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/major/DTSC-MAJ"
+    },
+    {
+      "code": "INSY-MAJ",
+      "name": "Intelligent Systems",
+      "kind": "major",
+      "career": "UGRD",
+      "units": 48,
+      "acronym": "INSY",
+      "postNominal": null,
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/major/INSY-MAJ"
+    },
+    {
+      "code": "SOFT-MAJ",
+      "name": "Software Development",
+      "kind": "major",
+      "career": "UGRD",
+      "units": 48,
+      "acronym": "SOFT",
+      "postNominal": null,
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/major/SOFT-MAJ"
+    },
+    {
+      "code": "ARIN-SPEC",
+      "name": "Artificial Intelligence",
+      "kind": "specialisation",
+      "career": "UGRD",
+      "units": 24,
+      "acronym": "ARIN",
+      "postNominal": null,
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/specialisation/ARIN-SPEC"
+    },
+    {
+      "code": "HCCC-SPEC",
+      "name": "Human-Centred and Creative Computing",
+      "kind": "specialisation",
+      "career": "UGRD",
+      "units": 24,
+      "acronym": "HCCC",
+      "postNominal": null,
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/specialisation/HCCC-SPEC"
+    },
+    {
+      "code": "MACL-SPEC",
+      "name": "Machine Learning",
+      "kind": "specialisation",
+      "career": "UGRD",
+      "units": 24,
+      "acronym": "MACL",
+      "postNominal": null,
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/specialisation/MACL-SPEC"
+    },
+    {
+      "code": "SYAR-SPEC",
+      "name": "Systems and Architecture",
+      "kind": "specialisation",
+      "career": "UGRD",
+      "units": 24,
+      "acronym": "SYAR",
+      "postNominal": null,
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/specialisation/SYAR-SPEC"
+    },
+    {
+      "code": "THCS-SPEC",
+      "name": "Theoretical Computer Science",
+      "kind": "specialisation",
+      "career": "UGRD",
+      "units": 24,
+      "acronym": "THCS",
+      "postNominal": null,
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/specialisation/THCS-SPEC"
+    },
+    {
+      "code": "ARTIF-SPEC",
+      "name": "Artificial Intelligence",
+      "kind": "specialisation",
+      "career": "PGRD",
+      "units": 24,
+      "acronym": "ARTIF",
+      "postNominal": null,
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/specialisation/ARTIF-SPEC"
+    },
+    {
+      "code": "CMSY-SPEC",
+      "name": "Computer Systems",
+      "kind": "specialisation",
+      "career": "PGRD",
+      "units": 24,
+      "acronym": "CMSY",
+      "postNominal": null,
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/specialisation/CMSY-SPEC"
+    },
+    {
+      "code": "DTSC-SPEC",
+      "name": "Data Science",
+      "kind": "specialisation",
+      "career": "PGRD",
+      "units": 24,
+      "acronym": "DTSC",
+      "postNominal": null,
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/specialisation/DTSC-SPEC"
+    },
+    {
+      "code": "MCHL-SPEC",
+      "name": "Machine Learning",
+      "kind": "specialisation",
+      "career": "PGRD",
+      "units": 24,
+      "acronym": "MCHL",
+      "postNominal": null,
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/specialisation/MCHL-SPEC"
+    },
+    {
+      "code": "SOFT-SPEC",
+      "name": "Software Development",
+      "kind": "specialisation",
+      "career": "PGRD",
+      "units": 24,
+      "acronym": "SOFT",
+      "postNominal": null,
+      "pcUrl": "https://programsandcourses.anu.edu.au/2026/specialisation/SOFT-SPEC"
+    }
+  ],
+  "programPlans": [
+    {
+      "programCode": "BCOMP",
+      "planCode": "COMS-MAJ",
+      "position": 1
+    },
+    {
+      "programCode": "BCOMP",
+      "planCode": "CSEC-MAJ",
+      "position": 2
+    },
+    {
+      "programCode": "BCOMP",
+      "planCode": "DTSC-MAJ",
+      "position": 3
+    },
+    {
+      "programCode": "BCOMP",
+      "planCode": "INSY-MAJ",
+      "position": 4
+    },
+    {
+      "programCode": "BCOMP",
+      "planCode": "SOFT-MAJ",
+      "position": 5
+    },
+    {
+      "programCode": "AACOM",
+      "planCode": "ARIN-SPEC",
+      "position": 1
+    },
+    {
+      "programCode": "AACOM",
+      "planCode": "HCCC-SPEC",
+      "position": 2
+    },
+    {
+      "programCode": "AACOM",
+      "planCode": "MACL-SPEC",
+      "position": 3
+    },
+    {
+      "programCode": "AACOM",
+      "planCode": "SYAR-SPEC",
+      "position": 4
+    },
+    {
+      "programCode": "AACOM",
+      "planCode": "THCS-SPEC",
+      "position": 5
+    },
+    {
+      "programCode": "AACRD",
+      "planCode": "ARIN-SPEC",
+      "position": 1
+    },
+    {
+      "programCode": "AACRD",
+      "planCode": "HCCC-SPEC",
+      "position": 2
+    },
+    {
+      "programCode": "AACRD",
+      "planCode": "MACL-SPEC",
+      "position": 3
+    },
+    {
+      "programCode": "AACRD",
+      "planCode": "SYAR-SPEC",
+      "position": 4
+    },
+    {
+      "programCode": "AACRD",
+      "planCode": "THCS-SPEC",
+      "position": 5
+    },
+    {
+      "programCode": "7706XMCOMP",
+      "planCode": "ARTIF-SPEC",
+      "position": 1
+    },
+    {
+      "programCode": "7706XMCOMP",
+      "planCode": "CMSY-SPEC",
+      "position": 2
+    },
+    {
+      "programCode": "7706XMCOMP",
+      "planCode": "DTSC-SPEC",
+      "position": 3
+    },
+    {
+      "programCode": "7706XMCOMP",
+      "planCode": "MCHL-SPEC",
+      "position": 4
+    },
+    {
+      "programCode": "7706XMCOMP",
+      "planCode": "SOFT-SPEC",
+      "position": 5
+    },
+    {
+      "programCode": "7722XVCOMP",
+      "planCode": "ARTIF-SPEC",
+      "position": 1
+    },
+    {
+      "programCode": "7722XVCOMP",
+      "planCode": "CMSY-SPEC",
+      "position": 2
+    },
+    {
+      "programCode": "7722XVCOMP",
+      "planCode": "DTSC-SPEC",
+      "position": 3
+    },
+    {
+      "programCode": "7722XVCOMP",
+      "planCode": "MCHL-SPEC",
+      "position": 4
+    },
+    {
+      "programCode": "7722XVCOMP",
+      "planCode": "SOFT-SPEC",
+      "position": 5
+    }
+  ]
+}
