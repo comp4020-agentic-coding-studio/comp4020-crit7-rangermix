@@ -1,7 +1,8 @@
 # ANU student enrolment system: current state (research notes)
 
 Researched 2026-09-23 using public web sources only (WebSearch/WebFetch).
-Every claim cites a URL. Anything not confirmed by an ANU page is marked
+§8 adds read-only observations of the live pages from a signed-in student
+session on 2026-09-24. Every other claim cites a URL. Anything not confirmed by an ANU page is marked
 **UNVERIFIED** or **INFERRED**.
 
 Tooling limitation: several ANU PDFs could not be decoded here. These were
@@ -163,6 +164,8 @@ Source: https://www.anu.edu.au/students/program-administration/enrolment/swappin
 
 ### 1e. What "Enrolment Details" shows
 
+**Superseded by the live observation in §8b.** Kept as found.
+
 **Partly UNVERIFIED.** No public ANU guide lists its columns. What the sources
 imply:
 
@@ -180,6 +183,8 @@ imply:
   probably of the form "2026 First Semester".
 
 ### 1f. The "Search" option inside Add
+
+**Superseded by the live observation in §8d–8e.** Kept as found.
 
 **UNVERIFIED for ANUHub.** Third-party ISIS-era guides describe these search
 criteria:
@@ -631,3 +636,124 @@ Source: https://programsandcourses.anu.edu.au/2026/program/AACOM
 - **Small screens**: "Some homepage tiles don't work well on small screens."
 - **Tutorials are a separate system** (MyTimetable), reached through the
   "Allocate to Your Class" tile.
+
+## 8. Live ANUHub observations (2026-09-24)
+
+These were seen read-only in a signed-in postgraduate student session, at
+https://selfservice.sas.anu.edu.au/psp/sscsprod/EMPLOYEE/SA/c/ANU_ISIS.ANU_ENROLMENT.GBL.
+Only structure, labels and public class data are recorded here. There is no
+name, student ID, program, grade or enrolment. Nothing was added, dropped or
+submitted. The screenshots taken show personal data and are not committed.
+
+The component name `ANU_ISIS.ANU_ENROLMENT.GBL` confirms the §1h inference:
+this is an ANU-built page, not delivered Fluid Class Search and Enroll.
+Every view renders inside one iframe (`TargetContent`) under the same URL,
+so no view has its own address.
+
+### 8a. Enrolment (the session list)
+
+- Notes at the top: sessions from prior years aren't shown (use Academic
+  History), and a student should contact their College if a term or session
+  is missing.
+- A career heading ("Postgraduate") above a table with the columns
+  **Semester / Session** | **Academic Program** | an **Enrolment Details**
+  button.
+- Rows seen: First Semester, 2026; Autumn Session, 2026; Winter Session,
+  2026; Second Semester, 2026; Spring Session, 2026. Labels take the form
+  "<Session>, <year>".
+- **No dates, no current-session marker and no "next" marker.** There was no
+  Summer Session 2026 row and **no 2027 row yet**.
+- Footer: "Select the Enrolment Details button to enrol in the corresponding
+  program for the semester/session."
+
+### 8b. Enrolment Class List (behind "Enrolment Details")
+
+- It replaces the session list in the same iframe. A NavBar back arrow
+  returns.
+- Warnings: dropping every class makes "you academic load" (sic) zero;
+  international students must keep a full-time load; to change session,
+  "select the Enrolment option from the menu above".
+- Context line: career, program code and name, session.
+- Table columns: **Class Number** | **Course** ("CODE - Title", truncated to
+  about 40 characters) | **Mode** | **Census Date** (DD/MM/YYYY) | **Units
+  Taken** (e.g. 6.00) | **Enrolment Status** ("Enroled" (sic) or "Dropped") |
+  a **Drop** button.
+- Dropped classes stay in the list, without a button.
+- No Swap button was visible, although §1d's guides describe one. There is
+  no unit total and there are no class start or end dates.
+- An **Add** button sits below the table.
+
+### 8c. Add Class
+
+- Heading "Add Class", with the warning "Adding classes to your enrolment is
+  a two step process. You must complete both steps to add the classes."
+- Instruction: "Enter a class number in the field below, or click Search to
+  search for the appropriate class. Repeat for each class you wish to add.
+  When you have selected all of the classes in which you wish to enrol,
+  click Continue." This paragraph was missing after returning from Search.
+- Controls: a **Class Number:** text box with an **Add Class** button, a
+  **Search** button, then **Continue** and **Cancel**. A reminder says
+  enrolment isn't complete until Continue.
+- The box takes class numbers only; there is no course-code input.
+- Not observed, because it would change enrolment: Continue, then the
+  permission number, then Save. The §1c sequence stands for those steps.
+
+### 8d. Class Search
+
+- Notes: undergraduates need a permission code for postgraduate classes and
+  vice versa, and non-award students need one for any class.
+- "*Academic Career and Subject Area are required to perform all searches."
+- Fields:
+  - **Academic Career*** (select): Non Award, Postgraduate, Research,
+    Undergraduate.
+  - **Subject Area Description*** and **Subject Area*** (selects): the same
+    list twice, by name and by code, kept in sync. They fill only after a
+    career is chosen, with 71 subject areas for Postgraduate.
+  - **Catalogue Number** (text) and **Course Title Keyword** (text).
+- There is no search across subject areas, and none by class number, mode,
+  level or description.
+
+### 8e. Class Search Results
+
+- The heading "Class Search Results", the context line, a count ("1-28 of
+  28" for Postgraduate COMP, Second Semester 2026) and a grid.
+- Columns: **Class Number** | **Course** (truncated as in 8b) | **Mode** |
+  **Start Date** | **End Date**, with an **Add Class** button on each row.
+- Sorted by class number; the column headers don't sort. There are no
+  units, career, census date, last day to enrol or description.
+- One class per click: Add Class returns to the Add Class page, and a
+  course in another subject needs a new search.
+
+Public class numbers for Postgraduate COMP in Second Semester 2026. All are
+In Person, 27/07/2026–30/10/2026, and titles are as ANUHub truncates them.
+
+| Class | Course |
+|---|---|
+| 8665 | COMP6996 - Unspecified credit non-Computi |
+| 8693 | COMP6390 - Human-Computer Interaction |
+| 8695 | COMP8620 - Advanced Topics in AI - Planning and Le |
+| 8697 | COMP6490 - Document Analysis |
+| 8699 | COMP8691 - Optimisation |
+| 8702 | COMP6710 - Structured Programming |
+| 8703 | COMP6260 - Foundations of Computing |
+| 8706 | COMP6730 - Programming for Scientists |
+| 8707 | COMP6442 - Software Construction |
+| 8708 | COMP6120 - Software Engineering |
+| 8709 | COMP6310 - Systems Networks & Concurrency |
+| 8710 | COMP6240 - Relational Databases |
+| 8711 | COMP6261 - Information Theory |
+| 8712 | COMP6330 - Operating Systems |
+| 8713 | COMP6464 - High Performance Scientific Co |
+| 8714 | COMP8430 - Data Wrangling |
+| 8716 | COMP8715 - Advanced Computing Team Projec |
+| 8718 | COMP6466 - Algorithms |
+| 8719 | COMP6670 - Intro to Machine Learning |
+| 8721 | COMP8800 - Advanced Computing Research Pr |
+| 8722 | COMP8830 - Computing Internship |
+| 8725 | COMP8820 - Exchange Program for Computer |
+| 9010 | COMP6034 - Network Security |
+| 9012 | COMP8011 - Advanced Topics in Formal Meth - Softwa |
+| 9013 | COMP8045 - Advanced Topics in Computer Sy - System |
+| 9055 | COMP7710 - Programming Fundamentals |
+| 9057 | COMP8020 - Advanced Topics in Human-Centr - Agenti |
+| 9072 | COMP8280 - Responsible Practice, Innovati |

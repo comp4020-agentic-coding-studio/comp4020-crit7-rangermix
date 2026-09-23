@@ -55,38 +55,50 @@ purpose but fixing the flow:
 
 ## 2. Grounding — the current system
 
-From ANU's public guides (see the research notes). **The live page open in
-the user's Chrome could not be inspected from this session**: the browser
-tools here drive a separate, logged-out browser, and reading the Chrome
-profile was blocked. Items marked *(verify)* need a screenshot of the live
-page.
+Two sources: ANU's public guides, and a read-only look at the live pages
+in a signed-in student session on 24 Sep 2026 (research notes §8). Only
+structure and labels were recorded, and nothing was submitted.
 
-**The documented add flow**
-(anu.edu.au › Enrol for the first time as a coursework student):
+**The current flow**
 
-1. Enrolment tile (or `NavBar › Menu › ANUHub › Enrolment › Enrolment`).
-2. **"Enrolment Details"** button beside the session. This opens a separate
-   page per session.
-3. **Add**.
-4. Type the **class number** and click **Add**, or use **Search** with
-   Academic Career / Subject Area / Catalog Number. The field never accepts
-   a course code. *(Search fields: verify.)*
-5. Repeat step 4 for each class.
-6. **Continue**.
-7. Enter a permission number if prompted. CBE notes that "the entry box
+1. **Enrolment** (tile, or `NavBar › Menu › ANUHub › Enrolment ›
+   Enrolment`): a table of this year's sessions ("Second Semester, 2026"),
+   each with its program and an **Enrolment Details** button. There are no
+   dates and no current or next marker, and on 24 Sep there is no 2027 row
+   yet.
+2. **Enrolment Details** replaces the list with the *Enrolment Class
+   List*: class number, course (the title cut at about 40 characters),
+   mode, census date, units, status ("Enroled" or "Dropped") and a
+   **Drop** button. There is no unit total and there are no class dates.
+   Changing session means going back to the list.
+3. **Add** opens *Add Class*: a **Class Number** box with its own **Add
+   Class** button, and **Search**. The box takes class numbers only.
+4. **Search** requires an **Academic Career** and a **Subject Area** (two
+   synced selects, one by name and one by code). Catalogue Number and
+   Course Title Keyword are optional. Results show class number, course,
+   mode, and start and end dates, sorted by class number, with one **Add
+   Class** button per row. Each add returns to step 3; a course in another
+   subject means another search.
+5. Repeat steps 3–4 for each class, then **Continue**.
+6. Enter a permission number if prompted. CBE notes that "the entry box
    always appears".
-8. **Save**, then check for "Successfully Added!".
+7. **Save**, then check for "Successfully Added!".
 
-Swap and Drop sit beside each course on the same per-session page.
+Steps 1–5 were observed live. Steps 6–7 come from the guides, because
+running them would have changed a real enrolment. Every view renders in
+one iframe under the same URL, so no view has an address that can be
+bookmarked or shared. The guides also describe a **Swap** button, but none
+showed in the live class list.
 
 **Pain points this redesign targets**
 
 | Today | Redesign |
 |---|---|
-| Class number only. The student must look it up on the P&C *Class* tab, and P&C warns to "check the correct class number is chosen for delivery mode". | Class number **or** course code. A course with several classes opens a chooser that shows the mode for each (F1). |
-| Six or more screens to add one class; Enrolment Details is a separate page. | One page. Enrolment details unfold per session, and results appear inline (F4). |
-| No public class search. P&C's search has no subject-area, class-number or level filter. | A filterable class table, scoped to a session, with multi-add (F2). |
-| Session dates, add/drop deadlines and the 24-unit cap are spread across the calendar and help pages. | Every session row states its dates and deadlines, and the cap is enforced with an explanation (F3, F1). |
+| Class number only. The student looks it up on the P&C *Class* tab, which warns to "check the correct class number is chosen for delivery mode". | Class number **or** course code. A course with several classes opens a chooser that shows each class's mode (F1). |
+| Six or more screens to add one class, each replacing the last. Enrolment Details is a separate view, and changing session means backing out to the list. | One page. Each session's details unfold in place, and results appear inline (F4). |
+| Class Search demands a career and a subject area. It can't search by class number, mode, level or description, it truncates titles, and it adds one class per click. P&C's public catalogue search has no subject-area, class-number or level filter either. | A filterable class table in which every filter is optional, with full-text search and multi-add (F2). |
+| The session list shows no dates and no current or next session, and next year's sessions aren't listed yet. Deadlines and the 24-unit cap sit on calendar and help pages. | Every session row states its dates and deadlines and is marked Now, Next or Upcoming, and the cap is enforced with an explanation (F3, F1). |
+| The class list shows each class's census date and units, but no unit total and no class dates. | Enrolment details show class dates, the census date and the unit total against the cap (F4). |
 | Program requirements live in P&C, separately from enrolment. | A requirements sidebar with a live status for each course and one-click add (F5). |
 | "Some homepage tiles don't work well on small screens." | Single-column phone layout (§6.1). |
 
@@ -460,6 +472,9 @@ Phone (< 960px), single column:
 - The session dates come from the 2025–2027 university calendars. Their
   term codes follow the verified pattern (`3` + year−1990 + session digit +
   `0`, e.g. 3660). The **2027 codes are inferred** and marked as such.
+- The fetched Second Semester 2026 COMP classes are checked against the 28
+  postgraduate classes seen live in ANUHub (research notes §8e). A mismatch
+  is flagged for a human, not silently fixed.
 - `src/data/README.md` records the provenance: the source URL for each
   file, the fetch date, and which fields are inferred.
 - At boot, `seed.ts` **upserts** by natural key and never deletes, so a
@@ -536,9 +551,11 @@ Each phase ends green (`pnpm check`), committed and pushed, and deployable.
 
 ## 12. Risks
 
-- **The live ANUHub page wasn't inspected** (§2). Mitigation: get two or
-  three screenshots (the session list, Enrolment Details, Add) before P2,
-  and commit them to `public/` for the README's before/after.
+- **The "before" screenshots carry personal data.** The live pages show a
+  real student's name, program and enrolments, so the screenshots stay out
+  of git. Mitigation: for the README (P6), use crops of the Add Class and
+  Class Search views with the context line blurred, or a labelled
+  wireframe of them.
 - **P&C markup may resist scraping.** Mitigation: the fetch script is
   one-off and its output is committed. If a page won't parse, curate that
   course by hand and record it in the provenance README. Scope stays at
@@ -556,15 +573,16 @@ Each phase ends green (`pnpm check`), committed and pushed, and deployable.
    specialisation (recommended, since `COMP8020` suggests a postgraduate
    student)? Or an undergraduate, e.g. AACOM + the Cyber Security major, to
    exercise "major"?
-4. **Screenshots** of the live ANUHub pages: the session list, Enrolment
-   Details, and Add with its Search. Can you share them for §2 and the
-   README?
+4. **README "before" images**: redacted crops of the live Add Class and
+   Class Search pages (recommended), or a wireframe of them?
 
 ## Sources
 
 The research notes hold the full list, with a URL on every claim. These
 are the sources the spec leans on most:
 
+- Live pages, signed in and read-only on 24 Sep 2026: research notes §8
+  (https://selfservice.sas.anu.edu.au/psp/sscsprod/EMPLOYEE/SA/c/ANU_ISIS.ANU_ENROLMENT.GBL)
 - Add flow: https://www.anu.edu.au/students/program-administration/enrolment/enrol-for-the-first-time-as-a-coursework-student
 - Swap and drop deadlines: https://www.anu.edu.au/students/program-administration/enrolment/swapping-or-dropping-a-course
 - 24-unit cap and Overload: https://www.anu.edu.au/students/program-administration/enrolment/overload-your-enrolment
