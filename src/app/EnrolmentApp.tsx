@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { fmtDate } from "../lib/format";
 import type { AppProps } from "../lib/types";
+import { AddClass } from "./components/AddClass";
+import { ClassChooser } from "./components/ClassChooser";
 import { EnrolmentDetails } from "./components/EnrolmentDetails";
 import { Notices } from "./components/Notices";
 import { RequirementsSidebar } from "./components/RequirementsSidebar";
@@ -65,7 +67,19 @@ export default function EnrolmentApp(props: AppProps) {
           onToggle={actions.toggleSession}
           renderDetails={(s) => (
             <EnrolmentDetails session={s} busy={busy} pending={state.pending} onDrop={(e) => void actions.drop(e.sessionId, e.classNumber)}>
-              {!s.add.open && <p className="add__closed">{s.add.reason}</p>}
+              {state.chooser?.sessionId === s.id ? (
+                <ClassChooser
+                  chooser={state.chooser}
+                  busy={busy}
+                  pending={state.pending === `choose:${s.id}`}
+                  onAdd={(classNumbers) => void actions.enrolClasses(s.id, classNumbers, `choose:${s.id}`)}
+                  onCancel={actions.cancelChooser}
+                />
+              ) : s.add.open ? (
+                <AddClass session={s} error={state.entryErrors[s.id] ?? null} busy={busy} pending={state.pending === `add:${s.id}`} onSubmit={(entry) => actions.enrolEntry(s.id, entry)} />
+              ) : (
+                <p className="add__closed">{s.add.reason}</p>
+              )}
             </EnrolmentDetails>
           )}
         />

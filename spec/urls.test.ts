@@ -8,6 +8,9 @@ describe("malformed links to /", () => {
   it.each([
     ["/?open=2099-S9", "isn't in the prototype's data"],
     ["/?open=2026-S2,nope", "isn't in the prototype's data"],
+    ["/?choose=garbage", "class chooser"],
+    ["/?choose=COMP8020&term=2027-S1", "class chooser"],
+    ["/?choose=POGO8062&term=nope", "isn't in the prototype's data"],
   ])("renders %s with a notice", async (path, words) => {
     expect(notices(await new Visitor().page(path))).toContain(words);
   });

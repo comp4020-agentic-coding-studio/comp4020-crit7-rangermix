@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { WriteResponse } from "../src/lib/types";
-import { badgeOf, sessionRow, singleClassCourses, Visitor } from "./helpers";
+import { badgeOf, classesOf, sessionRow, singleClassCourses, Visitor } from "./helpers";
 
 const openRows = (doc: Document): (string | null)[] => [...doc.querySelectorAll("details[data-session][open]")].map((d) => d.getAttribute("data-session"));
 
@@ -70,5 +70,18 @@ describe("F4: enrolment details unfold in place", () => {
     const row = sessionRow(doc, "2027-S1");
     expect(row.querySelector(`[data-class="${target.classNumber}"]`)?.textContent).toContain(target.courseCode);
     expect(row.textContent).toContain("1 class · 6 of 24 units");
+  });
+});
+
+describe("F1: the chooser from a link (spec §4.2)", () => {
+  it("server-renders the chooser for /?choose=POGO8062&term=2027-S1, with each class named in context", async () => {
+    const doc = await new Visitor().page("/?choose=POGO8062&term=2027-S1");
+    const row = sessionRow(doc, "2027-S1");
+    expect(row.hasAttribute("open")).toBe(true);
+    const pogo = classesOf("POGO8062", "2027-S1");
+    expect(row.querySelector("fieldset legend")?.textContent).toContain(`has ${pogo.length} classes in First Semester 2027`);
+    expect([...row.querySelectorAll("fieldset input[type=checkbox]")].map((b) => b.getAttribute("aria-label"))).toEqual(
+      pogo.map((c) => `Select POGO8062 class ${c.classNumber}, ${c.mode}`),
+    );
   });
 });

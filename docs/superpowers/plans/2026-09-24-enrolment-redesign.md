@@ -8404,3 +8404,4 @@ Execution notes: what each task found that the plan didn't expect, and where the
 - **Task 7** (`2c0c2df`): view model, sandbox, GET routes; view contract tests green first run.
 - **Task 8**: enrol/drop/reset API green first run (166 tests). The topic-course test is skipped: no 2027 course has classes of different topics.
 - **Task 9**: the React SPA shell renders on the server and hydrates cleanly (three hydration cases, no warnings); axe passes on `/` and `/?open=2026-S2` with the sibling-landmark layout. Broken percent-encoding in a link gets Astro's 400 (accepted: never a 500).
+- **Task 10**: add by class number or course code, the chooser (focus in, Cancel back to the input), drop, pending and network handling; component tests green; axe covers the chooser state.
