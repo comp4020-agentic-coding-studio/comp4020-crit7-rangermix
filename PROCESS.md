@@ -138,6 +138,37 @@ test the spec lists, so the contract existed before any code did.
     optimiser URL
     ([`2793d54`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/commit/2793d54)).
 
+### M2: the demo settings bar
+
+M2 started only once M1 was live, as the plan ordered. It's the bar I asked
+for so a crit can see the page on any date, in any of the five programs. When
+the agent asked whether each program should get its own demo student, I said:
+
+> keep current but provide reset button to load separate demo history
+
+- **The date setting**
+  ([`ebeb18e`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/commit/ebeb18e)).
+  - Since M1, one function has been the only source of "today". The bar's date
+    goes in there first.
+  - The badges, the add and drop windows, completion and the date new
+    enrolments are stamped with all follow it. None of that code changed.
+- **Program, plan and Reset per program**
+  ([`90f1643`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/commit/90f1643)).
+  - The agent picked the four new demo students from the snapshot by the
+    spec's rules.
+  - It also held each history to P&C's printed requisites. No student takes
+    COMP1110 before COMP1100, for example.
+- **What the checks caught.**
+  - The plan put the bar first on the page. The skip-link test from the M1
+    browser pass failed, because keyboard users would now Tab through the
+    bar before reaching "Skip to sessions". The skip link moved ahead of the
+    bar.
+  - On a phone the pinned bar was 374 pixels tall, 44% of the screen, all the
+    time. Now it pins only on wide screens and fits one row from 1280 pixels.
+    A skipped-to heading scrolls clear of it.
+  - The §11.5 scenarios all worked from the keyboard, and axe with contrast
+    on found no violations.
+
 ### How I know it works
 
 `pnpm check` runs a type check, the build, and every test: parsers, the golden

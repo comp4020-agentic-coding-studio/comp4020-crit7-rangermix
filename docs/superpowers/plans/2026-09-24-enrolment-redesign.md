@@ -8421,3 +8421,8 @@ Execution notes: what each task found that the plan didn't expect, and where the
   - Four more template students were picked by the rules. Each history also follows P&C's printed requisites.
   - The seed test's counts now come from the templates.
   - 278 tests.
+- **Task 15**: browser pass on the bar.
+  - It pins only from 960px; on a phone it measured 374px and now scrolls away.
+  - From 1280px it fits one row. Scroll padding keeps a skipped-to heading clear of it.
+  - The §11.5 scenarios all work from the keyboard, axe with contrast finds no violations, and the console is clean.
+  - The README has a settings-bar section with a screenshot, and PROCESS.md has the M2 account.

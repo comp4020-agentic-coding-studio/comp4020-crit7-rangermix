@@ -94,9 +94,40 @@ program that isn't a list of courses — those are shown verbatim under
 There is no ANU sign-in. Each browser gets its own copy of a demo student —
 u7000001, Master of Computing (Advanced) with the Artificial Intelligence
 specialisation, part-way through 2026 — the moment it first changes something,
-so visitors never see each other's enrolments. **Reset demo** starts the copy
-again. The student's history uses real P&C offerings; the grades are invented
-(`src/data/templates/README.md`).
+so visitors never see each other's enrolments. The Reset button in the demo
+settings bar starts the copy again. The student's history uses real P&C
+offerings; the grades are invented (`src/data/templates/README.md`).
+
+## The demo settings bar (M2)
+
+A crit audience can't wait for a real semester to begin or enrol in a
+different degree, so a bar pinned above the page lets whoever is presenting
+change what the page is computed for. It is **not part of the redesign**. It
+is dashed, muted and labelled "Demo settings — not part of the redesign", and
+a real student would never see it.
+
+- **Date.** The page is computed as if it were that day: the Now/Next badges,
+  whether adding and dropping are open, which classes count as completed, and
+  the date new enrolments are stamped with. It runs from 1 January 2026 to 31
+  December 2027, the span of the loaded sessions. **Use real date** switches
+  back to today in Canberra.
+- **Program and major/specialisation.** Five computing programs with five
+  majors or specialisations each, from P&C. Changing them changes the
+  requirements sidebar and the career check on new enrolments. A pair the
+  program doesn't offer is refused.
+- **History is fixed.** Settings never add, drop or regrade anything the
+  student has taken. Only the reading of it follows the date: a class that
+  has ended by then counts as completed, and one still running shows as
+  enrolled.
+- **Reset** loads the chosen program's own demo student: five of them, one per
+  program, each with a completed First Semester 2026, an enrolled Second
+  Semester 2026 and a requirement left open for 2027. Reset keeps the date
+  setting.
+
+On phones the bar scrolls away with the page instead of staying pinned,
+because there it wraps to about 370 pixels.
+
+<img src="public/readme/after-demo-bar.png" alt="The demo settings bar set to 10 December 2026: Spring Session 2026 is now Now and Second Semester 2026 counts as completed">
 
 ## Running it
 

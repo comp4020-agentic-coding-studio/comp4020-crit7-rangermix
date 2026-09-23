@@ -184,12 +184,18 @@ h4 { font-size: 0.95rem; }
 .readme main { max-width: 48rem; margin: 0 auto; padding: 0 1rem 2rem; }
 .readme main img { max-width: 100%; height: auto; border: 1px solid var(--line); }
 
-/* M2: the demo settings bar (spec §11.2): pinned, dashed, muted, and visibly not part of the redesign. */
-.demo-bar { position: sticky; top: 0; z-index: 10; margin-top: 0.5rem; padding: 0.5rem 0.75rem; background: #eef0f3; border: 2px dashed #6b6f78; border-radius: var(--radius); }
+/* M2: the demo settings bar (spec §11.2): dashed, muted, and visibly not part of the redesign. */
+.demo-bar { z-index: 10; margin-top: 0.5rem; padding: 0.5rem 0.75rem; background: #eef0f3; border: 2px dashed #6b6f78; border-radius: var(--radius); }
 .demo-bar__label { margin: 0 0 0.35rem; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #3f434a; }
 .demo-bar__form { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; align-items: end; }
 .demo-bar__note { font-size: 0.8rem; color: var(--muted); }
 @media (min-width: 960px) {
+  /* Pinned only where it's short: on a phone it wraps to about 370px, so there it scrolls away with the page. */
+  .demo-bar { position: sticky; top: 0; }
+  /* Narrow enough that the bar is one row from 1280px, two below it. */
+  .demo-bar select { max-width: 14rem; }
+  /* Keep a skipped-to or focused element clear of the pinned bar (at most two rows, about 176px). */
+  html { scroll-padding-top: 12rem; }
   /* The pinned bar would cover a pinned sidebar, so the sidebar scrolls with the page once the bar exists. */
   .requirements { position: static; max-height: none; }
 }
