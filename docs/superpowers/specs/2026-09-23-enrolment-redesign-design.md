@@ -1352,6 +1352,48 @@ approved this spec:
 
 No questions are open.
 
+### Clarifications from planning (2026-09-24)
+
+Writing the implementation plan surfaced gaps and one conflict in this
+spec. Each is resolved as below. The plan's "Spec clarifications" section
+holds the detail.
+
+1. **Two classes of one course in one session.** §6.3 refuses a class when
+   the student is already enrolled in the course that session, while §10
+   expects two class numbers of one course to "enrol both". The resolution
+   refuses the second class unless the two classes have different topics
+   (a topics course such as COMP8020). The chooser says when only one can
+   be taken. §10's "enrols both" is tested with a course whose classes
+   differ by topic; for POGO8062, one class enrols and the other is
+   refused.
+2. **Entry problems answer HTTP 422** and show under the input. These are
+   garbage, an unknown course, a course not offered in the session, and a
+   class number from another session. Per-class refusals come back as
+   outcomes, with the view, in a 200.
+3. **The nav names the plan**, as in "Demo Student · u7000001 · MCompAdv ·
+   Artificial Intelligence". `MCompAdv` is P&C's "Post Nominal", stored in
+   a new `plans.postNominal` column. There is no invented "(AI)".
+4. **Landmarks are siblings**, in this order: header (nav, h1, notices),
+   aside (requirements), main (sessions, browse), footer. CSS moves the
+   aside right of main at 960px. axe's `landmark-complementary-is-top-level`
+   and `region` rules require this, and it is also §6.1's phone order.
+5. **Consecutive plain paragraphs** in one chunk of a requirements section
+   (between empty paragraphs) merge into one note. A course line that
+   links two courses (an either/or) makes its group a note.
+6. **Catalogue annotations** (Enrolled, Completed, Adding closed) come from
+   server data. The client doesn't compare dates.
+7. **Component-test fixtures** are typed builders, not recorded responses.
+8. **The seeder rewrites** template students' plans and enrolments, and the
+   requirement tables, on every boot. It only upserts rows that enrolments
+   point at (§8.5's "never deletes").
+9. **`enrolOpens` is an ISO date** used to decide whether to show the note.
+   A new `enrolOpensText` holds the words shown: "early December
+   (indicative)".
+10. **A class number repeated** in one request is processed once.
+11. **Units are stored as REAL.**
+12. **The session heading's counts**, and which years sit behind "Show
+    earlier sessions", come from server fields.
+
 ## Sources
 
 The research notes hold the full lists, with a URL on every claim. These
