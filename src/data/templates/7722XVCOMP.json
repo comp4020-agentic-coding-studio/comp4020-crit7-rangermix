@@ -1,0 +1,18 @@
+{
+  "uid": "u7000001",
+  "name": "Demo Student",
+  "programCode": "7722XVCOMP",
+  "plans": ["ARTIF-SPEC"],
+  "rulesYear": 2026,
+  "commencedSessionId": "2026-S1",
+  "enrolments": [
+    { "sessionId": "2026-S1", "classNumber": 3733, "courseCode": "COMP6262", "grade": "D", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S1", "classNumber": 3740, "courseCode": "COMP6320", "grade": "HD", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S1", "classNumber": 3732, "courseCode": "COMP6445", "grade": "D", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S1", "classNumber": 3730, "courseCode": "COMP6240", "grade": "CR", "enrolledOn": "2026-02-09" },
+    { "sessionId": "2026-S2", "classNumber": 8707, "courseCode": "COMP6442", "grade": null, "enrolledOn": "2026-07-13" },
+    { "sessionId": "2026-S2", "classNumber": 8695, "courseCode": "COMP8620", "grade": null, "enrolledOn": "2026-07-13" },
+    { "sessionId": "2026-S2", "classNumber": 8699, "courseCode": "COMP8691", "grade": null, "enrolledOn": "2026-07-13" },
+    { "sessionId": "2026-S2", "classNumber": 9057, "courseCode": "COMP8020", "grade": null, "enrolledOn": "2026-07-13" }
+  ]
+}
