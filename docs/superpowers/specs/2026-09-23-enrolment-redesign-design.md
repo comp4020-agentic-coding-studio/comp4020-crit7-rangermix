@@ -1,6 +1,6 @@
 # Enrolment redesign — design spec
 
-Status: **draft for review, revision 2** (no implementation yet) ·
+Status: **draft for review, revision 3** (no implementation yet) ·
 2026-09-24 · crit 7 ("Build the ANU system you wish existed")
 
 Research behind this spec:
@@ -14,10 +14,17 @@ Research behind this spec:
 
 Every claim in both cites an ANU URL.
 
-Revision 2 folds in the answers to revision 1's open questions and three
+Revision 2 folded in the answers to revision 1's open questions and three
 new requirements: P&C is the source of truth, a demo settings bar (M2), and
-a crawl of all COMP courses plus five programs. It also re-weighs the
-approach options against them (§4.1).
+a crawl of all COMP courses plus five programs.
+
+Revision 3 applies the answers to revision 2's open questions (§14) and two
+changes from the user:
+
+- the page is built as a **single-page application** (D13, §4.1);
+- **the agent builds and runs the crawler** (D14, §8.2).
+
+An M2 Reset now loads a separate demo history for each program (§11.3).
 
 ## 1. Intent
 
@@ -50,6 +57,11 @@ Added on 2026-09-24:
 8. **M2, a pinned settings bar above the real demo**, to set the current
    date, the program and the major. It is built after this spec's M1.
 
+Added later on 2026-09-24:
+
+9. **Build it as a single-page application.**
+10. **The agent creates and runs the crawler.**
+
 ### What "good" means here
 
 - A student can go from "I need COMP8800 next semester" to enrolled
@@ -61,14 +73,17 @@ Added on 2026-09-24:
 - The crit spec holds: the app loads at its `*.fly.dev` URL, models a real
   ANU slice wired end to end, and **the core flow (enrol) survives a
   reload**.
-- It works with JavaScript off (full-page POST/redirect) and is better with
-  it on (in-place updates).
+- It behaves as a single-page application. The page loads once, and every
+  later change happens in place without a page load. The first response is
+  already the full page, rendered on the server, and reload or a shared link
+  restores the same view.
 
 ### Decisions
 
-D2, D3, D8 and D9 are the user's answers to revision 1's questions. D6, D10
-and D11 are the user's new requirements. The rest are design choices,
-open to correction.
+D2, D3, D8 and D9 are the user's answers to revision 1's questions, and
+D11's program and plan picks confirm revision 2's. D6, D10, D11, D13 and D14
+are the user's requirements. The rest are design choices, open to
+correction.
 
 | # | Decision | Why |
 |---|---|---|
@@ -82,8 +97,10 @@ open to correction.
 | D8 | The demo student is in **7722XVCOMP, Master of Computing (Advanced)** ("VCOMP"), with the **ARTIF-SPEC Artificial Intelligence** specialisation, under the 2026 rules. | User decision. P&C doesn't know the bare code `VCOMP`, so plans are stored by their full P&C code. |
 | D9 | The README's "before" images are **unblurred crops of the live ANUHub pages**, added at P6. | User decision. Nothing else from the signed-in session is committed. |
 | D10 | Two milestones. **M1** is F1–F5 (this spec's core). **M2** is the demo settings bar (§11), built only after M1 ships. M1 keeps the seams M2 needs (§11.4), so M2 adds code without reworking M1. | User requirement. |
-| D11 | **Data scope**: all COMP courses offered in 2026–2027; five programs with up to five plans each (§8.1); every course their requirements name; three multi-class examples. | User requirement. 2025 is left out because the demo student commenced in 2026 (open question 4). |
+| D11 | **Data scope**: all COMP courses offered in 2026–2027; five programs with up to five plans each (§8.1); every course their requirements name; three multi-class examples. | User requirement. 2025 is left out because the demo student commenced in 2026. The programs, plans and years were confirmed on 2026-09-24 (§14). |
 | D12 | Sessions are keyed by a readable slug (`2027-S1`), not ANUHub's PeopleSoft term codes. | P&C doesn't publish term codes, and the 2027 codes could only be guessed. A slug also makes URLs readable (`/?open=2027-S1`). |
+| D13 | The page is a **single-page application**. `/` server-renders the React app with the initial state; React then hydrates it and handles every later interaction through a JSON API, without page loads. Session, filter and chooser state stays in the URL. | User decision (2026-09-24), replacing revision 2's server-rendered page with region swaps. The server-rendered first paint is what the invariant tests and link checker see, since they run with scripts disabled (§4.1). |
+| D14 | **The agent builds and runs the crawler** during P1, and anyone can re-run it. The app and CI never run it. | User decision (2026-09-24). |
 
 ## 2. Grounding — the current system
 
@@ -166,7 +183,7 @@ enforce it. The second disappears because there is no permission step.
 
 - the five functions
 - persistence across reload
-- a working no-JS baseline
+- a single-page app whose first response is the full server-rendered page
 - accessibility: keyboard, screen reader, axe clean
 - usable at phone width
 - a re-runnable, polite P&C crawl whose snapshot is committed with its
@@ -182,6 +199,10 @@ enforce it. The second disappears because there is no permission step.
   COMP6120 ↔ COMP2120); the prerequisite text is shown, not checked
 - **Undo** (D2)
 - **Swap** (Drop + Add covers it)
+- working without JavaScript: the server-rendered page is readable, and a
+  `<noscript>` note says changes need JavaScript
+- pushing changes between tabs live: a tab re-fetches its state when it
+  regains focus
 - overload requests
 - the international-student minimum load
 - tutorial allocation (MyTimetable's job)
@@ -202,25 +223,49 @@ enforce it. The second disappears because there is no permission step.
 
 ### 4.1 Approaches, reconsidered
 
-Revision 1 weighed only the page architecture. The new requirements add
-three more choices: where the data comes from, how requirement prose
-becomes something the sidebar can track, and where M2's settings live.
-Each table leads with the recommendation.
+The user has chosen a single-page application (D13). That replaces revision
+2's recommendation of a server-rendered page with region swaps. (a) weighs
+the choices left inside an SPA; (b)–(d) are unchanged from revision 2,
+except that the agent now runs the crawler. Each table leads with the
+recommendation.
 
-**(a) Page architecture**: how the one page updates.
+**(a) Inside the SPA**
+
+(a1) *Rendering*: what the first response contains.
 
 | | Approach | For | Against |
 |---|---|---|---|
-| **A (recommended)** | **Server-rendered single page + region swap.** Astro renders the whole page from SQLite. Every action is a plain `<form>`: GET for view state and filters, POST + 303 redirect for changes. A ~60-line script intercepts those forms, fetches the resulting page, and swaps the `data-region` elements in place. | One render path. Works with JS off. Every state is a URL, so it can be tested over HTTP like the starter's guestbook test. No new dependencies. **M2 strengthens it**: a date or program change alters every region at once, and the server already derives everything from (student, today), so there is no client state to invalidate. | The server re-renders the whole page per interaction (trivial at this size). Focus and `<details>` state need care after a swap. |
-| A′ | Same server, with Astro's built-in `<ClientRouter />` doing the swap. | No custom script; it handles forms and history. | It swaps the whole body and resets scroll and focus on each submit. The page jumps away from the session the student was working in, which is what F4 exists to avoid. |
-| B | Astro + a client framework island (React/Svelte) calling JSON endpoints. | Instant filtering; rich widgets. | Two render paths and a new dependency; tests need a browser; nothing works with JS off. Under M2, status would be derived twice (server for validation, client for display), and every client store would need invalidating on a date change. |
-| C | Astro partials + htmx. | Small responses. | A new dependency, plus one partial per region to keep consistent with the full page. An M2 settings change refetches every partial, which is the full page anyway. |
+| **SSR + hydrate (recommended)** | `index.astro` computes the initial view on the server and renders `<EnrolmentApp client:load view={…} />`. The response is the full page, and React hydrates it in place. | The invariant tests and axe run on the served HTML with scripts disabled (`runScripts: "outside-only"`), so they check the real page. The link checker sees real links. First paint needs no API round trip. The page is readable without JavaScript. | Server and client output must match exactly, so dates are formatted by a pure function over ISO strings, and the client never reads its own clock. |
+| Client-only (`client:only="react"`) | The server sends a shell; the browser fetches the state and renders. | Nothing to hydrate. | The invariant tests would see only the shell, so their axe pass would check nothing that matters. There's an extra round trip before anything shows, and the link checker finds no links. |
+
+(a2) *Framework*.
+
+| | Approach | For | Against |
+|---|---|---|---|
+| **React 19 via `@astrojs/react` 7 (recommended)** | Components in `.tsx`, `useReducer` state, Testing Library tests. | The framework agents write most reliably. Mature accessibility and testing tools (`@testing-library/react` 16). The integration supports React 19. | The largest runtime of the options (tens of kB gzipped), which doesn't matter at this size. |
+| Svelte 5 via `@astrojs/svelte` 9 | Runes, compiled components. | Small bundle; concise code; declares Astro ^7 support. | Runes are newer, so agent output is less reliable. Smaller testing ecosystem. |
+| Preact + signals | A React-like API. | A tiny runtime. | `preact/compat` quirks with React-oriented libraries. |
+| Vanilla TS | No framework. | No dependency. | Hand-rolled rendering and state for a page with this much of both. |
+
+(a3) *Where status is derived*.
+
+| | Approach | For | Against |
+|---|---|---|---|
+| **Server view model (recommended)** | Every API response returns the whole view: classified sessions, enrolments, requirement statuses, summary and settings. It is built by the same `buildView(student, today)` the SSR uses. The client renders what it's given and never derives status. | Validation and display can't disagree. An M2 date change needs no client-side invalidation. | Each response is a few kB larger than a minimal diff. |
+| Client derivation | The API returns raw rows, and the client runs `classify` and `requirements` itself. | Smaller responses. | Two derivations: the server still validates. Under M2, every derived value must be recomputed when the date changes. |
+
+(a4) *Catalogue filtering*.
+
+| | Approach | For | Against |
+|---|---|---|---|
+| **In the browser (recommended)** | The browser fetches one session's classes once (a few hundred rows at most, with descriptions) and filters, sorts and pages them in memory. | Instant results with no debounce, and no FTS5 virtual table or custom migration. `search.ts` is a pure, unit-tested function. | The payload grows with the catalogue, but scope is fixed at about 180 courses (D11). |
+| On the server | A query per filter change, with SQLite FTS5. | Scales to the full ANU catalogue. | A round trip per keystroke, plus a custom FTS5 migration, for data that fits in one response. |
 
 **(b) Data pipeline**: how P&C data reaches the app.
 
 | | Approach | For | Against |
 |---|---|---|---|
-| **D1 (recommended)** | **Snapshot crawler.** `pnpm data:fetch` is run by a person. It caches raw responses in a gitignored directory. `pnpm data:build` normalises them offline into committed JSON plus a provenance file, and the app seeds from that JSON at boot. | Deterministic tests. The app never depends on P&C being up (curl hangs were observed). One polite crawl of about 200 requests. Data changes are reviewable as git diffs. | The data ages until someone re-runs the crawl. The UI states the snapshot date. |
+| **D1 (recommended)** | **Snapshot crawler.** `pnpm data:fetch` is run by the agent in P1 (D14), or by anyone later, but never by the app or CI. It caches raw responses in a gitignored directory. `pnpm data:build` normalises them offline into committed JSON plus a provenance file, and the app seeds from that JSON at boot. | Deterministic tests. The app never depends on P&C being up (curl hangs were observed). One polite crawl of about 200 requests. Data changes are reviewable as git diffs. | The data ages until someone re-runs the crawl. The UI states the snapshot date. |
 | D2 | Crawl at deploy or boot. | Always fresh at deploy. | Boot depends on P&C, the results can't be reproduced, and every deploy or machine restart loads ANU's site again. |
 | D3 | Live read-through with a cache. | Always fresh. | Every request depends on P&C, whose HTML has no API contract. Tests need the network or mocks. |
 
@@ -236,7 +281,7 @@ Each table leads with the recommendation.
 
 | | Approach | For | Against |
 |---|---|---|---|
-| **S1 (recommended)** | **Columns on the sandbox student** (`today`, `programCode`, its plans). | One source for both validation and display; survives reload; Reset restores the template. | None at this scale. |
+| **S1 (recommended)** | **Columns on the sandbox student** (`today`, `programCode`, its plans). | One source for both validation and display; survives reload; Reset loads a template. | None at this scale. |
 | S2 | Query parameters (`?asOf=…&program=…`). | Shareable links. | Every link and form must carry them, and forgetting one silently snaps the page back. |
 | S3 | A separate cookie. | Works without a sandbox. | A second store to keep in step with the sandbox. Apply is a POST, so a sandbox exists anyway. |
 
@@ -244,15 +289,30 @@ Each table leads with the recommendation.
 
 | Route | Kind | Purpose |
 |---|---|---|
-| `GET /` | page | The single page. See the query parameters below. |
-| `POST /api/enrol` | action | Takes `term` (a session slug) plus either `entry` or one or more `classNumber`. `entry` is free text: a class number or course code. `classNumber` values come from the chooser, the catalogue or the sidebar. It validates each class, enrols the valid ones, stores the outcomes as a flash notice, and redirects 303 back to `/?…` with the view state kept. If `entry` names a course with more than one class, it redirects to `/?choose=CODE&term=…`. |
-| `POST /api/drop` | action | Takes `term` and `classNumber`, drops the class, and redirects 303. |
-| `POST /api/demo/reset` | action | Resets this browser's sandbox to the template student. |
-| `POST /api/demo/settings` | action | **M2 only** (§11). |
-| `GET /api/events` | SSE | **Kept as is**: the deploy CI checks that it streams. No new use planned. |
+| `GET /` | page (SSR) | Renders the whole app for this browser's student, with the view state taken from the query parameters below, then hydrates. POSTs render the same page, as the CI POST probe needs (below). |
+| `GET /api/view` | JSON | The view model for this browser's student, as in §4.1 (a3). The client calls it when the tab regains focus. |
+| `GET /api/catalogue?session=2027-S1` | JSON | Every class in that session, with its course fields (code, title, description, career, level, units, subject, requisites, P&C URL) and class fields (number, mode, dates, topic). This is the data the catalogue filters in the browser. |
+| `POST /api/enrol` | JSON | The body is `{session, entry}` or `{session, classNumbers: [...]}`, where `entry` is free text (a class number or course code). If `entry` names a course with more than one class in the session, the response is `{choose: {course, classes}}` and nothing changes. Otherwise the server validates each class, enrols the valid ones, and returns `{outcomes, view}`. |
+| `POST /api/drop` | JSON | `{session, classNumber}` → `{outcomes, view}`. |
+| `POST /api/demo/reset` | JSON | `{programCode?}` → `{view}`. It resets this browser's sandbox to that program's template student. M1 has only the 7722XVCOMP template, which is the default. |
+| `POST /api/demo/settings` | JSON | **M2 only** (§11). |
+| `GET /api/events` | SSE | **Kept, with its heartbeat**, because the deploy CI checks that it streams. The guestbook's message events go when the guestbook does. |
 | `GET /readme/` | page | Unchanged (starter contract). |
 
-Query parameters on `GET /`. Session values are slugs such as `2027-S1`.
+**API conventions**
+
+- POSTs must send `Content-Type: application/json`; anything else gets 415.
+  A cross-site HTML form therefore can't reach them. A cross-site script
+  would need a CORS preflight, which the server never grants. The `sid`
+  cookie is also `SameSite=Lax`.
+- Errors come back as `{error: {code, message}}` with a 4xx status. The
+  message is shown to the user as written.
+- Every successful write returns the new view, so the client replaces its
+  state in one step.
+
+**Query parameters on `/`.** These are the SPA's URL state: the client
+keeps them in step with `history.replaceState`, and the server reads them
+for the first render. Session values are slugs such as `2027-S1`.
 
 - **`open`**: the sessions whose details are expanded. Defaults to the next
   semester.
@@ -263,17 +323,26 @@ Query parameters on `GET /`. Session values are slugs such as `2027-S1`.
   - `q, title, code, class, subject, career, level, mode, sort, page`.
 
 The two session parameters (`term` and `browse`) are kept separate so a
-chooser and a filtered catalogue can be open at once.
+chooser and a filtered catalogue can be open at once. An unknown value falls
+back to its default (§9).
 
 Constraint carried from CI: **`/` must stay server-rendered**, never
-prerendered. The deploy job POSTs to `/` to check that same-origin posts are
-accepted and cross-origin posts are refused with 403.
+prerendered. The deploy job POSTs a form to `/` and expects any status but
+403 from its own origin, and exactly 403 from a foreign one. Astro's origin
+check gives that for form content types.
 
 ### 4.3 Modules (each small, with one job)
 
-**App**
+**Server and shared logic** (`src/lib/`, pure where possible)
 
 - `src/lib/schema.ts`: tables (§5).
+- `src/lib/types.ts`: the view model and API types, shared by the server
+  and the client.
+- `src/lib/view.ts`: `buildView(student, today)` returns the view model.
+  `/`, `/api/view` and every write use it. When the URL asks for a chooser
+  or the catalogue, `index.astro` also passes that course's classes or that
+  session's catalogue as initial props, so those states render on the
+  server too.
 - `src/lib/clock.ts`: `today(student)`, **the only way code reads the
   date**. In M1 it returns `APP_TODAY` (tests) or the Canberra-local date.
   M2 puts the sandbox's override first.
@@ -289,7 +358,11 @@ accepted and cross-origin posts are refused with 403.
   - Anything else is invalid.
 - `src/lib/enrol.ts`: the validation rules and the enrol/drop
   transaction. It returns one outcome per class.
-- `src/lib/catalogue.ts`: turns filters into a SQL query, including FTS5.
+- `src/lib/search.ts`: a pure function over (classes, filters) that returns
+  the filtered, sorted page of the catalogue. It runs in the browser; the
+  server uses it only for the first render of `/?browse=…`.
+- `src/lib/format.ts`: pure en-AU date formatting over ISO date strings,
+  shared so that server and client render the same text.
 - `src/lib/requirements.ts`: a pure function over (groups, history,
   classes, today) that returns course and group statuses.
 - `src/lib/student.ts`: sandbox lookup, clone and cookie handling.
@@ -297,7 +370,8 @@ accepted and cross-origin posts are refused with 403.
 **Data**
 
 - `src/data/pc/*.json`, `src/data/calendar.json` and
-  `src/data/template-student.json` are committed.
+  `src/data/templates/<programCode>.json` are committed. M1 ships one
+  template, `7722XVCOMP.json`, and M2 adds the other four (§11.3).
 - `src/data/seed.ts` imports them, so Vite bundles them into `dist` and the
   Docker image carries them. It upserts them idempotently at boot.
 
@@ -310,14 +384,23 @@ accepted and cross-origin posts are refused with 403.
 - `scripts/pc/build.ts`: cache → normalised JSON + provenance.
 - `scripts/pc/overrides.json`: facts the requirement prose can't carry.
 
-**UI**
+**Client** (`src/app/`, React)
 
-- `src/components/`:
-  - `SessionList`, `SessionDetails`, `ClassRow`
-  - `AddClass`, `ClassChooser`, `Catalogue`
+- `EnrolmentApp.tsx`: the root. It owns the store and renders the regions
+  below. `index.astro` hydrates it with `client:load`.
+- `store.ts`: a `useReducer` over `{view, urlState, pending, notices}`. Its
+  actions are the API calls, and each successful write replaces `view` with
+  the one the server returns.
+- `api.ts`: typed `fetch` wrappers for §4.2, sharing their types with the
+  server through `src/lib/types.ts`.
+- `url.ts`: a pure mapping between the query string and `urlState`, in both
+  directions, used by the server and the client.
+- Components:
+  - `SessionList`, `SessionRow`, `EnrolmentDetails`, `ClassRow`
+  - `AddClass`, `ClassChooser`, `Catalogue` (`Filters`, `Results`,
+    `BulkBar`)
   - `RequirementsSidebar`, `Notices`
   - (M2) `DemoSettings`
-- `src/scripts/enhance.ts`: the region-swap script.
 
 ## 5. Data model
 
@@ -339,7 +422,7 @@ accepted and cross-origin posts are refused with 403.
   - `code` (PK, `COMP6320`), `subject` → subjects
   - `catalogue` (`6320`), `level` (1000 … 9000, from the first digit)
   - `title`, `career` (`UGRD` | `PGRD` | `RSCH`), `units`
-  - `description` (P&C's introduction text)
+  - `description` (P&C's introduction text; the catalogue searches it)
   - `requisites` (P&C's free text; display only)
   - `maxTakes` (default 1; raised by the seeder from requirement data, e.g.
     COMP8800 → 2)
@@ -370,18 +453,13 @@ accepted and cross-origin posts are refused with 403.
   - `text` (P&C's sentence, verbatim, always kept)
 - **`requirement_courses`**: `groupId` → requirement_groups, `courseCode` →
   courses, `times` (default 1; 2 for COMP8800).
-- **`course_fts`**: an FTS5 virtual table (external content = `courses`)
-  over code, title and description.
-  - It is created in a hand-written migration (`drizzle-kit generate
-    --custom`) and rebuilt after seeding.
-  - FTS5 is confirmed available in the bundled better-sqlite3 (SQLite
-    3.53.4).
 
 **Student data** (written at runtime):
 
 - **`students`**
   - `id`
-  - `token` (random; held in an httpOnly cookie; null for the template)
+  - `token` (random; held in an httpOnly cookie; null for a template,
+    and there is one template per program)
   - `name`, `uid`
   - `programCode` → plans, `rulesYear`, `commencedSessionId`
   - `createdAt`
@@ -405,14 +483,16 @@ starter does.
 
 ### 5.2 Demo sandbox (D5)
 
-- A **GET without a cookie** renders the template student read-only. It
-  writes nothing to the database, so crawlers, the CI link checker and the
-  invariant tests create no rows.
-- The **first POST** clones the template (the student row, its plans and
-  its enrolment history) and sets the cookie
+- A **GET without a cookie** renders the default template student
+  (7722XVCOMP) read-only. It writes nothing to the database, so crawlers,
+  the CI link checker and the invariant tests create no rows.
+- The **first API write** clones the template (the student row, its plans
+  and its enrolment history) and sets the cookie
   `sid=<token>; HttpOnly; SameSite=Lax; Path=/`, adding `Secure` in
   production.
-- **Reset** deletes the sandbox's rows and clears the cookie.
+- **Reset** replaces the sandbox's rows with a fresh clone of the chosen
+  program's template, and keeps the cookie (§11.3). In M1 the only template
+  is 7722XVCOMP.
 - An unknown or stale token counts as no cookie.
 - Sandboxes share nothing mutable, so there are no cross-visitor effects.
 
@@ -574,8 +654,8 @@ says so rather than hiding it (§13).
     use your requirements list, or browse classes."
 - **Which rows are open**:
   - By default, the **next** semester's row is open.
-  - Rows the user opens are kept in `?open=` for no-JS round trips, and
-    restored after a region swap.
+  - Rows the user opens are kept in `?open=`, so a reload or a shared link
+    reopens them.
   - Several rows can be open at once, e.g. to compare the current and next
     semesters.
 
@@ -633,12 +713,15 @@ First Semester 2027".
 ### 6.4 F2 — Browse classes
 
 - **Placement**: a section below the sessions, collapsed by default. It has
-  its own **session select**, which defaults to the next semester.
+  its own **session select**, which defaults to the next semester. Opening
+  the section, or changing the session, fetches that session's classes once
+  and keeps them for the visit. When the URL already has `browse`, they
+  arrive with the page instead (§4.3).
 - **Scope note**: the caption states the scope: "All COMP classes, plus
   courses named in the five programs' requirements."
-- **Filters** (a GET form), then Apply or Clear:
-  - **Search**: full text over code, title and description (FTS5 with
-    prefix matching).
+- **Filters** apply as the user types, and Clear resets them:
+  - **Search**: every word must prefix-match a word in the code, title,
+    topic or description, ignoring case (`search.ts`).
   - **Title contains**.
   - **Course code**: a prefix, so `COMP8` works.
   - **Class number**.
@@ -649,8 +732,11 @@ First Semester 2027".
 - **Results table**
   - Columns: select, class number, course code, title (with topic), career,
     level, units, mode, dates.
-  - Sortable by code, title or level through links.
-  - 50 rows per page, with paging links.
+  - Sortable by code, title or level.
+  - 50 rows per page.
+  - Sort and paging controls are real `?sort=` and `?page=` links. The
+    client handles them in place, and the server-rendered page follows
+    them too.
   - The `<caption>` states the count, session and active filters ("37 First
     Semester 2027 classes · subject COMP · level 8000").
 - **Row annotations**
@@ -661,10 +747,11 @@ First Semester 2027".
   - "Indicative" on 2027 offerings, since P&C says "the list of offerings
     for future years is indicative only".
 - **Bulk add**: a sticky bar appears once anything is selected: "**Add 3
-  selected classes to First Semester 2027**". It posts the `classNumber`
-  values, and the outcomes show exactly as in F1.
-- **With JS**: filter changes submit after a 300 ms pause, only the table
-  region is swapped, and the URL updates with `history.replaceState`.
+  selected classes to First Semester 2027**". It sends their class
+  numbers in one request, and the outcomes show exactly as in F1.
+- **URL**: filter changes update the URL with `history.replaceState`, so a
+  reload restores the same filtered view. The result count in the caption
+  is announced politely once typing pauses (500 ms).
 
 ### 6.5 F5 — Requirements sidebar
 
@@ -688,7 +775,7 @@ units from one of") and its state.
 **Actions**
 
 - **Add to First Semester 2027** appears when the next semester offers the
-  course. It posts `entry=CODE`, so a course with several classes opens the
+  course. It sends `entry: CODE`, so a course with several classes opens the
   chooser in that session's row.
 - The course code links to the catalogue, pre-filtered to that code. A
   small "P&C" link opens the plan's P&C page.
@@ -696,20 +783,29 @@ units from one of") and its state.
 **Accessibility.** Status is carried by text. The icons (✓ ● ◐ ○ –) are
 decorative (`aria-hidden`), and colour is never the only signal.
 
-**Updates.** The sidebar is a swapped region, so it updates on every enrol
-and drop.
+**Updates.** The sidebar renders from the view the server returns, so it
+updates on every enrol and drop.
 
-### 6.6 Progressive enhancement (`enhance.ts`)
+### 6.6 Client behaviour
 
-1. Intercept `submit` on `form[data-enhance]`.
-2. `fetch` the form, following the 303, and parse the returned HTML with
-   `DOMParser`.
-3. Replace each `[data-region]` on the page with its counterpart in the
-   response, matched by `id`. Re-apply the `open` state of any `<details>`
-   the user had open.
-4. Update the URL: `pushState` after writes, `replaceState` after filter
-   changes. Move focus to the notices region after writes.
-5. On any error, fall back to normal navigation.
+- **Writes wait for the server.** There are no optimistic updates. The
+  button that started a write shows "Adding…" or "Dropping…", and further
+  writes are blocked until the response arrives. The response's view then
+  replaces the client's state.
+- **Focus.** After a write, focus moves to the notices region, which lists
+  one outcome per class. Opening the chooser focuses its first checkbox;
+  Cancel returns focus to the input.
+- **URL.** `url.ts` keeps the open sessions, the chooser and the catalogue
+  filters in the query string with `replaceState`, so reload and shared
+  links restore the view. There is only one page, so there's no client
+  router.
+- **Stale tabs.** On `visibilitychange` to visible, the client re-fetches
+  `/api/view`, so a second tab catches up when the user returns to it.
+- **Hydration.** The server passes the full initial view, including
+  `today`, as props. `format.ts` renders every date from ISO strings, so
+  the server and the browser produce identical text.
+- **Without JavaScript**, the served page shows the full state, and a
+  `<noscript>` note says changes need JavaScript.
 
 ## 7. Accessibility and responsiveness
 
@@ -772,22 +868,26 @@ MACL-SPEC and MCHL-SPEC are 2026 plans that P&C drops in 2027. That's
 fine, since requirements use the 2026 rules.
 
 AACRD replaces MMLCV, which the research suggested, because MMLCV has no
-specialisations and the user asked for five plans per program (open
-question 1).
+specialisations and the user asked for five plans per program. The user
+confirmed this list on 2026-09-24 (§14).
 
 ### 8.2 Fetching (`pnpm data:fetch`)
 
 **Politeness**
 
-- It is run by a person, never by the app or CI.
-- It sends an honest User-Agent naming the project and its repo URL.
+- The agent runs it during P1, at the user's direction (D14). Anyone can
+  re-run it later. The app and CI never do.
+- It sends an honest User-Agent naming the project and its repo URL, and
+  saying that an AI coding agent runs it for a student project.
 - Requests are **serial at about 1 per second**, with a 30 s timeout and 3
   retries with backoff. Curl hangs were observed on first contact.
 - Every response is **cached on disk** in `.cache/pc/`, which is gitignored,
   so a re-run fetches only what's missing.
 - About 200 requests in total, or roughly 4 minutes.
-- robots.txt has no `User-agent: *` rule, and this script's agent isn't
-  listed.
+- robots.txt has no `User-agent: *` rule. It disallows ClaudeBot, which is
+  Anthropic's training crawler. This crawl is a user-directed fetch, a
+  different agent that the file doesn't list, and the script's own
+  User-Agent isn't listed either.
 
 **Correctness**
 
@@ -886,7 +986,9 @@ provenance file, since intensive classes vary.
 ### 8.5 Demo student (the only invented data)
 
 **Who.** "Demo Student", `u7000001`, 7722XVCOMP with ARTIF-SPEC,
-commenced First Semester 2026, rules year 2026.
+commenced First Semester 2026, rules year 2026. It is stored in
+`src/data/templates/7722XVCOMP.json`. M2 adds one template for each of the
+other four programs, built by the same rules (§11.3).
 
 **History** (real offerings only; the grades are invented):
 
@@ -922,8 +1024,13 @@ sandbox's enrolments.
 - **Malformed input**: an unknown session slug, filter value or `choose`
   code falls back to the default, and the page says so. **A malformed query
   string must never produce a 500.**
-- **Cross-origin POSTs** are refused by Astro's origin check (the CI
-  verifies this).
+- **Cross-site requests**: form POSTs to `/` are refused by Astro's origin
+  check (the CI verifies this). The API accepts only JSON (§4.2).
+- **Network failures**: the notice reads "Couldn't reach the server, so
+  nothing changed. Try again." The client state stays as it was, and the
+  buttons are enabled again.
+- **Malformed API bodies** get a 400 with a message naming the bad field.
+  They never get a 500.
 - **Crawler failures** never reach the app, which runs only on the
   committed snapshot:
   - timeouts and soft 404s are retried or recorded;
@@ -932,7 +1039,9 @@ sandbox's enrolments.
 ## 10. Testing
 
 **Contract tests** run over HTTP against the built server, in the same
-harness as the starter (`spec/*.test.ts`).
+harness as the starter (`spec/*.test.ts`). They check the JSON API and the
+server-rendered HTML of `/`, which is what the SPA hydrates, so they
+survive any change inside the client.
 
 - `APP_TODAY=2026-09-24` is set in `global-setup.ts`.
 - Tests pin the **committed snapshot**, never live P&C.
@@ -942,43 +1051,58 @@ harness as the starter (`spec/*.test.ts`).
 
 | Test | Proves |
 |---|---|
-| Every session row shows its start and end dates. Second Semester 2026 and Winter 2026 are **Now**; First Semester 2027 is **Next** and open by default. | F3 |
-| Session details are `<details>` on `/`, with no link to another page. | F4 |
-| `entry=<class number>` → 303, and a **fresh GET with the same cookie** lists the class under First Semester 2027. | F1, **crit: persists across reload** |
-| `entry=<code with one class>` → enrolled directly, with no confirm step. | F1, D2 |
-| `entry=<code with several classes>` → the chooser lists each class. Posting two `classNumber` values enrols both. | F1 |
-| `entry=` with a code not offered, an unknown code, a class from another session, or garbage → the matching message, and nothing enrolled. | F1 |
+| `/` shows every session with its start and end dates. Second Semester 2026 and Winter 2026 are **Now**; First Semester 2027 is **Next** and its details are open by default. | F3 |
+| Session details are `<details>` elements on `/`, not links to another page. | F4 |
+| `POST /api/enrol {entry: <class number>}` enrols the class, and a **fresh `GET /` with the same cookie** renders it under First Semester 2027. | F1, **crit: persists across reload** |
+| `entry: <code with one class>` enrols it directly, with no confirm step. | F1, D2 |
+| `entry: <code with several classes>` returns `choose`, listing each class, and changes nothing. Sending two class numbers then enrols both. | F1 |
+| `entry` with a code not offered, an unknown code, a class from another session, or garbage returns the matching message and enrols nothing. | F1 |
 | Refusals: the Last Day to Enrol has passed (Second Semester 2026); the course was already completed; a semester would exceed 24 units. COMP8800 can be enrolled for a second take. | rules |
-| Catalogue: `subject=COMP&career=PGRD&level=8000` returns only matching rows; `q=<word only in a description>` finds that course; bulk-adding 3 enrols 3. | F2 |
-| The template's sidebar shows **Completed · First Semester 2026**, **Enrolled · Second Semester 2026 (now)**, **Not enrolled** with Add, and "No classes listed" for COMP6250. Adding COMP8800 flips it to "Enrolled … (1 of 2)" and the summary to 30 enrolled. | F5 |
-| Drop removes the class and the sidebar reverts; a drop after the exam start is refused. | drop |
+| `GET /api/catalogue?session=2027-S1` returns only First Semester 2027 classes, with descriptions. `/?browse=2027-S1&subject=COMP&career=PGRD&level=8000` renders only matching rows. Bulk-adding 3 enrols 3. | F2 |
+| The template's sidebar shows **Completed · First Semester 2026**, **Enrolled · Second Semester 2026 (now)**, **Not enrolled** with Add, and "No classes listed" for COMP6250. After adding COMP8800, the returned view shows it as "Enrolled … (1 of 2)" with 30 units enrolled in the summary. | F5 |
+| A drop removes the class and the sidebar reverts. A drop after the exam start is refused. | drop |
+| A POST without `Content-Type: application/json` gets 415. A malformed body gets 400, never 500. | API |
 | Two cookie jars don't see each other's enrolments. A GET without a cookie writes no student row. | sandbox |
 | Every course code and class number on `/` exists in the committed snapshot. | D6 |
 
-**Unit tests** cover the pure modules (`sessions.ts`, `entry.ts` and
-`requirements.ts`) and the crawler's parsers:
+**Unit tests** (`src/**/*.test.ts`, `scripts/**/*.test.ts`):
 
-- Saved HTML fixtures of one course page, one program page and one
-  specialisation page give the expected rows.
-- Soft-404 detection.
-- The requirement golden test for the 20 pages.
+- the pure modules: `sessions.ts`, `entry.ts`, `requirements.ts`,
+  `search.ts`, `url.ts` and `format.ts`;
+- the crawler's parsers, on saved HTML fixtures of one course page, one
+  program page and one specialisation page;
+- soft-404 detection;
+- the requirement golden test for the 20 pages.
 
-These need `src/**/*.test.ts` and `scripts/**/*.test.ts` added to
-`vitest.config.ts`.
+**Component tests** (`src/app/**/*.test.tsx`, jsdom + Testing Library,
+with `fetch` stubbed by recorded API responses):
 
-**Routes**: `spec/routes.ts` gains the key states, so the invariants and
-axe cover them:
+- typing a course code with several classes opens the chooser and focuses
+  it, and Add selected sends both class numbers;
+- catalogue filters narrow the rows as the user types, and the URL
+  follows;
+- a failed request shows the network notice and leaves the state as it
+  was;
+- hydrating over the server's HTML logs no mismatch warning.
+
+Both new test globs need adding to `vitest.config.ts`. Component tests use
+jsdom per file (`// @vitest-environment jsdom`).
+
+**Routes**: `spec/routes.ts` gains the key server-rendered states, so the
+invariants and axe cover them:
 
 - `/`
 - `/?open=2026-S2`
 - `/?choose=POGO8062&term=2027-S1`
 - `/?browse=2027-S1&subject=COMP`
 
-**Manual browser pass** before shipping (Playwright):
+**Browser pass** before each ship, with the Playwright browser tools:
 
-- the region swap with JS on, and the no-JS fallback;
+- the core flow in a real browser: add by class number, add through the
+  chooser, bulk add, drop, then reload;
 - phone width;
 - keyboard-only enrolment;
+- axe in a real browser, for the contrast rules jsdom can't check;
 - screenshots for `PROCESS.md` and the README.
 
 ## 11. M2 — demo settings bar
@@ -1000,11 +1124,12 @@ editing any data. For example:
 
 ```
 ┌ Demo settings — not part of the redesign ────────────────────────────────────────┐
-│ Date [2026-09-24 📅] (real date ✓)  Program [7722XVCOMP Master of Computing (Adv.) ▾]│
-│ Major / specialisation [ARTIF-SPEC Artificial Intelligence ▾]  [Apply] [Use real  │
-│ date] [Reset demo]                                                               │
+│ Date [2026-09-24] (real date)  [Use real date]                                   │
+│ Program [7722XVCOMP Master of Computing (Advanced) ▾]                            │
+│ Major / specialisation [ARTIF-SPEC Artificial Intelligence ▾]                    │
+│ [Apply]  [Reset to 7722XVCOMP demo student]                                      │
 └──────────────────────────────────────────────────────────────────────────────────┘
-┌ nav: Enrolment · About ─────────────────── Demo Student · u7000001 · MCompAdv (AI) ┐
+┌ nav: Enrolment · About ───────────────── Demo Student · u7000001 · MCompAdv (AI) ┐
 ```
 
 **Placement and markup**
@@ -1020,19 +1145,21 @@ editing any data. For example:
 - **Date**: `<input type="date">`, limited to 2026-01-01 … 2027-12-31, the
   span of the loaded sessions. "Use real date" clears the override.
 - **Program**: the five programs in scope.
-- **Major / specialisation**: the plans offered by the chosen program,
-  grouped by program in `<optgroup>`s.
-  - With JS, only the chosen program's group is shown.
-  - Without JS, the server validates the pair: "ARIN-SPEC isn't offered in
-    7722XVCOMP".
-- **Reset demo** moves here from the nav.
+- **Major / specialisation**: only the chosen program's plans. Changing the
+  program selects that program's first plan. The server still validates
+  the pair: "ARIN-SPEC isn't offered in 7722XVCOMP".
+- **Apply** saves the date, program and plan.
+- **Reset** moves here from the nav. Its label names the program currently
+  selected: "Reset to BCOMP demo student".
 
 **Behaviour**
 
-- The controls form one POST form (`POST /api/demo/settings` → 303, with
-  the view state kept).
-- Visitors without a sandbox get one on Apply, like any POST.
-- The bar is a `data-region`, so an Apply swaps every region at once.
+- Apply sends `{today, programCode, planCode}` to
+  `POST /api/demo/settings`. Reset sends `{programCode}` to
+  `POST /api/demo/reset`. Either way, the returned view replaces the whole
+  page's state at once.
+- Visitors without a sandbox get one on their first Apply or Reset, like
+  any write.
 
 ### 11.3 Semantics
 
@@ -1059,7 +1186,33 @@ the sidebar for the new program and plan.
   warns on PG classes.
 - `rulesYear` stays 2026.
 
-**Reset** restores the template, including the real date.
+**Reset** loads the demo student of the program selected in the bar: that
+program's template, with its own plan and enrolment history (user decision,
+2026-09-24). It keeps the date setting, which only "Use real date" clears.
+Reset with 7722XVCOMP selected gives the M1 state back.
+
+**Per-program templates** (`src/data/templates/<programCode>.json`), one
+for each of the five programs:
+
+| Program | Template student | Plan |
+|---|---|---|
+| 7722XVCOMP | u7000001 (the M1 template, §8.5) | ARTIF-SPEC |
+| 7706XMCOMP | u7000002 | DTSC-SPEC |
+| BCOMP | u7000003 | SOFT-MAJ |
+| AACOM | u7000004 | ARIN-SPEC |
+| AACRD | u7000005 | THCS-SPEC |
+
+Each follows §8.5's rules:
+
+- commenced First Semester 2026, under the 2026 rules;
+- 24 units completed in First Semester 2026, and 24 enrolled in Second
+  Semester 2026, all real offerings from the snapshot;
+- at least two completed and two enrolled courses in its tracked groups,
+  and at least one tracked course that's not yet enrolled but offered in
+  First Semester 2027, so every status shows.
+
+M2-P2 picks the courses from the snapshot and records them in
+`src/data/templates/README.md`. Grades are invented and labelled as such.
 
 ### 11.4 Seams M1 keeps so M2 is additive
 
@@ -1071,6 +1224,7 @@ the sidebar for the new program and plan.
 | **Program and plans live on the student row**, not in config. | yes | the settings form writes them |
 | **Data**: all five programs and their plans are crawled and seeded in P1. | seeded, and only the template's program is shown | the selects read `program_plans` |
 | **Schema** | `students` without `today` | one migration adds nullable `today` |
+| **Templates are keyed by program**, and reset takes `programCode`. | one template (7722XVCOMP) | four more template files |
 
 ### 11.5 M2 tests
 
@@ -1080,7 +1234,8 @@ the sidebar for the new program and plan.
 | Setting it to 2027-03-02 makes First Semester 2027 **Now**, its add closed (last day 1 Mar) and Second Semester 2027 **Next**. COMP8620 then reads "Completed · Second Semester 2026" with no grade. | date, derived completion |
 | Switching to AACOM + ARIN-SPEC lists AACOM's compulsory courses and ARIN-SPEC's listed courses, keeps the enrolment history, and warns on a PG class. | program |
 | A pair the program doesn't offer is refused with a notice. | validation |
-| "Use real date" and Reset restore the defaults. | reset |
+| "Use real date" clears the override, and the badges follow the real date again. | date |
+| With BCOMP selected, Reset loads u7000003's history with SOFT-MAJ and keeps the date setting. Reset with 7722XVCOMP selected restores the M1 template. | reset |
 | The bar has an accessible name, and the page still has one `<h1>`. | a11y |
 
 ## 12. Build order
@@ -1091,23 +1246,24 @@ Each phase ends green (`pnpm check`), committed and pushed, and deployable.
 
 | Phase | Delivers |
 |---|---|
-| P0 Harness | Proposed `CLAUDE.md` rules for the user to accept or rewrite, since the harness is theirs and is marked (see below). The §10 test stubs. |
-| P1 Data | The crawler (`scope`, `fetch`, `parse`, `build`) with its parser tests and golden test. **The first crawl runs only with the user's go-ahead.** The committed snapshot and provenance file; `calendar.json`; the schema and migrations (drop `messages`, the new tables, the custom FTS5 migration); the seeder; the template student. |
-| P2 Read-only page | The single-page shell; the session list with Now/Next and dates; in-place enrolment details; the requirements sidebar. All read-only from the seed. |
-| P3 Enrol | Sandbox cookie; `/api/enrol` (class number, course code, chooser); `/api/drop`; notices; the rules; the persistence test. |
-| P4 Browse | Catalogue filters, FTS, level, sort, paging, bulk add, the Required and Enrolled annotations. |
-| P5 Enhance | `enhance.ts` region swap, focus and `<details>` restore, debounced filters. |
-| P6 Polish & ship | Phone layout; real-browser accessibility pass; the README (served at `/readme/`, with the D9 before crops and after screenshots); `PROCESS.md`; `reflections/crit-7.md`; deploy and verify on Fly. |
+| P0 Harness | Proposed `CLAUDE.md` rules for the user to accept or rewrite, since the harness is theirs and is marked (see below). The §10 contract-test stubs. |
+| P1 Data | The agent builds the crawler (`scope`, `fetch`, `parse`, `build`) with its parser and golden tests, **then runs it** (D14). The committed snapshot and provenance file; `calendar.json`; the schema and migrations (drop `messages`, add the new tables); the seeder; the 7722XVCOMP template student. |
+| P2 View + API | `buildView`, `/api/view`, `/api/catalogue`; the sandbox cookie; `/api/enrol` (class number, course code, `choose`), `/api/drop`, `/api/demo/reset`; the rules; the contract tests for all of them, including the persistence test. |
+| P3 SPA shell | The React integration; `EnrolmentApp` server-rendered and hydrated; the session list with Now/Next and dates; in-place enrolment details; the requirements sidebar; notices; `url.ts`. Read-only at first, then wired to the P2 API. |
+| P4 Add & drop | `AddClass`, `ClassChooser`, Drop, the sidebar's Add, pending states, focus handling, network errors; the component tests. |
+| P5 Browse | The catalogue: `search.ts`, filters, sort, paging, bulk add, the Required and Enrolled annotations, URL sync. |
+| P6 Polish & ship | Phone layout; the real-browser pass (§10); the README (served at `/readme/`, with the D9 before crops and after screenshots); `PROCESS.md`; `reflections/crit-7.md`; deploy and verify on Fly. |
 
 P0's proposed rules:
 
 - P&C is the source of truth for course data, and no course data is
   invented;
 - provenance is recorded for every data file;
-- the crawler is polite and human-run;
+- the crawler is polite, cached, and never runs in the app or CI;
 - contract tests come before features;
+- the server derives all status, and the client only renders it;
 - never prerender `/`;
-- keep `/api/events`;
+- keep `/api/events` streaming;
 - schema changes only through `db:generate`;
 - nothing from the signed-in ANUHub session is committed except the crops
   the user approved.
@@ -1116,8 +1272,8 @@ P0's proposed rules:
 
 | Phase | Delivers |
 |---|---|
-| M2-P1 Clock | The `students.today` migration; the bar with Date, "Use real date" and Reset; `POST /api/demo/settings`; the date tests. |
-| M2-P2 Program | The program and plan selects, pair validation, sidebar recompute, career warnings; the program tests. |
+| M2-P1 Clock | The `students.today` migration; the bar with Date and "Use real date"; `POST /api/demo/settings` for the date; the date tests. |
+| M2-P2 Program | The program and plan selects, pair validation, sidebar recompute, career warnings; the four more template students and the per-program Reset; the program and reset tests. |
 | M2-P3 Ship | Bar styling at phone width, an accessibility pass, a README section on the settings bar, deploy. |
 
 ## 13. Risks
@@ -1157,24 +1313,40 @@ P0's proposed rules:
   future enrolments at a date before the student commenced.
   - Mitigation: the bar is labelled demo-only, the date range is limited to
     2026–2027, and §11.3 defines the behaviour.
+- **Hydration mismatches, or a heavy bundle.**
+  - Mitigation: the client never reads its own clock or locale.
+    `format.ts` renders dates from ISO strings, and a component test fails
+    on any hydration warning.
+  - The bundle is React plus the app (tens of kB gzipped). The browser pass
+    checks first paint at phone width.
+- **The CI link checker follows every server-rendered link**, including
+  sort, paging and the sidebar's pre-filtered catalogue links.
+  - The set is bounded: 3 sorts × a few pages, plus one filtered page per
+    tracked course. Sort and paging links keep the current filters and add
+    none, and each sidebar link sets only a course code on an otherwise
+    unfiltered catalogue, so the checker can't wander into endless
+    combinations.
+  - P6 records how long the deploy job's link check takes.
 - **The README crops come from a real signed-in ANUHub session** (D9).
   - They are cropped to the view being compared.
   - The user can still ask for blurring before P6 commits them.
 
 ## 14. Open questions
 
-Each has a recommended default, which the spec already assumes.
+Revision 2's questions were answered on 2026-09-24:
 
-1. **Programs**: BCOMP, AACOM, AACRD, 7706XMCOMP and 7722XVCOMP. AACRD is
-   in place of MMLCV, because MMLCV has no majors or specialisations.
-   Keep this set?
-2. **Plans**: the §8.1 picks leave out HCCC-MAJ and INFS-MAJ (BCOMP), and
-   COMP-SPEC, HCCM-SPEC and VCOMP's CSEC-SPEC (Masters). Keep these picks?
+1. **Programs**: BCOMP, AACOM, AACRD, 7706XMCOMP and 7722XVCOMP. Yes.
+2. **Plans**: the §8.1 picks. Yes.
 3. **M2 program switch**: keep the enrolment history and recompute the
-   sidebar (recommended)? Or load a separate template history for each
-   program?
-4. **Years**: 2026–2027 only (recommended, since the demo student commenced
-   in 2026)? Or also crawl 2025, so M2's date can reach back a year?
+   sidebar, plus a Reset that loads each program's own demo history
+   (§11.3).
+4. **Years**: 2026–2027 only. Yes.
+
+Still open (the spec assumes the default):
+
+1. **Framework**: React 19 (default, §4.1 a2), or Svelte 5?
+2. **M2 templates**: the plans picked for the four new template students
+   (§11.3). Keep them?
 
 ## Sources
 
@@ -1191,6 +1363,11 @@ are the sources the spec leans on most:
 - Permission codes: https://www.anu.edu.au/students/program-administration/enrolment/permission-codes
 - ANUHub rename: https://services.anu.edu.au/information-technology/software-systems/anuhub
 - Calendars: https://www.anu.edu.au/directories/university-calendar?year=2026 and `?year=2027`
+
+**Framework**
+
+- `@astrojs/react` 7.0.0, with React 19 as a peer dependency:
+  https://www.npmjs.com/package/@astrojs/react (checked 2026-09-24)
 
 **Programs & Courses**
 
