@@ -30,3 +30,5 @@ mise.local.toml
 
 # Playwright MCP snapshots and logs from browser passes
 .playwright-mcp/
+
+.vscode/settings.json
