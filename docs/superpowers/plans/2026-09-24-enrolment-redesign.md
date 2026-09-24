@@ -8426,3 +8426,8 @@ Execution notes: what each task found that the plan didn't expect, and where the
   - From 1280px it fits one row. Scroll padding keeps a skipped-to heading clear of it.
   - The §11.5 scenarios all work from the keyboard, axe with contrast finds no violations, and the console is clean.
   - The README has a settings-bar section with a screenshot, and PROCESS.md has the M2 account.
+- **Final review** (`446c317`): a fresh Opus reviewer found no critical issues.
+  - Two important findings, plus three minors re-graded up by their effect, were fixed test-first (282 tests).
+  - The other minors are deferred to the student.
+  - The live site passes the probes and the link check (40 links).
+  - Every ruling and deferred finding is in `2026-09-24-enrolment-redesign-ledger.md`, and the report is in `../reviews/2026-09-24-final-review.md`.
