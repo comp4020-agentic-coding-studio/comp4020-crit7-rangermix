@@ -169,6 +169,29 @@ the agent asked whether each program should get its own demo student, I said:
   - The §11.5 scenarios all worked from the keyboard, and axe with contrast
     on found no violations.
 
+M2 was deployed the same way, and the probes and a live date check passed.
+
+### A fresh review before the crit
+
+A reviewer with fresh context read the whole branch against the spec and the
+plan. It found no critical issues and two important ones:
+
+- entry problems weren't announced to screen readers;
+- fast typing in a filter could make Safari refuse a URL write and blank the
+  page.
+
+The agent re-graded three minor findings up, judging by what a student would
+actually get:
+
+- A stale `open=` link collapsed every session row.
+- A chooser that replaced another kept its ticks, which could enrol a class
+  nobody saw ticked.
+- The README image test had landed in a file the course ships frozen.
+
+All five were fixed, each behaviour change test-first
+([`446c317`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/commit/446c317)).
+The remaining minors are listed for me to decide on.
+
 ### How I know it works
 
 `pnpm check` runs a type check, the build, and every test: parsers, the golden
