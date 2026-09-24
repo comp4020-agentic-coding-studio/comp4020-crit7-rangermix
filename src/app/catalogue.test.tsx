@@ -11,6 +11,7 @@ const browsing = (patch: Partial<AppProps> = {}): AppProps => appProps({ url: ur
 
 afterEach(() => {
   cleanup();
+  vi.restoreAllMocks();
   vi.unstubAllGlobals();
   window.history.replaceState(null, "", "/");
 });
@@ -25,7 +26,31 @@ describe("browse classes (F2, spec §6.4)", () => {
     await user.type(screen.getByLabelText("Search"), "optim");
     expect(within(table).getAllByRole("row")).toHaveLength(2);
     expect(table.querySelector("caption")?.textContent).toBe("1 First Semester 2027 class · search “optim”");
-    expect(window.location.search).toBe("?browse=2027-S1&q=optim");
+    await vi.waitFor(() => expect(window.location.search).toBe("?browse=2027-S1&q=optim"));
+  });
+
+  // Browsers throttle history writes; Safari throws past 100 in 10 seconds.
+  it("writes the URL a few times as the user types, not once per keystroke", async () => {
+    vi.stubGlobal("fetch", vi.fn<typeof fetch>());
+    const spy = vi.spyOn(window.history, "replaceState");
+    const user = userEvent.setup();
+    render(<EnrolmentApp {...browsing()} />);
+    spy.mockClear();
+    await user.type(screen.getByLabelText("Search"), "optimisation");
+    await vi.waitFor(() => expect(window.location.search).toBe("?browse=2027-S1&q=optimisation"));
+    expect(spy.mock.calls.length).toBeLessThanOrEqual(3);
+  });
+
+  it("keeps the page up when the browser refuses a URL write", async () => {
+    vi.stubGlobal("fetch", vi.fn<typeof fetch>());
+    vi.spyOn(window.history, "replaceState").mockImplementation(() => {
+      throw new DOMException("Attempt to use history.replaceState() more than 100 times per 10 seconds", "SecurityError");
+    });
+    const user = userEvent.setup();
+    render(<EnrolmentApp {...browsing()} />);
+    await user.type(screen.getByLabelText("Search"), "optim");
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    expect(within(screen.getByRole("table")).getAllByRole("row")).toHaveLength(2);
   });
 
   it("adds the selected classes in one request", async () => {

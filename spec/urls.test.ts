@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { Visitor } from "./helpers";
+import { sessionRow, Visitor } from "./helpers";
 
 // Review Focus 1: a malformed or stale link must never produce a 500 (spec §9).
 const notices = (doc: Document): string => doc.querySelector('[aria-label="Notices"]')?.textContent ?? "";
@@ -19,6 +19,11 @@ describe("malformed links to /", () => {
     [`/?browse=2027-S1&q=${"x".repeat(5000)}`, "cut to 100 characters"],
   ])("renders %s with a notice", async (path, words) => {
     expect(notices(await new Visitor().page(path))).toContain(words);
+  });
+
+  it("falls back to the default open row when open names only unknown sessions (spec §4.2)", async () => {
+    const doc = await new Visitor().page("/?open=2099-S9");
+    expect(sessionRow(doc, "2027-S1").open).toBe(true);
   });
 
   it("clamps a page past the end without an error", async () => {

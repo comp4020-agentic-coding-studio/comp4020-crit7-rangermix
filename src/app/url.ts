@@ -44,7 +44,9 @@ export function parseQuery(params: URLSearchParams, ctx: UrlContext): { state: U
       .filter(Boolean);
     const unknown = ids.filter((id) => !known.has(id));
     if (unknown.length > 0) problems.push(ignored(unknown));
-    open = [...new Set(ids.filter((id) => known.has(id)))];
+    const valid = [...new Set(ids.filter((id) => known.has(id)))];
+    // An explicit empty open= closes every row; a list naming only unknown sessions falls back to the default (spec §4.2).
+    open = ids.length > 0 && valid.length === 0 ? null : valid;
   }
 
   let choose: string | null = null;

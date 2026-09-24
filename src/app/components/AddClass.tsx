@@ -45,7 +45,7 @@ export function AddClass({ session, error, busy, pending, onSubmit }: Props) {
         e.g. 5099 or COMP1100
       </p>
       {error && (
-        <p id={`${id}-error`} className="error">
+        <p id={`${id}-error`} className="error" role="alert">
           {error}
         </p>
       )}

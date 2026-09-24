@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { fmtDate } from "../lib/format";
 import type { AppProps } from "../lib/types";
 import { AddClass } from "./components/AddClass";
@@ -13,6 +13,9 @@ import { SiteNav } from "./components/SiteNav";
 import { useEnrolment } from "./store";
 import { openSessions, toQuery } from "./url";
 
+/** The fewest milliseconds between two history writes: 5 a second at most, well inside every browser's throttle. */
+const URL_WRITE_GAP = 200;
+
 // The whole enrolment page as one React island (spec D13): server-rendered
 // with the view, then hydrated. The landmarks are siblings, in the phone
 // reading order: header (nav, h1, notices), requirements, sessions and
@@ -24,12 +27,28 @@ export default function EnrolmentApp(props: AppProps) {
   const busy = state.pending !== null;
   const browseSession = view.nextSemesterId ?? view.sessions[view.sessions.length - 1]?.id ?? "";
 
-  // The URL follows the state, so reload and shared links restore the view (spec §6.6).
+  // The URL follows the state, so reload and shared links restore the view (spec §6.6). Typing in a filter
+  // changes the state per keystroke and browsers throttle history writes (Safari throws past 100 in 10 s),
+  // so writes are spaced (the first at once, a burst folded into one trailing write) and a refused one is ignored.
+  const lastUrlWrite = useRef(-URL_WRITE_GAP);
   useEffect(() => {
     const target = `/${toQuery(url, view.nextSemesterId)}`;
-    if (window.location.pathname + window.location.search !== target) {
-      window.history.replaceState(window.history.state, "", target + window.location.hash);
+    const write = (): void => {
+      if (window.location.pathname + window.location.search === target) return;
+      lastUrlWrite.current = performance.now();
+      try {
+        window.history.replaceState(window.history.state, "", target + window.location.hash);
+      } catch {
+        // Refused by the browser's throttle; the next change writes the URL again.
+      }
+    };
+    const wait = lastUrlWrite.current + URL_WRITE_GAP - performance.now();
+    if (wait <= 0) {
+      write();
+      return;
     }
+    const timer = setTimeout(write, wait);
+    return () => clearTimeout(timer);
   }, [url, view.nextSemesterId]);
 
   // A stale tab catches up when it's shown again (spec §6.6).
@@ -82,6 +101,8 @@ export default function EnrolmentApp(props: AppProps) {
             <EnrolmentDetails session={s} busy={busy} pending={state.pending} onDrop={(e) => void actions.drop(e.sessionId, e.classNumber)}>
               {state.chooser?.sessionId === s.id ? (
                 <ClassChooser
+                  // A new course's chooser starts with nothing picked.
+                  key={`${state.chooser.sessionId}:${state.chooser.course.code}`}
                   chooser={state.chooser}
                   busy={busy}
                   pending={state.pending === `choose:${s.id}`}

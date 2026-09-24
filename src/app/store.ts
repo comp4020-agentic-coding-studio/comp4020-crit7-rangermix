@@ -141,8 +141,13 @@ export function useEnrolment(props: AppProps) {
         const r = await write(key, () => api.enrolEntry(sessionId, entry));
         if (!r) return "error";
         if (!r.ok) {
-          if (r.status === 422 && key.startsWith("add:")) dispatch({ type: "entryError", sessionId, message: r.message });
-          else failed(r.message);
+          if (r.status === 422 && key.startsWith("add:")) {
+            dispatch({ type: "entryError", sessionId, message: r.message });
+            // Back to the field, so it's read with the problem: the Add button was disabled mid-request (spec §6.6).
+            setTimeout(() => document.getElementById(`entry-${sessionId}`)?.focus(), 0);
+          } else {
+            failed(r.message);
+          }
           return "error";
         }
         if ("choose" in r.data) {
