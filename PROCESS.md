@@ -192,6 +192,64 @@ All five were fixed, each behaviour change test-first
 ([`446c317`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/commit/446c317)).
 The remaining minors are listed for me to decide on.
 
+### After M2: six improvements I chose from measurements
+
+Trying the live page myself, I found a class dropped before the semester
+started still sat in the history:
+
+> before semester start dropping class should no remain in history.
+
+That became
+[`6138b2b`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/commit/6138b2b).
+Then I asked:
+
+> other improvements you can think of on the enrolling page?
+
+The agent measured the build before suggesting anything:
+- the next semester's add box was 1,129 px down on a laptop;
+- adding from the catalogue threw the page back to the top;
+- Drop acted in one click on classes that could no longer be added back;
+- 18 courses' requisites mention a permission code.
+
+I picked six and changed one of them:
+
+> add 1-6, ask first for all drop except for sessions not started, and add
+> drop consequence explaining for other sessions.
+
+Each change was test-first, in its own commit:
+
+- **Past and quiet sessions fold away**
+  ([`94cca85`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/commit/94cca85)).
+  The add box moved from 1,129 to 775 px down on a laptop, and from 1,889 to
+  1,335 px on a phone.
+- **Deadlines count down** within a fortnight
+  ([`6be009c`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/commit/6be009c)).
+- **Drop asks first once a class has started**, and says what it costs
+  ([`b3c0a06`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/commit/b3c0a06)).
+  The wording comes from ANU's census-dates page: no fee or grade on or
+  before census, then WD until the drop-without-failure date, then WN. It
+  also covers re-adding and the international 24-unit half-year rule.
+- **Permission codes are flagged only where ANUHub would ask**
+  ([`d0c8c37`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/commit/d0c8c37)).
+  That covers a class from the other career, and P&C sentences read with
+  their conditions: COMP8430 needs one only in intensive mode, and COMP8712
+  only after COMP3710.
+- **Each class links to its P&C class page and timetable**, and sessions
+  with classes point to MyTimetable
+  ([`dec62cd`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/commit/dec62cd)).
+- **The student keeps their place after a write**
+  ([`4c47140`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/commit/4c47140)).
+  Focus stays on the control used, and the outcome shows beside it; the
+  notices region announces it without taking focus.
+
+The checks caught three things along the way:
+- The agent's first phone measurement was taken before the sidebar
+  collapsed, so it said 3.4 screens. The fair figure was 2.24.
+- A hand count of permission-code courses was one off; running the rule
+  itself gave the real number.
+- MyTimetable refuses automated requests, so the page links ANU's
+  timetabling information instead of a URL it couldn't check.
+
 ### How I know it works
 
 `pnpm check` runs a type check, the build, and every test: parsers, the golden

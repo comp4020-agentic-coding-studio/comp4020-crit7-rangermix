@@ -27,11 +27,14 @@ answers:
 
 | ANUHub today | This prototype |
 |---|---|
-| A session list with no dates and no current or next marker. | Every session shows its dates and key deadlines (exams, add, census, drop), badged **Now**, **Next** or **Upcoming**. |
+| A session list with no dates and no current or next marker. | Every session shows its dates and key deadlines (exams, add, census, drop), badged **Now**, **Next** or **Upcoming**. Deadlines within a fortnight count down ("drop without failure closes in 11 days"). Past sessions, and intensive sessions with none of your classes, fold away, so the semester you're enrolling for sits near the top. |
 | Enrolment Details replaces the list; changing session means backing out. | Each session is a disclosure row: its enrolment details unfold in place. |
 | Class numbers only, looked up elsewhere. | A class number **or** a course code. A course with one class is added directly; a course with several opens an inline chooser showing each class's mode and dates. |
 | Search needs a career and a subject area, and adds one class per click. | Every filter is optional, search covers codes, titles and descriptions, and several classes can be added at once. |
 | Program requirements live on another site, as prose. | A sidebar tracks the program's and major's course lists, with each course's status and a one-click Add. |
+| ANU's rules for dropping (census fees, WD and WN grades, the international 24-unit rule) sit on separate pages. | Once a class has started, Drop asks first, and the confirmation says what dropping now costs, from those rules and the class's own dates. A class that hasn't started drops in one click and leaves no record. |
+| The permission-number box appears every time, whether or not a class needs a code (CBE's guide). | A class is flagged only where ANUHub would ask this student for a code, with a link to how to get one. |
+| Tutorials are chosen in a separate system, MyTimetable. | Each class links to its P&C class page and timetable, and a session with current or upcoming classes points to MyTimetable. |
 
 <img src="public/readme/before-sessions.png" alt="ANUHub's session list: sessions and a program, with no dates">
 
@@ -44,7 +47,9 @@ answers:
 *Before: crops of the live ANUHub pages, 24 September 2026, reproduced with
 the student's permission.*
 
-<img src="public/readme/after-sessions.png" alt="The redesign: sessions with dates and Now/Next badges beside the requirements sidebar">
+<img src="public/readme/after-sessions.png" alt="The redesign: past and intensive sessions folded, the current and next semesters first with a deadline counting down, beside the requirements sidebar">
+
+<img src="public/readme/after-drop-confirm.png" alt="Dropping a class that has started asks first and lists what it costs: no re-adding, still charged, WD until 9 Oct, and the international load rule">
 
 <img src="public/readme/after-chooser.png" alt="Typing POGO8062 opens a chooser in place, with each class's mode and dates">
 
@@ -61,17 +66,21 @@ tests that run against the built server (`spec/`): the badges and dates, the
 in-place details, every add path and its messages, the 24-unit cap, drop
 deadlines, persistence across a reload, sandbox isolation, the catalogue's
 filters and links, the sidebar's statuses, and that every course code on the
-page exists in the snapshot. axe runs on every server-rendered state in the
+page exists in the snapshot. They also pin the folds, the countdowns, what
+the drop confirmation says in each census window, where permission codes
+apply, the class-page links, and where focus lands after each kind of write.
+axe runs on every server-rendered state in the
 suite, and a real-browser pass checked contrast, keyboard use and the phone
 layout. **Judgement calls** that no test settles: the wording, which
 requirement prose counts as a trackable course list, and the layout.
 
-**What it deliberately leaves out.** Real sign-in, permission codes,
-prerequisite checking (P&C publishes prerequisites only as prose, so the page
-shows them and doesn't enforce them), undo (the reverse of an add is a drop),
-swap, overloads, fees, seats and waitlists, tutorials, and any rule in a
-program that isn't a list of courses — those are shown verbatim under
-"Other rules, not tracked".
+**What it deliberately leaves out.** Real sign-in, asking for or checking
+permission codes (the page only flags where ANUHub would ask), prerequisite
+checking (P&C publishes prerequisites only as prose, so the page shows them
+and doesn't enforce them), undo (the reverse of an add is a drop), swap,
+overloads, fees, seats and waitlists, choosing tutorials (the page points to
+MyTimetable), and any rule in a program that isn't a list of courses — those
+are shown verbatim under "Other rules, not tracked".
 
 ## Where the data comes from
 
