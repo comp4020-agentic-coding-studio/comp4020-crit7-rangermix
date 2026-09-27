@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { fmtDate } from "../lib/format";
-import type { AppProps } from "../lib/types";
+import type { AppProps, Notice } from "../lib/types";
 import { AddClass } from "./components/AddClass";
 import { Catalogue } from "./components/Catalogue";
 import { ClassChooser } from "./components/ClassChooser";
@@ -22,7 +22,9 @@ const URL_WRITE_GAP = 200;
 // browse, footer. CSS moves the requirements to the right at 960px (plan
 // clarification 4).
 export default function EnrolmentApp(props: AppProps) {
-  const { state, actions, noticesRef } = useEnrolment(props);
+  const { state, actions } = useEnrolment(props);
+  // The last write's outcome, for the control that made it (spec §15.3).
+  const resultFor = (match: (key: string) => boolean): Notice[] | null => (state.result && match(state.result.key) ? state.result.notices : null);
   const { view, url } = state;
   const busy = state.pending !== null;
   const browseSession = view.nextSemesterId ?? view.sessions[view.sessions.length - 1]?.id ?? "";
@@ -72,20 +74,29 @@ export default function EnrolmentApp(props: AppProps) {
       <a className="skip-link" href="#sessions-heading">
         Skip to sessions
       </a>
-      <DemoSettings demo={view.demo} student={view.student} busy={busy} pending={state.pending} onApply={(s) => void actions.applySettings(s)} onReset={(code) => void actions.reset(code)} />
+      <DemoSettings
+        demo={view.demo}
+        student={view.student}
+        busy={busy}
+        pending={state.pending}
+        result={resultFor((k) => k === "settings" || k === "reset")}
+        onApply={(s) => void actions.applySettings(s)}
+        onReset={(code) => void actions.reset(code)}
+      />
       <header className="site-header">
         <SiteNav student={view.student} busy={busy} resetPending={state.pending === "reset"} onReset={null} />
         <h1>Enrolment</h1>
         <noscript>
           <p className="noscript">Changes need JavaScript. Without it you can still read your enrolment.</p>
         </noscript>
-        <Notices ref={noticesRef} notices={state.notices} />
+        <Notices notices={state.notices} seq={state.seq} />
       </header>
       <RequirementsSidebar
         requirements={view.requirements}
         browseSession={browseSession}
         busy={busy}
         pending={state.pending}
+        result={state.result}
         onAdd={(c) => {
           if (c.add) void actions.enrolEntry(c.add.sessionId, c.code, `req:${c.code}`);
         }}
@@ -98,7 +109,13 @@ export default function EnrolmentApp(props: AppProps) {
           open={openSessions(url, view.nextSemesterId)}
           onToggle={actions.toggleSession}
           renderDetails={(s) => (
-            <EnrolmentDetails session={s} busy={busy} pending={state.pending} onDrop={(e) => void actions.drop(e.sessionId, e.classNumber)}>
+            <EnrolmentDetails
+              session={s}
+              busy={busy}
+              pending={state.pending}
+              result={resultFor((k) => k.startsWith(`drop:${s.id}:`))}
+              onDrop={(e) => void actions.drop(e.sessionId, e.classNumber)}
+            >
               {state.chooser?.sessionId === s.id ? (
                 <ClassChooser
                   // A new course's chooser starts with nothing picked.
@@ -106,11 +123,19 @@ export default function EnrolmentApp(props: AppProps) {
                   chooser={state.chooser}
                   busy={busy}
                   pending={state.pending === `choose:${s.id}`}
+                  result={resultFor((k) => k === `choose:${s.id}`)}
                   onAdd={(classNumbers) => void actions.enrolClasses(s.id, classNumbers, `choose:${s.id}`)}
                   onCancel={actions.cancelChooser}
                 />
               ) : s.add.open ? (
-                <AddClass session={s} error={state.entryErrors[s.id] ?? null} busy={busy} pending={state.pending === `add:${s.id}`} onSubmit={(entry) => actions.enrolEntry(s.id, entry)} />
+                <AddClass
+                  session={s}
+                  error={state.entryErrors[s.id] ?? null}
+                  busy={busy}
+                  pending={state.pending === `add:${s.id}`}
+                  result={resultFor((k) => k === `add:${s.id}` || k === `choose:${s.id}`)}
+                  onSubmit={(entry) => actions.enrolEntry(s.id, entry)}
+                />
               ) : (
                 <p className="add__closed">{s.add.reason}</p>
               )}
@@ -133,6 +158,8 @@ export default function EnrolmentApp(props: AppProps) {
           onFilters={(filters) => actions.setUrl({ filters })}
           onRetry={actions.retryCatalogue}
           onAdd={(sessionId, classNumbers) => actions.enrolClasses(sessionId, classNumbers, "bulk")}
+          result={resultFor((k) => k === "bulk")}
+          onDismiss={actions.dismissResult}
         />
       </main>
       <footer className="site-footer">

@@ -1,16 +1,19 @@
 import { useState } from "react";
-import type { SessionView } from "../../lib/types";
+import type { Notice, SessionView } from "../../lib/types";
+import { InlineNotices } from "./Notices";
 
 interface Props {
   session: SessionView;
   error: string | null;
   busy: boolean;
   pending: boolean;
+  /** The outcome of this box's last add (spec §15.3). */
+  result: Notice[] | null;
   onSubmit: (entry: string) => Promise<"enrolled" | "choose" | "error">;
 }
 
 // F1's one input (spec §6.3). The session is implicit; the server reads the entry.
-export function AddClass({ session, error, busy, pending, onSubmit }: Props) {
+export function AddClass({ session, error, busy, pending, result, onSubmit }: Props) {
   const [value, setValue] = useState("");
   const id = `entry-${session.id}`;
   return (
@@ -49,6 +52,7 @@ export function AddClass({ session, error, busy, pending, onSubmit }: Props) {
           {error}
         </p>
       )}
+      <InlineNotices notices={result} />
     </form>
   );
 }

@@ -37,7 +37,7 @@ describe("the class chooser (F1, spec §6.3)", () => {
     await user.click(boxes[1]);
     await user.click(within(chooser).getByRole("button", { name: "Add selected" }));
     expect(JSON.parse(String(fetchMock.mock.calls[1][1]?.body))).toEqual({ session: "2027-S1", classNumbers: [5354, 5355] });
-    expect(await screen.findByText(outcome.message)).toBeTruthy();
+    expect(await within(screen.getByRole("region", { name: "Notices" })).findByText(outcome.message)).toBeTruthy();
     expect(screen.queryByRole("group", { name: /POGO8062/ })).toBeNull();
     await vi.waitFor(() => expect(window.location.search).not.toContain("choose="));
   });

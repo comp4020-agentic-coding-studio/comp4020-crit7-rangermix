@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { caption, search } from "../../lib/search";
-import type { Catalogue as CatalogueData, Filters as FilterState, View } from "../../lib/types";
+import type { Catalogue as CatalogueData, Filters as FilterState, Notice, View } from "../../lib/types";
 import { BulkBar } from "./BulkBar";
 import { Filters } from "./Filters";
 import { Results } from "./Results";
@@ -22,6 +22,9 @@ interface Props {
   onFilters: (filters: FilterState) => void;
   onRetry: () => void;
   onAdd: (sessionId: string, classNumbers: number[]) => Promise<boolean>;
+  /** The last bulk add's outcome (spec §15.3). */
+  result: Notice[] | null;
+  onDismiss: () => void;
 }
 
 function useSettled<T>(value: T, ms: number): T {
@@ -104,9 +107,11 @@ export function Catalogue(props: Props) {
               sessionName={data.sessionName}
               busy={props.busy}
               pending={props.pending === "bulk"}
+              result={props.result}
               onAdd={async () => {
                 if (await props.onAdd(data.sessionId, picked)) setSelected(new Set());
               }}
+              onDismiss={props.onDismiss}
             />
           </>
         )}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fmtDate } from "../../lib/format";
-import type { DemoView, StudentView } from "../../lib/types";
+import type { DemoView, Notice, StudentView } from "../../lib/types";
+import { InlineNotices } from "./Notices";
 
 export interface DemoChange {
   today?: string | null;
@@ -13,13 +14,15 @@ interface Props {
   student: StudentView;
   busy: boolean;
   pending: string | null;
+  /** The outcome of the last Apply or Reset (spec §15.3). */
+  result: Notice[] | null;
   onApply: (change: DemoChange) => void;
   onReset: (programCode: string) => void;
 }
 
 // M2's demo settings bar (spec §11.2): crit scaffolding, labelled as not part
 // of the redesign. A named region with no heading, so the page keeps one h1.
-export function DemoSettings({ demo, student, busy, pending, onApply, onReset }: Props) {
+export function DemoSettings({ demo, student, busy, pending, result, onApply, onReset }: Props) {
   const [date, setDate] = useState(demo.today);
   const [programCode, setProgramCode] = useState(student.programCode);
   const [planCode, setPlanCode] = useState(student.planCode ?? "");
@@ -86,6 +89,7 @@ export function DemoSettings({ demo, student, busy, pending, onApply, onReset }:
           {pending === "reset" ? "Resetting…" : `Reset to ${programCode} demo student`}
         </button>
       </form>
+      <InlineNotices notices={result} />
     </section>
   );
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import type { CourseStatusView, GroupState, Icon, RequirementsView } from "../../lib/types";
+import type { CourseStatusView, GroupState, Icon, Notice, RequirementsView } from "../../lib/types";
 import { catalogueLink } from "../url";
+import { InlineNotices } from "./Notices";
 
 // "Your requirements" (spec §6.5, F5). Status is carried by text; the icons
 // are decorative.
@@ -13,11 +14,13 @@ interface Props {
   browseSession: string;
   busy: boolean;
   pending: string | null;
+  /** The last write's outcome; a course shows it when the write was its Add (spec §15.3). */
+  result: { key: string; notices: Notice[] } | null;
   onAdd: (course: CourseStatusView) => void;
   onBrowse: (code: string) => void;
 }
 
-function Courses({ courses, browseSession, busy, pending, onAdd, onBrowse }: Omit<Props, "requirements"> & { courses: CourseStatusView[] }) {
+function Courses({ courses, browseSession, busy, pending, result, onAdd, onBrowse }: Omit<Props, "requirements"> & { courses: CourseStatusView[] }) {
   return (
     <ul className="req-courses">
       {courses.map((c) => (
@@ -45,6 +48,7 @@ function Courses({ courses, browseSession, busy, pending, onAdd, onBrowse }: Omi
               <span className="visually-hidden"> ({c.code})</span>
             </button>
           )}
+          {result?.key === `req:${c.code}` && <InlineNotices notices={result.notices} />}
         </li>
       ))}
     </ul>

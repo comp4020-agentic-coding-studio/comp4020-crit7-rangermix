@@ -1,19 +1,22 @@
 import type { ReactNode } from "react";
 import { TIMETABLING_URL } from "../../lib/links";
-import type { EnrolmentView, SessionView } from "../../lib/types";
+import type { EnrolmentView, Notice, SessionView } from "../../lib/types";
 import { ClassRow } from "./ClassRow";
+import { InlineNotices } from "./Notices";
 
 interface Props {
   session: SessionView;
   busy: boolean;
   pending: string | null;
+  /** The outcome of the last drop in this session (spec §15.3). */
+  result: Notice[] | null;
   onDrop: (e: EnrolmentView) => void;
   /** The add area: the input, the chooser, or why adding is closed. */
   children: ReactNode;
 }
 
 // "Enrolment details", unfolded in place inside the session row (spec §6.2, F4).
-export function EnrolmentDetails({ session, busy, pending, onDrop, children }: Props) {
+export function EnrolmentDetails({ session, busy, pending, result, onDrop, children }: Props) {
   const units = session.cap === null ? `${session.units} units` : `${session.units} of ${session.cap} units`;
   return (
     <div className="details">
@@ -36,6 +39,7 @@ export function EnrolmentDetails({ session, busy, pending, onDrop, children }: P
           ))}
         </ul>
       )}
+      <InlineNotices notices={result} />
       {/* Tutorials live in a separate system; point there once there's a class to go to (spec §15.6). */}
       {session.enrolments.some((e) => e.state === "enrolled") && (
         <p className="details__tutorials">

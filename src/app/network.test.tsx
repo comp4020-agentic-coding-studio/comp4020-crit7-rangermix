@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import EnrolmentApp from "./EnrolmentApp";
@@ -17,9 +17,12 @@ describe("writes wait for the server (spec §6.6, §9)", () => {
     render(<EnrolmentApp {...appProps()} />);
     await user.type(screen.getByLabelText("Class number or course code"), "COMP8800");
     await user.click(screen.getByRole("button", { name: "Add" }));
-    expect(await screen.findByText("Couldn't reach the server, so nothing changed. Try again.")).toBeTruthy();
+    const message = "Couldn't reach the server, so nothing changed. Try again.";
+    expect(await within(screen.getByRole("region", { name: "Notices" })).findByText(message)).toBeTruthy();
+    expect(screen.getByLabelText("Class number or course code").closest("form")?.textContent).toContain(message);
     expect((screen.getByRole("button", { name: "Add" }) as HTMLButtonElement).disabled).toBe(false);
-    expect(document.activeElement).toBe(screen.getByRole("region", { name: "Notices" }));
+    // The student keeps their place (spec §15.3): focus returns to Add, not to the notices.
+    await vi.waitFor(() => expect(document.activeElement).toBe(screen.getByRole("button", { name: "Add" })));
     expect(document.querySelector('[data-session="2026-S2"] [data-class="8707"]')).not.toBeNull();
   });
 

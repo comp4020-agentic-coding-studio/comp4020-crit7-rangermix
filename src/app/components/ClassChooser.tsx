@@ -1,18 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { fmtRange } from "../../lib/format";
 import { PERMISSION_CODES_URL } from "../../lib/links";
-import type { Chooser } from "../../lib/types";
+import type { Chooser, Notice } from "../../lib/types";
+import { InlineNotices } from "./Notices";
 
 interface Props {
   chooser: Chooser;
   busy: boolean;
   pending: boolean;
+  /** The outcome of a failed add from this chooser, which stays open (spec §15.3). */
+  result: Notice[] | null;
   onAdd: (classNumbers: number[]) => void;
   onCancel: () => void;
 }
 
 // A course's classes in one session, in place of the input (spec §6.3).
-export function ClassChooser({ chooser, busy, pending, onAdd, onCancel }: Props) {
+export function ClassChooser({ chooser, busy, pending, result, onAdd, onCancel }: Props) {
   const [picked, setPicked] = useState<number[]>([]);
   const first = useRef<HTMLInputElement>(null);
   const { code, title } = chooser.course;
@@ -61,6 +64,7 @@ export function ClassChooser({ chooser, busy, pending, onAdd, onCancel }: Props)
           <strong>Requisites (from P&amp;C, not checked here):</strong> {chooser.course.requisites}
         </p>
       )}
+      <InlineNotices notices={result} />
       <div className="chooser__actions">
         <button type="button" className="button" disabled={busy || picked.length === 0} onClick={() => onAdd([...picked].sort((a, b) => a - b))}>
           {pending ? "Adding…" : "Add selected"}

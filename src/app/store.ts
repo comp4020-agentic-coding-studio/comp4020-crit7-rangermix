@@ -1,4 +1,4 @@
-import { useMemo, useReducer, useRef } from "react";
+import { useEffect, useMemo, useReducer, useRef } from "react";
 import { PERMISSION_CODES_URL } from "../lib/links";
 import type { AppProps, Catalogue, Chooser, Notice, Outcome, UrlState, View, WriteResponse } from "../lib/types";
 import * as api from "./api";
@@ -13,6 +13,10 @@ export interface AppState {
   view: View;
   url: UrlState;
   notices: Notice[];
+  /** Counts results, so the notices region announces a repeated message again (spec §15.3). */
+  seq: number;
+  /** The last write's outcome, shown beside the control that made it (spec §15.3); cleared when the next write starts. */
+  result: { key: string; notices: Notice[] } | null;
   /** The control whose write is in flight ("add:2027-S1", "choose:2027-S1", "drop:2027-S1:5354", "req:COMP8800", "bulk", "reset"); null when idle. */
   pending: string | null;
   chooser: Chooser | null;
@@ -28,9 +32,10 @@ export type Action =
   | { type: "url"; patch: Partial<UrlState> }
   | { type: "toggleSession"; sessionId: string; open: boolean }
   | { type: "pending"; key: string | null }
-  | { type: "written"; view: View; notices: Notice[] }
+  | { type: "written"; view: View; notices: Notice[]; key: string }
   | { type: "view"; view: View }
-  | { type: "notices"; notices: Notice[] }
+  | { type: "notices"; notices: Notice[]; key: string }
+  | { type: "dismissResult" }
   | { type: "chooser"; chooser: Chooser | null }
   | { type: "entryError"; sessionId: string; message: string | null }
   | { type: "loadingCatalogue"; sessionId: string }
@@ -42,6 +47,8 @@ export function init(props: AppProps): AppState {
     view: props.view,
     url: props.url,
     notices: props.notices,
+    seq: 0,
+    result: null,
     pending: null,
     chooser: props.chooser,
     entryErrors: {},
@@ -67,13 +74,22 @@ export function reducer(state: AppState, action: Action): AppState {
       return { ...state, url: { ...state.url, open: next } };
     }
     case "pending":
-      return { ...state, pending: action.key };
+      return { ...state, pending: action.key, result: action.key === null ? state.result : null };
     case "written":
-      return { ...state, view: action.view, notices: action.notices, catalogues: keepCatalogues(state, action.view) };
+      return {
+        ...state,
+        view: action.view,
+        notices: action.notices,
+        seq: state.seq + 1,
+        result: { key: action.key, notices: action.notices },
+        catalogues: keepCatalogues(state, action.view),
+      };
     case "view":
       return { ...state, view: action.view, catalogues: keepCatalogues(state, action.view) };
     case "notices":
-      return { ...state, notices: action.notices };
+      return { ...state, notices: action.notices, seq: state.seq + 1, result: { key: action.key, notices: action.notices } };
+    case "dismissResult":
+      return { ...state, result: null };
     case "chooser":
       return { ...state, chooser: action.chooser };
     case "entryError": {
@@ -100,26 +116,61 @@ export function outcomeNotices(outcomes: Outcome[]): Notice[] {
   ]);
 }
 
+/**
+ * Where focus goes when the control that made a write is gone (spec §15.3): the add input for an
+ * add or a chooser, the course's link for a sidebar add, the bulk bar's Dismiss, and the class
+ * row (or, if the drop removed it, the add input) for a drop.
+ */
+function placeFor(key: string): HTMLElement | null {
+  const [kind, a, b] = key.split(":");
+  const q = (selector: string): HTMLElement | null => document.querySelector<HTMLElement>(selector);
+  const entry = (): HTMLElement | null => document.getElementById(`entry-${a}`) ?? q(`details[data-session="${a}"] > summary`);
+  switch (kind) {
+    case "add":
+    case "choose":
+      return entry();
+    case "req":
+      return q(`[data-course="${a}"] a`);
+    case "drop":
+      return q(`details[data-session="${a}"] details[data-class="${b}"] > summary`) ?? entry();
+    case "bulk":
+      return document.getElementById("bulk-dismiss");
+    default:
+      return null;
+  }
+}
+
 export function useEnrolment(props: AppProps) {
   const [state, dispatch] = useReducer(reducer, props, init);
   const latest = useRef(state);
   latest.current = state;
-  const noticesRef = useRef<HTMLElement | null>(null);
+  /** The write in flight and the control that started it, so focus can come back to it (spec §15.3). */
+  const place = useRef<{ key: string; origin: HTMLElement | null } | null>(null);
+
+  // After a write the student keeps their place (spec §15.3): focus returns to the control they
+  // used, or, when the result removed it, to what replaced it. It never jumps to the notices,
+  // which announce the outcome politely; the outcome also shows beside the control.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: runs once per result
+  useEffect(() => {
+    const was = place.current;
+    if (!was) return;
+    place.current = null;
+    // A tick later, so updates that follow the result (a cleared selection) have rendered too.
+    const id = setTimeout(() => {
+      const origin = was.origin;
+      const kept = origin?.isConnected && !(origin instanceof HTMLButtonElement && origin.disabled);
+      (kept ? origin : placeFor(was.key))?.focus({ preventScroll: true });
+    }, 0);
+    return () => clearTimeout(id);
+  }, [state.seq]);
 
   const actions = useMemo(() => {
-    // After a write, focus moves to the notices, which list one outcome per class (spec §6.6).
-    const focusNotices = (): void => noticesRef.current?.focus();
-    const failed = (message: string): void => {
-      dispatch({ type: "notices", notices: [{ tone: "error", text: message }] });
-      focusNotices();
-    };
-    const written = (data: WriteResponse): void => {
-      dispatch({ type: "written", view: data.view, notices: outcomeNotices(data.outcomes) });
-      focusNotices();
-    };
+    const failed = (message: string, key: string): void => dispatch({ type: "notices", notices: [{ tone: "error", text: message }], key });
+    const written = (data: WriteResponse, key: string): void => dispatch({ type: "written", view: data.view, notices: outcomeNotices(data.outcomes), key });
     /** Runs one write. Writes are serialised: while one is in flight, another click does nothing (spec §6.6). */
     async function write<T>(key: string, call: () => Promise<api.ApiResult<T>>): Promise<api.ApiResult<T> | null> {
       if (latest.current.pending !== null) return null;
+      place.current = { key, origin: document.activeElement instanceof HTMLElement ? document.activeElement : null };
       latest.current = { ...latest.current, pending: key };
       dispatch({ type: "pending", key });
       try {
@@ -152,7 +203,7 @@ export function useEnrolment(props: AppProps) {
             // Back to the field, so it's read with the problem: the Add button was disabled mid-request (spec §6.6).
             setTimeout(() => document.getElementById(`entry-${sessionId}`)?.focus(), 0);
           } else {
-            failed(r.message);
+            failed(r.message, key);
           }
           return "error";
         }
@@ -163,7 +214,7 @@ export function useEnrolment(props: AppProps) {
           dispatch({ type: "url", patch: { choose: choose.course.code, term: choose.sessionId } });
           return "choose";
         }
-        written(r.data);
+        written(r.data, key);
         return "enrolled";
       },
 
@@ -171,27 +222,28 @@ export function useEnrolment(props: AppProps) {
         const r = await write(key, () => api.enrolClasses(sessionId, classNumbers));
         if (!r) return false;
         if (!r.ok) {
-          failed(r.message);
+          failed(r.message, key);
           return false;
         }
         if (key.startsWith("choose:")) closeChooser();
-        written(r.data);
+        written(r.data, key);
         return true;
       },
 
       async drop(sessionId: string, classNumber: number): Promise<void> {
-        const r = await write(`drop:${sessionId}:${classNumber}`, () => api.dropClass(sessionId, classNumber));
-        if (r?.ok) written(r.data);
-        else if (r) failed(r.message);
+        const key = `drop:${sessionId}:${classNumber}`;
+        const r = await write(key, () => api.dropClass(sessionId, classNumber));
+        if (r?.ok) written(r.data, key);
+        else if (r) failed(r.message, key);
       },
 
       async reset(programCode?: string): Promise<void> {
         const r = await write("reset", () => api.resetDemo(programCode));
         if (r?.ok) {
           closeChooser();
-          written(r.data);
+          written(r.data, "reset");
         } else if (r) {
-          failed(r.message);
+          failed(r.message, "reset");
         }
       },
 
@@ -199,10 +251,15 @@ export function useEnrolment(props: AppProps) {
         const r = await write("settings", () => api.saveSettings(settings));
         if (r?.ok) {
           closeChooser();
-          written(r.data);
+          written(r.data, "settings");
         } else if (r) {
-          failed(r.message);
+          failed(r.message, "settings");
         }
+      },
+
+      /** The bulk bar's Dismiss (spec §15.3). */
+      dismissResult(): void {
+        dispatch({ type: "dismissResult" });
       },
 
       /** Cancel returns focus to the session's input (spec §6.6). */
@@ -244,5 +301,5 @@ export function useEnrolment(props: AppProps) {
     };
   }, []);
 
-  return { state, actions, noticesRef };
+  return { state, actions };
 }

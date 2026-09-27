@@ -710,7 +710,8 @@ class.
 **Warn**, without blocking, when the class's career doesn't match the
 student's program (e.g. a PGRD student adding a UGRD course).
 
-**Outcomes** appear as a list in the notices region, and focus moves there:
+**Outcomes** appear as a list in the notices region and beside the control
+that made the write, and focus stays in place (§15.3):
 "Enrolled: COMP8800 (class ####)" / "Not added: COMP8020 — not offered in
 First Semester 2027".
 
@@ -796,9 +797,10 @@ updates on every enrol and drop.
   button that started a write shows "Adding…" or "Dropping…", and further
   writes are blocked until the response arrives. The response's view then
   replaces the client's state.
-- **Focus.** After a write, focus moves to the notices region, which lists
-  one outcome per class. Opening the chooser focuses its first checkbox;
-  Cancel returns focus to the input.
+- **Focus.** After a write, focus stays where the student was and the
+  outcome shows beside the control (§15.3). The notices region announces
+  it. Opening the chooser focuses its first checkbox; Cancel returns focus
+  to the input.
 - **URL.** `url.ts` keeps the open sessions, the chooser and the catalogue
   filters in the query string with `replaceState`, so reload and shared
   links restore the view. There is only one page, so there's no client
@@ -1457,6 +1459,34 @@ Supersedes the one-click **Drop** of §6.2.
   - A link to ANU's census-dates page.
 - Countdowns follow §15.4. The server writes every line (`dropConfirm`,
   `dropConsequences`).
+
+### 15.3 The student keeps their place after a write
+
+Supersedes §6.6's "after a write, focus moves to the notices region" and
+§6.3's "focus moves there". Moving focus scrolled the page to the top: adding
+from the catalogue at 1,705 px left the student at 0.
+
+- **Focus stays** on the control that made the write. If the result
+  removed that control, focus goes to what replaced it:
+  - the add input, after an add or a chooser add;
+  - the course's link in the sidebar, after its Add;
+  - the bulk bar's Dismiss, after a bulk add;
+  - the class row, now "Dropped", after a drop (or the add input, if the
+    drop removed the row).
+  - Focus moves without scrolling.
+- **The outcome shows beside the control** as well as in the notices
+  region:
+  - under the add input, or in a chooser that stayed open;
+  - under the sidebar course;
+  - in the bulk bar, until Dismiss or the next selection;
+  - in the session's details, after a drop;
+  - in the demo bar, after Apply or Reset.
+- The next write clears it.
+- **The notices region stays the one live region.** It announces each
+  outcome politely without taking focus. Each result renders new list items,
+  so a repeated message is announced again.
+- A 422 entry problem still returns focus to the input, where it is read
+  with its linked message.
 
 ### 15.4 Deadlines count down
 
