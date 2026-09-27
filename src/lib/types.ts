@@ -57,8 +57,12 @@ export interface SessionView {
   startDate: string;
   endDate: string;
   badge: Badge;
-  /** Before today's year: shown behind "Show earlier sessions" (spec §6.2). */
-  earlier: boolean;
+  /**
+   * Where the row sits (spec §15.1): "past" behind "Past sessions"; "intensive" (an intensive
+   * session with none of the student's classes) behind its year's "Intensive sessions"; null in
+   * the main list.
+   */
+  fold: "past" | "intensive" | null;
   /** "exams 5–21 Nov · add closed 3 Aug · census 31 Aug · …" (spec §6.2). */
   keyDates: string;
   add: AddState;

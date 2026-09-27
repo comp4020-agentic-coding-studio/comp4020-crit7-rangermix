@@ -630,9 +630,8 @@ says so rather than hiding it (§13).
 
 ### 6.2 F3 + F4 — Sessions and in-place Enrolment details
 
-- **One row per session**, grouped by academic year. Only years at or after
-  today's year are shown by default; earlier years sit behind "Show earlier
-  sessions".
+- **One row per session**, grouped by academic year. Past sessions, and
+  intensive sessions with none of the student's classes, fold away (§15.1).
 - **Each row** shows:
   - the session name, the start–end dates and a badge (**Now**, **Next**,
     **Upcoming**, **Past**);
@@ -1397,6 +1396,32 @@ holds the detail.
 11. **Units are stored as REAL.**
 12. **The session heading's counts**, and which years sit behind "Show
     earlier sessions", come from server fields.
+
+## 15. Improvements after M2 (2026-09-27)
+
+The user picked six improvements from a list the agent measured on the
+build: "add 1-6, ask first for all drop except for sessions not started,
+and add drop consequence explaining for other sessions." Each rule below
+supersedes the earlier text it names.
+
+### 15.1 Past and quiet sessions fold away
+
+Supersedes §6.2's "earlier years sit behind 'Show earlier sessions'".
+
+- Every **past** session, from any year, sits behind one "Past sessions
+  (*n*)" fold at the top of the list.
+- An **intensive** session that isn't past and has none of the student's
+  classes (dropped ones count as classes) sits behind its year's
+  "Intensive sessions (*n*): Winter, Spring" fold, after that year's other
+  rows.
+- Everything else stays in the main list, grouped by year. On 2026-09-24
+  that is Second Semester 2026, First Semester 2027 and Second Semester
+  2027. Measured after hydration, the next semester's add box moves from
+  1,129 px to 775 px down on a 1280×800 laptop, and from 1,889 px to
+  1,335 px on a 390×844 phone. 374 px of the phone figure is the M2 demo bar.
+- A fold opens when it holds a session the URL (`?open=`) or the chooser
+  opened.
+- The server derives each row's `fold`; the client only groups by it.
 
 ## Sources
 

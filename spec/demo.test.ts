@@ -25,7 +25,7 @@ describe("M2: the date setting (spec §11.3)", () => {
     expect(s1?.keyDates).toContain("add closed 1 Mar");
     expect(body.view.nextSemesterId).toBe("2027-S2");
     expect(status(body.view, "COMP8620")?.text).toBe("Completed · Second Semester 2026");
-    expect(body.view.sessions.find((s) => s.id === "2026-S1")?.earlier).toBe(true);
+    expect(body.view.sessions.find((s) => s.id === "2026-S1")?.fold).toBe("past");
   });
 
   it("stamps new enrolments with the demo date", async () => {

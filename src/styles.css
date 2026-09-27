@@ -79,7 +79,8 @@ h4 { font-size: 0.95rem; }
 .sessions__note { color: var(--muted); }
 .year-group { display: grid; gap: 0.5rem; }
 .year-group__label { margin: 0.75rem 0 0; font-weight: 700; color: var(--muted); }
-.earlier > summary { cursor: pointer; color: var(--accent); }
+.fold > summary { cursor: pointer; color: var(--accent); font-weight: 600; padding: 0.35rem 0; }
+.fold { display: grid; gap: 0.5rem; }
 .session { border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); }
 .session--now { border-left: 5px solid var(--now); }
 .session--next { border-left: 5px solid var(--next); }

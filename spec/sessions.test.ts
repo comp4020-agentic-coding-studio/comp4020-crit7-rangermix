@@ -7,18 +7,19 @@ const openRows = (doc: Document): (string | null)[] => [...doc.querySelectorAll(
 describe("F3: sessions show dates and Now/Next", () => {
   it("lists every session with its dates; Second Semester 2026 and Winter 2026 are Now, First Semester 2027 is Next", async () => {
     const doc = await new Visitor().page("/");
+    // Past sessions first (folded), then each year's own sessions, then its folded intensive sessions (spec §15.1).
     expect([...doc.querySelectorAll("details[data-session]")].map((d) => d.getAttribute("data-session"))).toEqual([
       "2026-SUM",
       "2026-S1",
       "2026-AUT",
-      "2026-WIN",
       "2026-S2",
+      "2026-WIN",
       "2026-SPR",
-      "2027-SUM",
       "2027-S1",
+      "2027-S2",
+      "2027-SUM",
       "2027-AUT",
       "2027-WIN",
-      "2027-S2",
       "2027-SPR",
     ]);
     expect(badgeOf(doc, "2026-S2")).toBe("Now");
@@ -40,6 +41,30 @@ describe("F3: sessions show dates and Now/Next", () => {
 
   it("reopens the sessions named in ?open=", async () => {
     expect(openRows(await new Visitor().page("/?open=2026-S2,2027-S2"))).toEqual(["2026-S2", "2027-S2"]);
+  });
+});
+
+describe("folds (spec §15.1)", () => {
+  const ids = (list: Element[]): (string | null)[] => list.map((d) => d.getAttribute("data-session"));
+
+  it("folds past sessions, and intensive sessions with none of your classes, so the current and next semesters lead", async () => {
+    const doc = await new Visitor().page("/");
+    const past = doc.querySelector("details.fold--past");
+    expect(past?.querySelector("summary")?.textContent).toBe("Past sessions (3)");
+    expect(past?.hasAttribute("open")).toBe(false);
+    expect(ids([...(past?.querySelectorAll("details[data-session]") ?? [])])).toEqual(["2026-SUM", "2026-S1", "2026-AUT"]);
+    const quiet = [...doc.querySelectorAll("details.fold--intensive")];
+    expect(quiet.map((f) => f.querySelector("summary")?.textContent)).toEqual(["Intensive sessions (2): Winter, Spring", "Intensive sessions (4): Summer, Autumn, Winter, Spring"]);
+    expect(quiet.some((f) => f.hasAttribute("open"))).toBe(false);
+    const unfolded = [...doc.querySelectorAll("details[data-session]")].filter((d) => !d.parentElement?.closest("details.fold"));
+    expect(ids(unfolded)).toEqual(["2026-S2", "2027-S1", "2027-S2"]);
+  });
+
+  it("opens a fold that holds a session named in ?open=", async () => {
+    const doc = await new Visitor().page("/?open=2026-WIN");
+    expect(sessionRow(doc, "2026-WIN").closest("details.fold")?.hasAttribute("open")).toBe(true);
+    expect(openRows(doc)).toEqual(["2026-WIN"]);
+    expect(doc.querySelector("details.fold--past")?.hasAttribute("open")).toBe(false);
   });
 });
 

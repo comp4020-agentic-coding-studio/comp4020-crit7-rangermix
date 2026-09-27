@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ApiErrorBody, Catalogue, View } from "../src/lib/types";
+import type { ApiErrorBody, Catalogue, View, WriteResponse } from "../src/lib/types";
 import { sandboxCount, snapshot, Visitor } from "./helpers";
 
 describe("GET /api/view", () => {
@@ -38,6 +38,23 @@ describe("GET /api/view", () => {
     expect(view.marks.COMP6445).toEqual({ completed: "Completed · First Semester 2026", enrolledIn: [] });
     expect(view.marks.COMP6442).toEqual({ completed: null, enrolledIn: ["2026-S2"] });
     expect(sandboxCount()).toBe(before);
+  });
+
+  it("folds past sessions and intensive sessions with none of the student's classes (spec §15.1)", async () => {
+    const { body } = await new Visitor().getJson<View>("/api/view");
+    const fold = (id: string) => body.sessions.find((s) => s.id === id)?.fold;
+    expect(["2026-SUM", "2026-S1", "2026-AUT"].map(fold)).toEqual(["past", "past", "past"]);
+    expect(["2026-WIN", "2026-SPR", "2027-SUM"].map(fold)).toEqual(["intensive", "intensive", "intensive"]);
+    expect(["2026-S2", "2027-S1", "2027-S2"].map(fold)).toEqual([null, null, null]);
+  });
+
+  it("keeps an intensive session unfolded once the student has a class in it", async () => {
+    const spring = snapshot.classes.find((c) => c.sessionId === "2026-SPR" && c.lastDayToEnrol >= "2026-09-24");
+    expect(spring, "a Spring Session 2026 class still open on 2026-09-24").toBeDefined();
+    const v = new Visitor();
+    const { body } = await v.postJson<WriteResponse>("/api/enrol", { session: "2026-SPR", classNumbers: [spring?.classNumber] });
+    expect(body.outcomes[0].ok).toBe(true);
+    expect(body.view.sessions.find((s) => s.id === "2026-SPR")?.fold).toBeNull();
   });
 
   it("treats an unknown sid cookie as no cookie", async () => {
