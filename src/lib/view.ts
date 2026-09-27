@@ -3,6 +3,7 @@ import snapshot from "../data/pc/snapshot.json";
 import { realToday, today as todayFor } from "./clock";
 import { db } from "./db";
 import { addDays, countdown, fmtDate, fmtDay, fmtRange, fmtUnits, fmtWeekday } from "./format";
+import { classPageUrl } from "./links";
 import { type PermissionContext, permissionNote, permissionReason } from "./permission";
 import { classKey, type Ref, ref } from "./ref";
 import { evaluateRequirements, type GroupInput, type Offer, type Take } from "./requirements";
@@ -172,6 +173,7 @@ function enrolmentView(e: EnrolmentRecord, today: string, facts: StudentFacts): 
     startDate: e.cls.startDate,
     endDate: e.cls.endDate,
     censusDate: e.cls.censusDate,
+    classUrl: classPageUrl(e.session, e.course.code, e.classNumber),
     state,
     grade: e.grade,
     enrolledOn: e.enrolledOn,

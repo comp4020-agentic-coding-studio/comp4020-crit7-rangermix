@@ -49,7 +49,10 @@ export function ClassChooser({ chooser, busy, pending, onAdd, onCancel }: Props)
                 {c.topic ? ` · ${c.topic}` : ""}
                 {c.canAdd ? "" : " · adding closed"}
               </span>
-            </label>
+            </label>{" "}
+            <a className="chooser__page" href={c.classUrl} aria-label={`${code} class ${c.classNumber}: class page and timetable on Programs & Courses`}>
+              class page
+            </a>
           </li>
         ))}
       </ul>

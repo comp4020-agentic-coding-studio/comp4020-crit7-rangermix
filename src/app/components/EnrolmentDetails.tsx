@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { TIMETABLING_URL } from "../../lib/links";
 import type { EnrolmentView, SessionView } from "../../lib/types";
 import { ClassRow } from "./ClassRow";
 
@@ -34,6 +35,12 @@ export function EnrolmentDetails({ session, busy, pending, onDrop, children }: P
             </li>
           ))}
         </ul>
+      )}
+      {/* Tutorials live in a separate system; point there once there's a class to go to (spec §15.6). */}
+      {session.enrolments.some((e) => e.state === "enrolled") && (
+        <p className="details__tutorials">
+          Tutorials and labs are chosen separately, in MyTimetable, once allocation opens. <a href={TIMETABLING_URL}>Timetabling dates and MyTimetable</a>
+        </p>
       )}
       {children}
     </div>

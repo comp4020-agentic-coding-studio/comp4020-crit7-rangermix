@@ -89,6 +89,8 @@ export interface EnrolmentView {
   startDate: string;
   endDate: string;
   censusDate: string;
+  /** The class's P&C page, with its timetable link (spec §15.6). */
+  classUrl: string;
   state: EnrolmentState;
   grade: string | null;
   enrolledOn: string;
@@ -174,6 +176,8 @@ export interface ChooserClass {
   lastDayToEnrol: string;
   censusDate: string;
   canAdd: boolean;
+  /** The class's P&C page, with its timetable link (spec §15.6). */
+  classUrl: string;
 }
 
 export interface Chooser {
@@ -205,6 +209,8 @@ export interface CatalogueClass {
   description: string;
   requisites: string | null;
   pcUrl: string;
+  /** The class's P&C page, with its timetable link (spec §15.6). */
+  classUrl: string;
   canAdd: boolean;
   /** "Needs a permission code: …" when ANUHub would ask this student for one (spec §15.5). */
   permission: string | null;

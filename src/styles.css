@@ -111,6 +111,9 @@ h4 { font-size: 0.95rem; }
 .class__facts dt { font-size: 0.8rem; color: var(--muted); }
 .class__facts dd { margin: 0; }
 .class__note { margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--muted); }
+.class__links { margin: 0.25rem 0; font-size: 0.85rem; }
+.details__tutorials { margin: 0.5rem 0; font-size: 0.85rem; color: var(--muted); }
+.chooser__page { font-size: 0.85rem; }
 /* Drop's confirmation (spec §15.2): in place, bordered in the danger colour. */
 .drop-confirm { margin-top: 0.5rem; padding: 0.6rem 0.75rem; border: 2px solid var(--bad); border-radius: var(--radius); background: var(--paper); }
 .drop-confirm:focus { outline: 3px solid var(--accent); outline-offset: 2px; }

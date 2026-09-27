@@ -1501,6 +1501,28 @@ It still doesn't ask for or check codes (§3 non-goals).
 - The server computes the notes per student. A cached catalogue is dropped
   when the view's date, student or program changes.
 
+### 15.6 Class pages, timetables and tutorials
+
+Tutorials are a separate system (MyTimetable), which research §7 lists as a
+pain point.
+
+- **Every class links to its P&C class page**:
+  `https://programsandcourses.anu.edu.au/{year}/course/{code}/{session name
+  without the year}/{class}`, for example `/2027/course/COMP8800/First%20Semester/5048`.
+  The address was checked on 2026-09-27 for a 2027 semester class and a
+  2026 Autumn class. The page carries P&C's own "View Class Timetable"
+  link.
+  - An enrolment's details say "Class page and timetable (P&C)".
+  - Each chooser class has a "class page" link.
+  - In the catalogue, the class number is the link.
+  - Each link is named in context: "COMP6442 class 8707: class page and
+    timetable on Programs & Courses".
+- **A session with a current or upcoming class** says, under its classes:
+  "Tutorials and labs are chosen separately, in MyTimetable, once allocation
+  opens." It links to ANU's timetabling pages, which give each semester's
+  MyTimetable dates. MyTimetable itself answers automated requests with 410,
+  so the page links ANU's information page rather than the app.
+
 ## Sources
 
 The research notes hold the full lists, with a URL on every claim. These

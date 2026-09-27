@@ -71,7 +71,11 @@ export function Results({ result, data, filters, view, selected, onSelect, hrefF
                       aria-label={`Select ${c.courseCode} class ${c.classNumber}, ${c.mode}`}
                     />
                   </td>
-                  <td>{c.classNumber}</td>
+                  <td>
+                    <a href={c.classUrl} aria-label={`${c.courseCode} class ${c.classNumber}: class page and timetable on Programs & Courses`}>
+                      {c.classNumber}
+                    </a>
+                  </td>
                   <td>
                     <a href={c.pcUrl}>{c.courseCode}</a>
                   </td>

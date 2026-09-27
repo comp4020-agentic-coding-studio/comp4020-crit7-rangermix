@@ -1,4 +1,5 @@
 import snapshot from "../data/pc/snapshot.json";
+import { classPageUrl } from "./links";
 import { type PermissionContext, permissionNote, permissionReason } from "./permission";
 import { ref } from "./ref";
 import type { CourseRow } from "./schema";
@@ -45,6 +46,7 @@ export function catalogueFor(sessionId: string, today: string, ctx: PermissionCo
       description: course.description,
       requisites: course.requisites,
       pcUrl: course.pcUrl,
+      classUrl: classPageUrl(session, c.courseCode, c.classNumber),
       canAdd: canAdd(c, today),
       permission: permissionNote(permissionReason(course, session.kind, ctx)),
     };
@@ -85,6 +87,7 @@ export function chooserFor(code: string, sessionId: string, today: string, ctx: 
       lastDayToEnrol: c.lastDayToEnrol,
       censusDate: c.censusDate,
       canAdd: canAdd(c, today),
+      classUrl: classPageUrl(session, code, c.classNumber),
     })),
     note: topics.size < classes.length ? `You can enrol in one class of ${code} per session, unless the classes have different topics.` : null,
     permission: permissionNote(permissionReason(course, session.kind, ctx)),

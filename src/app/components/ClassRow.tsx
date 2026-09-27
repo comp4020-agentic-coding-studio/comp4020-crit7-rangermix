@@ -58,6 +58,11 @@ export function ClassRow({ enrolment: e, busy, pending, onDrop }: Props) {
           </div>
         )}
       </dl>
+      <p className="class__links">
+        <a href={e.classUrl} aria-label={`${e.courseCode} class ${e.classNumber}: class page and timetable on Programs & Courses`}>
+          Class page and timetable (P&amp;C)
+        </a>
+      </p>
       {e.permission && (
         <p className="class__note">
           {e.permission} <a href={PERMISSION_CODES_URL}>How to get a permission code</a>
