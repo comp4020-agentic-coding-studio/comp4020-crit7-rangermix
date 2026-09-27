@@ -183,6 +183,7 @@ h4 { font-size: 0.95rem; }
 .tag { font-size: 0.72rem; padding: 0.05rem 0.4rem; border-radius: 999px; background: var(--wash); border: 1px solid var(--line); }
 .tag--required { background: var(--next-wash); border-color: var(--next); color: var(--next); font-weight: 700; }
 .tag--quiet { color: var(--muted); }
+.tag--permission { border-color: var(--warn); font-weight: 600; }
 .pager { display: flex; gap: 1rem; align-items: center; margin-top: 0.5rem; }
 .bulkbar { position: sticky; bottom: 0; background: var(--paper); border-top: 2px solid var(--accent); padding: 0.6rem 0; margin-top: 0.5rem; }
 .browse__failed { color: var(--bad); }

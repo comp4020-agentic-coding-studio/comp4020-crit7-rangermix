@@ -1,4 +1,5 @@
 import { useMemo, useReducer, useRef } from "react";
+import { PERMISSION_CODES_URL } from "../lib/links";
 import type { AppProps, Catalogue, Chooser, Notice, Outcome, UrlState, View, WriteResponse } from "../lib/types";
 import * as api from "./api";
 import { EMPTY_FILTERS, openSessions } from "./url";
@@ -50,8 +51,9 @@ export function init(props: AppProps): AppState {
   };
 }
 
-/** A view for another date makes cached catalogues stale, because their canAdd was computed for the old date. */
-const keepCatalogues = (state: AppState, view: View): Record<string, Catalogue> => (view.today === state.view.today ? state.catalogues : {});
+/** A view for another date or student makes cached catalogues stale: their canAdd and permission notes were computed for the old ones. */
+const keepCatalogues = (state: AppState, view: View): Record<string, Catalogue> =>
+  view.today === state.view.today && view.student.uid === state.view.student.uid && view.student.programCode === state.view.student.programCode ? state.catalogues : {};
 
 export function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
@@ -89,9 +91,13 @@ export function reducer(state: AppState, action: Action): AppState {
   }
 }
 
-/** One notice per class, then its warning, if any (spec §6.3). */
+/** One notice per class, then its warning and permission-code note, if any (spec §6.3, §15.5). */
 export function outcomeNotices(outcomes: Outcome[]): Notice[] {
-  return outcomes.flatMap((o): Notice[] => [{ tone: o.ok ? "ok" : "error", text: o.message }, ...(o.warning ? [{ tone: "warning" as const, text: o.warning }] : [])]);
+  return outcomes.flatMap((o): Notice[] => [
+    { tone: o.ok ? "ok" : "error", text: o.message },
+    ...(o.warning ? [{ tone: "warning" as const, text: o.warning }] : []),
+    ...(o.permission ? [{ tone: "info" as const, text: o.permission, link: { href: PERMISSION_CODES_URL, text: "How to get a permission code" } }] : []),
+  ]);
 }
 
 export function useEnrolment(props: AppProps) {

@@ -3,12 +3,13 @@ import snapshot from "../data/pc/snapshot.json";
 import { realToday, today as todayFor } from "./clock";
 import { db } from "./db";
 import { addDays, countdown, fmtDate, fmtDay, fmtRange, fmtUnits, fmtWeekday } from "./format";
+import { type PermissionContext, permissionNote, permissionReason } from "./permission";
 import { classKey, type Ref, ref } from "./ref";
 import { evaluateRequirements, type GroupInput, type Offer, type Take } from "./requirements";
 import * as t from "./schema";
 import { canAdd, canDrop, classify, dropDeadline, isPast } from "./sessions";
 import type { StudentRecord } from "./student";
-import type { AddState, Badge, BlockView, CourseMark, EnrolmentState, EnrolmentView, RequirementsView, SessionView, View } from "./types";
+import type { AddState, Badge, BlockView, Career, CourseMark, EnrolmentState, EnrolmentView, RequirementsView, SessionView, View } from "./types";
 
 // buildView(student): the whole page state for one student (spec §4.1 a3).
 // `/`, `/api/view` and every write return it, so what the page shows, what
@@ -95,6 +96,21 @@ function halfOf(s: t.SessionRow): { key: string; name: string } {
   return { key: `${s.year}-${first ? 1 : 2}`, name: `${first ? "first" : "second"} half of ${s.year}` };
 }
 
+/** What a student's rows need beyond their own class: half-year loads (§15.2) and the permission context (§15.5). */
+interface StudentFacts {
+  halfUnits: Map<string, number>;
+  permission: PermissionContext;
+}
+
+function contextOf(records: EnrolmentRecord[], today: string, programCareer: Career): PermissionContext {
+  return { programCareer, completed: new Set(records.filter((e) => takeState(e, today) === "completed").map((e) => e.course.code)) };
+}
+
+/** The permission context for a student (spec §15.5): their program's career and the courses they've completed. */
+export function permissionContext(student: StudentRecord, r: Ref = ref()): PermissionContext {
+  return contextOf(enrolmentRecords(student.id, r), todayFor(student), (r.plans.get(student.programCode) as t.PlanRow).career);
+}
+
 /** Units of live (not dropped) enrolments per half-year. */
 function unitsByHalf(records: EnrolmentRecord[]): Map<string, number> {
   const units = new Map<string, number>();
@@ -140,10 +156,10 @@ function dropNotice(e: EnrolmentRecord, today: string, halfUnits: Map<string, nu
   return { confirm: true, consequences: lines };
 }
 
-function enrolmentView(e: EnrolmentRecord, today: string, halfUnits: Map<string, number>): EnrolmentView {
+function enrolmentView(e: EnrolmentRecord, today: string, facts: StudentFacts): EnrolmentView {
   const state = takeState(e, today);
   const droppable = state === "enrolled" && canDrop(e.cls, e.session, today);
-  const drop = droppable ? dropNotice(e, today, halfUnits) : { confirm: false, consequences: [] };
+  const drop = droppable ? dropNotice(e, today, facts.halfUnits) : { confirm: false, consequences: [] };
   return {
     id: e.id,
     sessionId: e.sessionId,
@@ -163,12 +179,13 @@ function enrolmentView(e: EnrolmentRecord, today: string, halfUnits: Map<string,
     canDrop: droppable,
     dropConfirm: drop.confirm,
     dropConsequences: drop.consequences,
+    permission: state === "enrolled" ? permissionNote(permissionReason(e.course, e.session.kind, facts.permission)) : null,
     dropNote: state === "enrolled" && !droppable ? `Self-service drop closed on ${fmtDate(dropDeadline(e.cls, e.session))}` : null,
   };
 }
 
-function sessionView(s: t.SessionRow, badge: Badge, records: EnrolmentRecord[], today: string, r: Ref, halfUnits: Map<string, number>): SessionView {
-  const enrolments = records.map((e) => enrolmentView(e, today, halfUnits));
+function sessionView(s: t.SessionRow, badge: Badge, records: EnrolmentRecord[], today: string, r: Ref, facts: StudentFacts): SessionView {
+  const enrolments = records.map((e) => enrolmentView(e, today, facts));
   const live = enrolments.filter((e) => e.state !== "dropped");
   return {
     id: s.id,
@@ -275,8 +292,8 @@ export function buildView(student: StudentRecord): View {
   const today = todayFor(student);
   const { badges, nextId } = classify(r.sessions, today);
   const records = enrolmentRecords(student.id, r);
-  const halfUnits = unitsByHalf(records);
   const program = r.plans.get(student.programCode) as t.PlanRow;
+  const facts: StudentFacts = { halfUnits: unitsByHalf(records), permission: contextOf(records, today, program.career) };
   const plan = student.plans.length > 0 ? (r.plans.get(student.plans[0]) ?? null) : null;
   const requirements = requirementsView(student, records, badges, nextId ? (r.sessionById.get(nextId) ?? null) : null, today, r);
   return {
@@ -292,7 +309,7 @@ export function buildView(student: StudentRecord): View {
       planCode: plan?.code ?? null,
       planName: plan?.name ?? null,
     },
-    sessions: r.sessions.map((s) => sessionView(s, badges.get(s.id) ?? "past", records.filter((e) => e.sessionId === s.id), today, r, halfUnits)),
+    sessions: r.sessions.map((s) => sessionView(s, badges.get(s.id) ?? "past", records.filter((e) => e.sessionId === s.id), today, r, facts)),
     nextSemesterId: nextId,
     requirements: requirements.view,
     marks: marks(records, today),

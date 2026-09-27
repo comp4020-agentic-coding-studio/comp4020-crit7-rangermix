@@ -43,5 +43,5 @@ export const POST: APIRoute = ({ request, cookies }) =>
     if (settings.today !== undefined) parts.push(settings.today === null ? `the real date (${fmtDate(view.today)})` : fmtDate(settings.today));
     if (settings.programCode !== undefined) parts.push(settings.programCode, settings.planCode as string);
     const message = `Demo settings applied: ${parts.join(" · ")}.`;
-    return json({ outcomes: [{ ok: true, message, warning: null, courseCode: null, classNumber: null }], view });
+    return json({ outcomes: [{ ok: true, message, warning: null, permission: null, courseCode: null, classNumber: null }], view });
   });

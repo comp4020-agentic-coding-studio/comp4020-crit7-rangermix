@@ -3,6 +3,7 @@ import { chooserFor } from "./catalogue";
 import { db } from "./db";
 import { parseEntry } from "./entry";
 import { fmtDate, fmtUnits } from "./format";
+import { type PermissionContext, permissionReason } from "./permission";
 import { classKey, ref } from "./ref";
 import * as t from "./schema";
 import { canAdd, canDrop, dropDeadline } from "./sessions";
@@ -23,7 +24,7 @@ function sessionNames(ids: string[]): string {
 }
 
 /** Turns what was typed into the classes to enrol, a chooser, or the message to show under the input. */
-export function resolveEntry(raw: string, sessionId: string, today: string): EntryResolution {
+export function resolveEntry(raw: string, sessionId: string, today: string, ctx: PermissionContext): EntryResolution {
   const r = ref();
   const session = r.sessionById.get(sessionId);
   if (!session) throw new Error(`resolveEntry: no session ${sessionId}`);
@@ -41,7 +42,7 @@ export function resolveEntry(raw: string, sessionId: string, today: string): Ent
   const all = r.classesByCourse.get(entry.code) ?? [];
   const here = all.filter((c) => c.sessionId === sessionId);
   if (here.length === 1) return { kind: "classes", classNumbers: [here[0].classNumber] };
-  const chooser = here.length > 1 ? chooserFor(entry.code, sessionId, today) : null;
+  const chooser = here.length > 1 ? chooserFor(entry.code, sessionId, today, ctx) : null;
   if (chooser) return { kind: "choose", chooser };
   const next = all.find((c) => canAdd(c, today));
   const tail = next
@@ -54,10 +55,10 @@ export function resolveEntry(raw: string, sessionId: string, today: string): Ent
 
 const CAREER: Record<Career, string> = { UGRD: "undergraduate", PGRD: "postgraduate", RSCH: "research" };
 const A_CAREER: Record<Career, string> = { UGRD: "an undergraduate", PGRD: "a postgraduate", RSCH: "a research" };
-const refused = (courseCode: string | null, classNumber: number, message: string): Outcome => ({ ok: false, courseCode, classNumber, message, warning: null });
+const refused = (courseCode: string | null, classNumber: number, message: string): Outcome => ({ ok: false, courseCode, classNumber, message, warning: null, permission: null });
 
 /** Enrols each class in turn, in one transaction (spec §9). Repeated class numbers are processed once. */
-export function enrolClasses(student: { id: number; programCareer: Career }, sessionId: string, classNumbers: number[], today: string): Outcome[] {
+export function enrolClasses(student: { id: number; context: PermissionContext }, sessionId: string, classNumbers: number[], today: string): Outcome[] {
   const r = ref();
   const session = r.sessionById.get(sessionId);
   if (!session) throw new Error(`enrolClasses: no session ${sessionId}`);
@@ -93,10 +94,13 @@ export function enrolClasses(student: { id: number; programCareer: Career }, ses
         throw err;
       }
       const warning =
-        course.career === student.programCareer
+        course.career === student.context.programCareer
           ? null
-          : `${course.code} is ${A_CAREER[course.career]} course and your program is ${CAREER[student.programCareer]}, so it may not count towards your degree.`;
-      return { ok: true, courseCode: course.code, classNumber: n, message: `Enrolled: ${course.code} ${course.title} (class ${n}, ${fmtUnits(course.units)})`, warning };
+          : `${course.code} is ${A_CAREER[course.career]} course and your program is ${CAREER[student.context.programCareer]}, so it may not count towards your degree.`;
+      // The prototype enrols without a code, and says where ANUHub wouldn't (spec §15.5).
+      const reason = permissionReason(course, session.kind, student.context);
+      const permission = reason ? `${course.code} needs a permission code in ANUHub: ${reason}. This prototype doesn't ask for one.` : null;
+      return { ok: true, courseCode: course.code, classNumber: n, message: `Enrolled: ${course.code} ${course.title} (class ${n}, ${fmtUnits(course.units)})`, warning, permission };
     }),
   );
 }
@@ -121,6 +125,6 @@ export function dropClass(studentId: number, sessionId: string, classNumber: num
     // A class dropped before it starts leaves no record; once it has started, the row stays listed as Dropped.
     if (today < cls.startDate) db.delete(t.enrolments).where(eq(t.enrolments.id, row.id)).run();
     else db.update(t.enrolments).set({ status: "dropped", droppedOn: today }).where(eq(t.enrolments.id, row.id)).run();
-    return { ok: true, courseCode: course.code, classNumber, message: `Dropped: ${course.code} ${course.title} (class ${classNumber})`, warning: null };
+    return { ok: true, courseCode: course.code, classNumber, message: `Dropped: ${course.code} ${course.title} (class ${classNumber})`, warning: null, permission: null };
   });
 }

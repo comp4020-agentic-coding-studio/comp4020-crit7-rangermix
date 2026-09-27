@@ -1474,6 +1474,33 @@ Supersedes §6.2's fixed key-date wording within a fortnight of a deadline.
 - The server writes the text from `today(student)`, so the M2 date moves it
   too.
 
+### 15.5 Permission codes, flagged only where they apply
+
+ANUHub shows its permission-number box to everyone (research §7). The page
+flags a class only when ANUHub would actually want a code from this student.
+It still doesn't ask for or check codes (§3 non-goals).
+
+- **Two sources** (`permission.ts`):
+  - **Career**: a class from another career, e.g. an undergraduate class for
+    a postgraduate program (research §8d).
+  - **P&C's requisites**: a sentence that mentions a permission code, read
+    with P&C's two conditions:
+    - "in intensive mode" applies only to classes in intensive sessions
+      (COMP8430);
+    - "previously completed COMP3710 or COMP6470" applies only when the
+      student has completed one of them (COMP4712, COMP8712);
+    - every other wording asks unconditionally. There are 15 such courses
+      in the snapshot, including COMP8800 and COMP8020.
+- **Where it shows**:
+  - a "Permission code" tag on catalogue rows;
+  - "Needs a permission code: …" in the chooser and on a live enrolment;
+  - an info notice after enrolling: "COMP8800 needs a permission code in
+    ANUHub: P&C's requisites ask for one. This prototype doesn't ask for
+    one."
+  - Each links to ANU's permission-codes page.
+- The server computes the notes per student. A cached catalogue is dropped
+  when the view's date, student or program changes.
+
 ## Sources
 
 The research notes hold the full lists, with a URL on every claim. These

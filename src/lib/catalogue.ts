@@ -1,4 +1,5 @@
 import snapshot from "../data/pc/snapshot.json";
+import { type PermissionContext, permissionNote, permissionReason } from "./permission";
 import { ref } from "./ref";
 import type { CourseRow } from "./schema";
 import { canAdd } from "./sessions";
@@ -20,7 +21,7 @@ function facetsOf(classes: { subject: string; career: CourseRow["career"]; level
   };
 }
 
-export function catalogueFor(sessionId: string, today: string): Catalogue {
+export function catalogueFor(sessionId: string, today: string, ctx: PermissionContext): Catalogue {
   const r = ref();
   const session = r.sessionById.get(sessionId);
   if (!session) throw new Error(`catalogueFor: no session ${sessionId}`);
@@ -45,6 +46,7 @@ export function catalogueFor(sessionId: string, today: string): Catalogue {
       requisites: course.requisites,
       pcUrl: course.pcUrl,
       canAdd: canAdd(c, today),
+      permission: permissionNote(permissionReason(course, session.kind, ctx)),
     };
   });
   return { sessionId, sessionName: session.name, indicative: session.year > SNAPSHOT_YEAR, today, classes, facets: facetsOf(classes) };
@@ -62,7 +64,7 @@ export function facetsFor(sessionId: string): Facets | null {
   );
 }
 
-export function chooserFor(code: string, sessionId: string, today: string): Chooser | null {
+export function chooserFor(code: string, sessionId: string, today: string, ctx: PermissionContext): Chooser | null {
   const r = ref();
   const course = r.courseByCode.get(code);
   const session = r.sessionById.get(sessionId);
@@ -85,5 +87,6 @@ export function chooserFor(code: string, sessionId: string, today: string): Choo
       canAdd: canAdd(c, today),
     })),
     note: topics.size < classes.length ? `You can enrol in one class of ${code} per session, unless the classes have different topics.` : null,
+    permission: permissionNote(permissionReason(course, session.kind, ctx)),
   };
 }

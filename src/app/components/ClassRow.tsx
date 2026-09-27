@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { fmtDate, fmtUnits } from "../../lib/format";
-import { CENSUS_DATES_URL } from "../../lib/links";
+import { CENSUS_DATES_URL, PERMISSION_CODES_URL } from "../../lib/links";
 import type { EnrolmentView } from "../../lib/types";
 
 function stateText(e: EnrolmentView): string {
@@ -58,6 +58,11 @@ export function ClassRow({ enrolment: e, busy, pending, onDrop }: Props) {
           </div>
         )}
       </dl>
+      {e.permission && (
+        <p className="class__note">
+          {e.permission} <a href={PERMISSION_CODES_URL}>How to get a permission code</a>
+        </p>
+      )}
       {e.canDrop && <DropControl enrolment={e} busy={busy} pending={pending} onDrop={onDrop} />}
       {e.dropNote && <p className="class__note">{e.dropNote}</p>}
     </details>

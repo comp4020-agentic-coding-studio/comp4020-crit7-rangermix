@@ -13,5 +13,5 @@ export const POST: APIRoute = ({ request, cookies }) =>
     if (typeof programCode !== "string") throw new ApiError(400, "bad_field", "programCode must be a program code such as 7722XVCOMP.");
     const student = resetSandbox(cookies, programCode);
     const message = `Demo reset: you're ${student.name} (${student.uid}) again, with the starting enrolments.`;
-    return json({ outcomes: [{ ok: true, message, warning: null, courseCode: null, classNumber: null }], view: buildView(student) });
+    return json({ outcomes: [{ ok: true, message, warning: null, permission: null, courseCode: null, classNumber: null }], view: buildView(student) });
   });

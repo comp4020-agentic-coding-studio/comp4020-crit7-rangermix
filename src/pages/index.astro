@@ -4,13 +4,15 @@ import { openSessions, parseQuery } from "../app/url";
 import { catalogueFor, chooserFor, facetsFor } from "../lib/catalogue";
 import { studentFor } from "../lib/student";
 import type { AppProps } from "../lib/types";
-import { buildView } from "../lib/view";
+import { buildView, permissionContext } from "../lib/view";
 import "../styles.css";
 
 // The whole app, server-rendered for this browser's student and hydrated
 // (spec D13). It stays server-rendered, and renders the same page on POST,
 // which the deploy CI's origin probe needs (spec §4.2).
-const view = buildView(studentFor(Astro.cookies));
+const student = studentFor(Astro.cookies);
+const view = buildView(student);
+const context = permissionContext(student);
 const names = new Map(view.sessions.map((s) => [s.id, s.name]));
 const { state: url, problems } = parseQuery(Astro.url.searchParams, {
   sessionIds: view.sessions.map((s) => s.id),
@@ -20,15 +22,15 @@ const { state: url, problems } = parseQuery(Astro.url.searchParams, {
     const f = facetsFor(id);
     return f && { subjects: f.subjects.map((s) => s.code), careers: f.careers, levels: f.levels, modes: f.modes };
   },
-  canChoose: (code, term) => chooserFor(code, term, view.today) !== null,
+  canChoose: (code, term) => chooserFor(code, term, view.today, context) !== null,
 });
-const chooser = url.choose && url.term ? chooserFor(url.choose, url.term, view.today) : null;
+const chooser = url.choose && url.term ? chooserFor(url.choose, url.term, view.today, context) : null;
 if (chooser) url.open = [...new Set([...openSessions(url, view.nextSemesterId), chooser.sessionId])];
 const props: AppProps = {
   view,
   url,
   notices: problems.map((text) => ({ tone: "info" as const, text })),
-  catalogue: url.browse ? catalogueFor(url.browse, view.today) : null,
+  catalogue: url.browse ? catalogueFor(url.browse, view.today, context) : null,
   chooser,
 };
 ---

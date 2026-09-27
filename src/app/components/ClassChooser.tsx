@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { fmtRange } from "../../lib/format";
+import { PERMISSION_CODES_URL } from "../../lib/links";
 import type { Chooser } from "../../lib/types";
 
 interface Props {
@@ -26,6 +27,11 @@ export function ClassChooser({ chooser, busy, pending, onAdd, onCancel }: Props)
         {code} {title} has {chooser.classes.length} classes in {chooser.sessionName}
       </legend>
       {chooser.note && <p className="hint">{chooser.note}</p>}
+      {chooser.permission && (
+        <p className="hint">
+          {chooser.permission} <a href={PERMISSION_CODES_URL}>How to get a permission code</a>
+        </p>
+      )}
       <ul className="chooser__classes">
         {chooser.classes.map((c, i) => (
           <li key={c.classNumber}>

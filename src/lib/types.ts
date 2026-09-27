@@ -101,6 +101,8 @@ export interface EnrolmentView {
    * started, the note beside its one-click Drop. Empty when there's no Drop.
    */
   dropConsequences: string[];
+  /** "Needs a permission code: …" when ANUHub would ask for one for this live enrolment (spec §15.5). */
+  permission: string | null;
   /** Why an enrolled class offers no Drop: "Self-service drop closed on 4 Nov 2026". */
   dropNote: string | null;
 }
@@ -181,6 +183,8 @@ export interface Chooser {
   classes: ChooserClass[];
   /** Set when the classes don't differ by topic, so only one can be enrolled (plan clarification 1). */
   note: string | null;
+  /** "Needs a permission code: …" when ANUHub would ask this student for one (spec §15.5). */
+  permission: string | null;
 }
 
 export interface CatalogueClass {
@@ -202,6 +206,8 @@ export interface CatalogueClass {
   requisites: string | null;
   pcUrl: string;
   canAdd: boolean;
+  /** "Needs a permission code: …" when ANUHub would ask this student for one (spec §15.5). */
+  permission: string | null;
 }
 
 export interface Facets {
@@ -226,6 +232,8 @@ export interface Outcome {
   ok: boolean;
   message: string;
   warning: string | null;
+  /** On an enrolment ANUHub would want a permission code for: "COMP8800 needs a permission code in ANUHub: …" (spec §15.5). */
+  permission: string | null;
   courseCode: string | null;
   classNumber: number | null;
 }
@@ -270,6 +278,8 @@ export interface UrlState {
 export interface Notice {
   tone: "ok" | "error" | "warning" | "info";
   text: string;
+  /** A page that says what to do next, e.g. how to get a permission code. */
+  link?: { href: string; text: string };
 }
 
 /** What index.astro passes to the island. */

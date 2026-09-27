@@ -24,6 +24,7 @@ export const enrolment = (patch: Partial<EnrolmentView> = {}): EnrolmentView => 
   canDrop: true,
   dropConfirm: true,
   dropConsequences: ["You can't add it back: adding closed on Mon 3 Aug.", "You'll still be charged for it: the census date was Mon 31 Aug."],
+  permission: null,
   dropNote: null,
   ...patch,
 });
@@ -143,6 +144,7 @@ export const POGO_CHOOSER: Chooser = {
     { classNumber: 5355, mode: "Online", topic: null, startDate: "2027-02-22", endDate: "2027-05-28", lastDayToEnrol: "2027-03-01", censusDate: "2027-03-31", canAdd: true },
   ],
   note: "You can enrol in one class of POGO8062 per session, unless the classes have different topics.",
+  permission: null,
 };
 
 const cls = (patch: Partial<CatalogueClass>): CatalogueClass => ({
@@ -164,6 +166,7 @@ const cls = (patch: Partial<CatalogueClass>): CatalogueClass => ({
   requisites: null,
   pcUrl: "https://programsandcourses.anu.edu.au/2026/course/COMP6000",
   canAdd: true,
+  permission: null,
   ...patch,
 });
 

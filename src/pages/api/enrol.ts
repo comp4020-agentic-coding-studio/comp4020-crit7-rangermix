@@ -4,7 +4,7 @@ import { enrolClasses, resolveEntry } from "../../lib/enrol";
 import { ApiError, handle, json, readBody, sessionIdField } from "../../lib/http";
 import { ref } from "../../lib/ref";
 import { sandboxFor, studentFor } from "../../lib/student";
-import { buildView } from "../../lib/view";
+import { buildView, permissionContext } from "../../lib/view";
 
 // POST {session, entry} or {session, classNumbers} (spec §4.2). A course
 // with several classes answers {choose} and changes nothing; a problem with
@@ -20,7 +20,8 @@ export const POST: APIRoute = ({ request, cookies }) =>
     let classNumbers: number[];
     if (hasEntry) {
       if (typeof body.entry !== "string" || body.entry.length > 100) throw new ApiError(400, "bad_field", "entry must be text: a class number or a course code.");
-      const resolved = resolveEntry(body.entry, sessionId, today(studentFor(cookies)));
+      const viewer = studentFor(cookies);
+      const resolved = resolveEntry(body.entry, sessionId, today(viewer), permissionContext(viewer));
       if (resolved.kind === "error") throw new ApiError(422, "entry", resolved.message);
       if (resolved.kind === "choose") return json({ choose: resolved.chooser });
       classNumbers = resolved.classNumbers;
@@ -33,7 +34,6 @@ export const POST: APIRoute = ({ request, cookies }) =>
     }
 
     const student = sandboxFor(cookies);
-    const career = r.plans.get(student.programCode)?.career ?? "PGRD";
-    const outcomes = enrolClasses({ id: student.id, programCareer: career }, sessionId, classNumbers, today(student));
+    const outcomes = enrolClasses({ id: student.id, context: permissionContext(student) }, sessionId, classNumbers, today(student));
     return json({ outcomes, view: buildView(student) });
   });

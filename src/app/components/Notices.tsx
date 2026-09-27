@@ -11,6 +11,12 @@ export function Notices({ notices, ref }: { notices: Notice[]; ref: Ref<HTMLElem
           {notices.map((n, i) => (
             <li key={`${i}:${n.text}`} className={`notice notice--${n.tone}`}>
               {n.text}
+              {n.link && (
+                <>
+                  {" "}
+                  <a href={n.link.href}>{n.link.text}</a>
+                </>
+              )}
             </li>
           ))}
         </ul>

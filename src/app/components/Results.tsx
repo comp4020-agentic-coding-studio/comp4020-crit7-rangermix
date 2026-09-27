@@ -83,6 +83,11 @@ export function Results({ result, data, filters, view, selected, onSelect, hrefF
                       {mark?.completed && <span className="tag">{mark.completed}</span>}
                       {!mark?.completed && enrolledHere && <span className="tag">Enrolled</span>}
                       {!c.canAdd && <span className="tag">Adding closed</span>}
+                      {c.permission && (
+                        <span className="tag tag--permission" title={c.permission}>
+                          Permission code
+                        </span>
+                      )}
                       {data.indicative && <span className="tag tag--quiet">Indicative</span>}
                     </span>
                   </td>
