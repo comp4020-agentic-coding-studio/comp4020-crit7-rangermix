@@ -179,7 +179,7 @@ export const enrolments = sqliteTable(
   },
   (t) => [
     foreignKey({ columns: [t.sessionId, t.classNumber], foreignColumns: [classes.sessionId, classes.classNumber] }),
-    // One live enrolment per class per student; dropped rows stay as history.
+    // One live enrolment per class per student; rows dropped after the class started stay as history.
     uniqueIndex("enrolments_live_uq").on(t.studentId, t.sessionId, t.classNumber).where(sql`status = 'enrolled'`),
     index("enrolments_student_idx").on(t.studentId),
   ],

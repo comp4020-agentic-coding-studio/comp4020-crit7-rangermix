@@ -141,7 +141,25 @@ describe("drop", () => {
     const dropped = await v.postJson<WriteResponse>("/api/drop", { session: S1, classNumber: n });
     expect(dropped.body.outcomes[0]).toMatchObject({ ok: true, courseCode: "COMP8800" });
     expect(sidebar(dropped.body.view, "COMP8800")).toMatchObject({ text: "Not enrolled", add: { sessionId: S1, label: "Add to First Semester 2027" } });
-    expect(dropped.body.view.sessions.find((s) => s.id === S1)?.enrolments.find((e) => e.classNumber === n)).toMatchObject({
+  });
+
+  it("leaves no trace of a class dropped before it starts", async () => {
+    const v = new Visitor();
+    const added = await v.postJson<WriteResponse>("/api/enrol", { session: S1, entry: "COMP8800" });
+    const n = added.body.outcomes[0].classNumber;
+    const dropped = await v.postJson<WriteResponse>("/api/drop", { session: S1, classNumber: n });
+    expect(dropped.body.outcomes[0]).toMatchObject({ ok: true });
+    expect(dropped.body.view.sessions.find((s) => s.id === S1)?.enrolments).toEqual([]);
+    const fresh = await new Visitor(v.sid).getJson<View>("/api/view");
+    expect(fresh.body.sessions.find((s) => s.id === S1)?.enrolments).toEqual([]);
+  });
+
+  it("keeps a class dropped after it started, marked Dropped", async () => {
+    const started = template.enrolments.find((e) => e.courseCode === "COMP8620");
+    expect(started).toBeDefined();
+    const { body } = await new Visitor().postJson<WriteResponse>("/api/drop", { session: "2026-S2", classNumber: started?.classNumber });
+    expect(body.outcomes[0]).toMatchObject({ ok: true, courseCode: "COMP8620" });
+    expect(body.view.sessions.find((s) => s.id === "2026-S2")?.enrolments.find((e) => e.classNumber === started?.classNumber)).toMatchObject({
       state: "dropped",
       droppedOn: "2026-09-24",
       canDrop: false,

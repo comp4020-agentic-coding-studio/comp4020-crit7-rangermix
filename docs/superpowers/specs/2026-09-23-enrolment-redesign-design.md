@@ -520,6 +520,9 @@ starter does.
   (D4).
 - **Can drop**: `today < session.examStart` for semesters, otherwise
   `today ≤ class.endDate`. This is ANU's published rule.
+- **Dropped before the start**: when `today < class.startDate` the drop
+  deletes the enrolment instead of marking it dropped, so it leaves no
+  history.
 
 **Course status in the sidebar.** A course is needed `times` times.
 Completed takes are counted first, then enrolled takes, and the text is
@@ -647,7 +650,8 @@ says so rather than hiding it (§13).
     Expanded, it shows the class dates, census date, the date enrolled, the
     grade (for completed classes), and **Drop** when `canDrop`.
   - **Dropped classes** stay listed, marked "Dropped · 12 Oct 2026" and
-    without actions, as ANUHub does.
+    without actions, as ANUHub does. A class dropped before its start
+    date leaves no record and disappears from the list.
   - **Add a class** (F1) shows when the session has any class that can
     still be added. Otherwise the section says why ("Adding closed on
     3 Aug").

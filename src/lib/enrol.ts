@@ -101,7 +101,7 @@ export function enrolClasses(student: { id: number; programCareer: Career }, ses
   );
 }
 
-/** Drops one class, if ANU's self-service rule still allows it (spec §5.3). */
+/** Drops one class, if ANU's self-service rule still allows it (spec §5.3). A class that hasn't started is removed outright. */
 export function dropClass(studentId: number, sessionId: string, classNumber: number, today: string): Outcome {
   const r = ref();
   const session = r.sessionById.get(sessionId);
@@ -118,7 +118,9 @@ export function dropClass(studentId: number, sessionId: string, classNumber: num
     if (!canDrop(cls, session, today)) {
       return refused(course.code, classNumber, `Not dropped: ${course.code} (class ${classNumber}) — self-service drop closed on ${fmtDate(dropDeadline(cls, session))}`);
     }
-    db.update(t.enrolments).set({ status: "dropped", droppedOn: today }).where(eq(t.enrolments.id, row.id)).run();
+    // A class dropped before it starts leaves no record; once it has started, the row stays listed as Dropped.
+    if (today < cls.startDate) db.delete(t.enrolments).where(eq(t.enrolments.id, row.id)).run();
+    else db.update(t.enrolments).set({ status: "dropped", droppedOn: today }).where(eq(t.enrolments.id, row.id)).run();
     return { ok: true, courseCode: course.code, classNumber, message: `Dropped: ${course.code} ${course.title} (class ${classNumber})`, warning: null };
   });
 }
