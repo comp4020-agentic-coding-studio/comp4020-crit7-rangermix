@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import snapshot from "../data/pc/snapshot.json";
 import { realToday, today as todayFor } from "./clock";
 import { db } from "./db";
-import { addDays, fmtDate, fmtDay, fmtRange } from "./format";
+import { addDays, countdown, fmtDate, fmtDay, fmtRange, fmtWeekday } from "./format";
 import { classKey, type Ref, ref } from "./ref";
 import { evaluateRequirements, type GroupInput, type Offer, type Take } from "./requirements";
 import * as t from "./schema";
@@ -45,16 +45,37 @@ export function takeState(e: EnrolmentRecord, today: string): EnrolmentState {
   return e.grade !== null && FAIL_GRADES.has(e.grade) ? "failed" : "completed";
 }
 
+/**
+ * A deadline that closes at the end of its day. Within a fortnight it reads as a countdown
+ * (spec §15.4): "drop closes in 3 days (Wed 2 Jun)", "drop closes today"; further out it keeps
+ * its plain form, "drop to 2 Jun".
+ */
+function deadline(today: string, iso: string, closes: string, plain: string, time = ""): string {
+  const when = countdown(today, iso);
+  if (when === null) return plain;
+  if (when === "today") return `${closes} today${time ? ` at ${time}` : ""}`;
+  return `${closes} ${when} (${fmtWeekday(iso)}${time ? `, ${time}` : ""})`;
+}
+
 function keyDates(s: t.SessionRow, today: string): string {
   const parts: string[] = [];
   if (s.kind === "intensive") {
     parts.push("dates vary by class");
   } else {
     if (s.examStart && s.examEnd) parts.push(`exams ${fmtRange(s.examStart, s.examEnd)}`);
-    if (s.lastDayToAdd) parts.push(today <= s.lastDayToAdd ? `add until ${fmtDay(s.lastDayToAdd)}` : `add closed ${fmtDay(s.lastDayToAdd)}`);
-    if (s.censusDate) parts.push(`census ${fmtDay(s.censusDate)}`);
-    if (s.dropNoFailDate) parts.push(`drop without failure until ${fmtDay(s.dropNoFailDate)}`);
-    if (s.examStart) parts.push(`drop to ${fmtDay(addDays(s.examStart, -1))}`);
+    // ANU's pages give 11:59pm for the semester add deadline (research §1d).
+    if (s.lastDayToAdd) {
+      parts.push(today <= s.lastDayToAdd ? deadline(today, s.lastDayToAdd, "adding closes", `add until ${fmtDay(s.lastDayToAdd)}`, "11:59pm") : `add closed ${fmtDay(s.lastDayToAdd)}`);
+    }
+    if (s.censusDate) {
+      const when = countdown(today, s.censusDate);
+      parts.push(when === null ? `census ${fmtDay(s.censusDate)}` : when === "today" ? "census today" : `census ${when} (${fmtWeekday(s.censusDate)})`);
+    }
+    if (s.dropNoFailDate) parts.push(deadline(today, s.dropNoFailDate, "drop without failure closes", `drop without failure until ${fmtDay(s.dropNoFailDate)}`));
+    if (s.examStart) {
+      const last = addDays(s.examStart, -1);
+      parts.push(deadline(today, last, "drop closes", `drop to ${fmtDay(last)}`));
+    }
   }
   if (s.enrolOpens && s.enrolOpensText && today < s.enrolOpens) parts.push(`enrolment usually opens ${s.enrolOpensText}`);
   return parts.join(" · ");

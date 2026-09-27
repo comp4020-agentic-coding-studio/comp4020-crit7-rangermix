@@ -117,3 +117,24 @@ describe("M2: per-program reset (spec §11.3)", () => {
     expect(["2026-S1", "2026-S2"].map((id) => body.view.sessions.find((s) => s.id === id)?.units)).toEqual([24, 24]);
   });
 });
+
+describe("countdowns (spec §15.4)", () => {
+  const keyDates = async (today: string) => {
+    const { body } = await new Visitor().postJson<WriteResponse>("/api/demo/settings", { today });
+    return body.view.sessions.find((s) => s.id === "2027-S1")?.keyDates ?? "";
+  };
+
+  it("counts down to the add deadline within a fortnight, with ANU's 11:59pm", async () => {
+    expect(await keyDates("2027-02-26")).toContain("adding closes in 3 days (Mon 1 Mar, 11:59pm)");
+    expect(await keyDates("2027-02-28")).toContain("adding closes tomorrow (Mon 1 Mar, 11:59pm)");
+    expect(await keyDates("2027-03-01")).toContain("adding closes today at 11:59pm");
+    expect(await keyDates("2027-02-10")).toContain("add until 1 Mar");
+  });
+
+  it("counts down to census, the last day to drop without failure, and the drop deadline", async () => {
+    expect(await keyDates("2027-03-30")).toContain("census tomorrow (Wed 31 Mar)");
+    expect(await keyDates("2027-03-31")).toContain("census today");
+    expect(await keyDates("2027-04-30")).toContain("drop without failure closes in 7 days (Fri 7 May)");
+    expect(await keyDates("2027-05-30")).toContain("drop closes in 3 days (Wed 2 Jun)");
+  });
+});

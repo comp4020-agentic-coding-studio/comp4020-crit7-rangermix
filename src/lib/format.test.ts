@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addDays, fmtDate, fmtDay, fmtRange, fmtUnits } from "./format";
+import { addDays, countdown, daysUntil, fmtDate, fmtDay, fmtRange, fmtUnits, fmtWeekday } from "./format";
 
 describe("format (en-AU, locale-free)", () => {
   it("formats days and dates", () => {
@@ -20,5 +20,23 @@ describe("format (en-AU, locale-free)", () => {
     expect(addDays("2026-11-05", -1)).toBe("2026-11-04");
     expect(addDays("2027-03-01", -1)).toBe("2027-02-28");
     expect(addDays("2028-03-01", -1)).toBe("2028-02-29");
+  });
+  it("names the weekday", () => {
+    expect(fmtWeekday("2027-03-01")).toBe("Mon 1 Mar");
+    expect(fmtWeekday("2026-10-09")).toBe("Fri 9 Oct");
+    expect(fmtWeekday("2028-02-29")).toBe("Tue 29 Feb");
+  });
+  it("counts whole days between dates, across months and years", () => {
+    expect(daysUntil("2027-02-26", "2027-03-01")).toBe(3);
+    expect(daysUntil("2026-12-31", "2027-01-01")).toBe(1);
+    expect(daysUntil("2026-10-09", "2026-09-24")).toBe(-15);
+  });
+  it("counts down to a date within a fortnight (spec §15.4)", () => {
+    expect(countdown("2027-03-01", "2027-03-01")).toBe("today");
+    expect(countdown("2027-02-28", "2027-03-01")).toBe("tomorrow");
+    expect(countdown("2027-02-26", "2027-03-01")).toBe("in 3 days");
+    expect(countdown("2026-09-25", "2026-10-09")).toBe("in 14 days");
+    expect(countdown("2026-09-24", "2026-10-09")).toBeNull();
+    expect(countdown("2027-03-02", "2027-03-01")).toBeNull();
   });
 });

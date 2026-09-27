@@ -1423,6 +1423,22 @@ Supersedes §6.2's "earlier years sit behind 'Show earlier sessions'".
   opened.
 - The server derives each row's `fold`; the client only groups by it.
 
+### 15.4 Deadlines count down
+
+Supersedes §6.2's fixed key-date wording within a fortnight of a deadline.
+
+- A key date 0–14 days away reads as a countdown with its weekday:
+  - "adding closes in 3 days (Mon 1 Mar, 11:59pm)", "…tomorrow (…)" and
+    "adding closes today at 11:59pm". ANU's pages give 11:59pm for the
+    semester add deadline (research §1d), and no other deadline gets a time.
+  - "census in 5 days (Wed 31 Mar)", "census tomorrow (…)", "census today".
+  - "drop without failure closes in 7 days (Fri 7 May)".
+  - "drop closes in 3 days (Wed 2 Jun)".
+- Further out, or once passed, the key dates keep their plain form ("add
+  until 1 Mar", "add closed 3 Aug").
+- The server writes the text from `today(student)`, so the M2 date moves it
+  too.
+
 ## Sources
 
 The research notes hold the full lists, with a URL on every claim. These

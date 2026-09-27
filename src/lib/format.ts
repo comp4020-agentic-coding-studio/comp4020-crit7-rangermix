@@ -40,3 +40,22 @@ export function addDays(iso: string, n: number): string {
   date.setUTCDate(date.getUTCDate() + n);
   return date.toISOString().slice(0, 10);
 }
+
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+/** "Mon 1 Mar" */
+export function fmtWeekday(iso: string): string {
+  return `${WEEKDAYS[new Date(`${iso}T00:00:00Z`).getUTCDay()]} ${fmtDay(iso)}`;
+}
+
+/** Whole days from `from` to `to` (negative when `to` is earlier). */
+export function daysUntil(from: string, to: string): number {
+  return Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000);
+}
+
+/** How far away a date within a fortnight is (spec §15.4): "today", "tomorrow", "in 3 days"; null further out, or once it has passed. */
+export function countdown(today: string, iso: string): string | null {
+  const n = daysUntil(today, iso);
+  if (n < 0 || n > 14) return null;
+  return n === 0 ? "today" : n === 1 ? "tomorrow" : `in ${n} days`;
+}
