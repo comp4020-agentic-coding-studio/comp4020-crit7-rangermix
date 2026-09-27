@@ -94,6 +94,13 @@ export interface EnrolmentView {
   enrolledOn: string;
   droppedOn: string | null;
   canDrop: boolean;
+  /** True when Drop asks first: the class has started (spec §15.2). */
+  dropConfirm: boolean;
+  /**
+   * What dropping now means (spec §15.2): the confirmation's list, or, for a class that hasn't
+   * started, the note beside its one-click Drop. Empty when there's no Drop.
+   */
+  dropConsequences: string[];
   /** Why an enrolled class offers no Drop: "Self-service drop closed on 4 Nov 2026". */
   dropNote: string | null;
 }

@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import snapshot from "../data/pc/snapshot.json";
 import { realToday, today as todayFor } from "./clock";
 import { db } from "./db";
-import { addDays, countdown, fmtDate, fmtDay, fmtRange, fmtWeekday } from "./format";
+import { addDays, countdown, fmtDate, fmtDay, fmtRange, fmtUnits, fmtWeekday } from "./format";
 import { classKey, type Ref, ref } from "./ref";
 import { evaluateRequirements, type GroupInput, type Offer, type Take } from "./requirements";
 import * as t from "./schema";
@@ -89,9 +89,61 @@ function addState(s: t.SessionRow, today: string, r: Ref): AddState {
   return { open: false, reason: `Adding closed on ${fmtDay(last)}` };
 }
 
-function enrolmentView(e: EnrolmentRecord, today: string): EnrolmentView {
+/** The half-year ANU's international load rule counts (spec §15.2): Summer, Autumn and Semester 1, or Winter, Spring and Semester 2. */
+function halfOf(s: t.SessionRow): { key: string; name: string } {
+  const first = Number(s.startDate.slice(5, 7)) <= 6;
+  return { key: `${s.year}-${first ? 1 : 2}`, name: `${first ? "first" : "second"} half of ${s.year}` };
+}
+
+/** Units of live (not dropped) enrolments per half-year. */
+function unitsByHalf(records: EnrolmentRecord[]): Map<string, number> {
+  const units = new Map<string, number>();
+  for (const e of records) {
+    if (e.status !== "enrolled") continue;
+    const { key } = halfOf(e.session);
+    units.set(key, (units.get(key) ?? 0) + e.course.units);
+  }
+  return units;
+}
+
+/**
+ * Drop's behaviour and what dropping now means (spec §15.2). A class that hasn't started drops in
+ * one click and leaves no record; once it has, Drop asks first and lists the consequences, from
+ * ANU's census rules: no fee or grade on or before the census date, then WD until the last day to
+ * drop without failure, then WN.
+ */
+function dropNotice(e: EnrolmentRecord, today: string, halfUnits: Map<string, number>): { confirm: boolean; consequences: string[] } {
+  const soon = (iso: string): string => {
+    const when = countdown(today, iso);
+    return when ? ` (${when})` : "";
+  };
+  const last = e.cls.lastDayToEnrol;
+  const readd = today <= last ? `you can add it back until ${fmtWeekday(last)}${soon(last)}` : `you can't add it back: adding closed on ${fmtWeekday(last)}`;
+  if (today < e.cls.startDate) return { confirm: false, consequences: [`It hasn't started, so dropping it leaves no record; ${readd}.`] };
+
+  const lines = [`${readd[0].toUpperCase()}${readd.slice(1)}.`];
+  const census = e.cls.censusDate;
+  if (today <= census) {
+    lines.push(`No fee and no grade on your transcript if you drop by ${fmtWeekday(census)}, the census date${soon(census)}.`);
+  } else {
+    lines.push(`You'll still be charged for it: the census date was ${fmtWeekday(census)}.`);
+    const noFail = e.session.dropNoFailDate;
+    if (noFail === null) lines.push("Your transcript will show WD (withdrawal without failure), not a fail.");
+    else if (today <= noFail) lines.push(`Your transcript will show WD (withdrawal without failure), not a fail, if you drop by ${fmtWeekday(noFail)}${soon(noFail)}; after that it's WN (withdrawn with failure).`);
+    else lines.push(`Your transcript will show WN (withdrawn with failure): the last day to drop without failure was ${fmtWeekday(noFail)}.`);
+  }
+  const half = halfOf(e.session);
+  const left = (halfUnits.get(half.key) ?? 0) - e.course.units;
+  if (left < SEMESTER_CAP) {
+    lines.push(`International students need a Reduced Study Load Application in ANUHub to drop below 24 units in a half-year; this would leave ${fmtUnits(left)} in the ${half.name}.`);
+  }
+  return { confirm: true, consequences: lines };
+}
+
+function enrolmentView(e: EnrolmentRecord, today: string, halfUnits: Map<string, number>): EnrolmentView {
   const state = takeState(e, today);
   const droppable = state === "enrolled" && canDrop(e.cls, e.session, today);
+  const drop = droppable ? dropNotice(e, today, halfUnits) : { confirm: false, consequences: [] };
   return {
     id: e.id,
     sessionId: e.sessionId,
@@ -109,12 +161,14 @@ function enrolmentView(e: EnrolmentRecord, today: string): EnrolmentView {
     enrolledOn: e.enrolledOn,
     droppedOn: e.droppedOn,
     canDrop: droppable,
+    dropConfirm: drop.confirm,
+    dropConsequences: drop.consequences,
     dropNote: state === "enrolled" && !droppable ? `Self-service drop closed on ${fmtDate(dropDeadline(e.cls, e.session))}` : null,
   };
 }
 
-function sessionView(s: t.SessionRow, badge: Badge, records: EnrolmentRecord[], today: string, r: Ref): SessionView {
-  const enrolments = records.map((e) => enrolmentView(e, today));
+function sessionView(s: t.SessionRow, badge: Badge, records: EnrolmentRecord[], today: string, r: Ref, halfUnits: Map<string, number>): SessionView {
+  const enrolments = records.map((e) => enrolmentView(e, today, halfUnits));
   const live = enrolments.filter((e) => e.state !== "dropped");
   return {
     id: s.id,
@@ -221,6 +275,7 @@ export function buildView(student: StudentRecord): View {
   const today = todayFor(student);
   const { badges, nextId } = classify(r.sessions, today);
   const records = enrolmentRecords(student.id, r);
+  const halfUnits = unitsByHalf(records);
   const program = r.plans.get(student.programCode) as t.PlanRow;
   const plan = student.plans.length > 0 ? (r.plans.get(student.plans[0]) ?? null) : null;
   const requirements = requirementsView(student, records, badges, nextId ? (r.sessionById.get(nextId) ?? null) : null, today, r);
@@ -237,7 +292,7 @@ export function buildView(student: StudentRecord): View {
       planCode: plan?.code ?? null,
       planName: plan?.name ?? null,
     },
-    sessions: r.sessions.map((s) => sessionView(s, badges.get(s.id) ?? "past", records.filter((e) => e.sessionId === s.id), today, r)),
+    sessions: r.sessions.map((s) => sessionView(s, badges.get(s.id) ?? "past", records.filter((e) => e.sessionId === s.id), today, r, halfUnits)),
     nextSemesterId: nextId,
     requirements: requirements.view,
     marks: marks(records, today),

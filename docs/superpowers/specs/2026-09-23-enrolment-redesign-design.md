@@ -1423,6 +1423,41 @@ Supersedes §6.2's "earlier years sit behind 'Show earlier sessions'".
   opened.
 - The server derives each row's `fold`; the client only groups by it.
 
+### 15.2 Drop asks first once a class has started
+
+Supersedes the one-click **Drop** of §6.2.
+
+- **A class that hasn't started** (`today < class.startDate`, the same line
+  as §5.3's "dropped before the start") still drops in one click. A note
+  beside Drop says why that's safe: "It hasn't started, so dropping it
+  leaves no record; you can add it back until Mon 1 Mar."
+- **Any other droppable class** shows "Drop…". It opens a confirmation in
+  place, "Drop COMP6442 Software Construction (class 8707)?", with **Keep
+  COMP6442** and **Drop COMP6442**. Escape and Keep return focus to Drop…
+- The confirmation lists what dropping now means, from the dates the page
+  already has and ANU's census rules (census-dates page, checked
+  2026-09-27):
+  - **Re-adding**: "You can add it back until Mon 1 Mar" or "You can't add
+    it back: adding closed on Mon 3 Aug."
+  - **On or before the class's census date**: "No fee and no grade on your
+    transcript if you drop by Wed 31 Mar, the census date."
+  - **After census**: "You'll still be charged for it: the census date was
+    Mon 31 Aug." Then one of:
+    - WD (withdrawal without failure) until the session's last day to drop
+      without failure: "…if you drop by Fri 9 Oct; after that it's WN
+      (withdrawn with failure)";
+    - WN once that day has passed;
+    - WD for intensive classes, which ANU grades WD up to their last day.
+  - **International students**, when the drop would leave the half-year
+    under 24 units (Summer, Autumn and Semester 1, or Winter, Spring and
+    Semester 2): "International students need a Reduced Study Load
+    Application in ANUHub to drop below 24 units in a half-year; this would
+    leave 18 units in the second half of 2026." The prototype doesn't know
+    who is international, so the line is conditional in its wording.
+  - A link to ANU's census-dates page.
+- Countdowns follow §15.4. The server writes every line (`dropConfirm`,
+  `dropConsequences`).
+
 ### 15.4 Deadlines count down
 
 Supersedes §6.2's fixed key-date wording within a fortnight of a deadline.

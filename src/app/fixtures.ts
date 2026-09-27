@@ -5,7 +5,7 @@ import { EMPTY_FILTERS } from "./url";
 // the API's types, so they can't drift from what the server sends. The
 // course and class values here are test data, not the app's data.
 
-const enrolment = (patch: Partial<EnrolmentView> = {}): EnrolmentView => ({
+export const enrolment = (patch: Partial<EnrolmentView> = {}): EnrolmentView => ({
   id: 1,
   sessionId: "2026-S2",
   classNumber: 8707,
@@ -22,6 +22,8 @@ const enrolment = (patch: Partial<EnrolmentView> = {}): EnrolmentView => ({
   enrolledOn: "2026-07-13",
   droppedOn: null,
   canDrop: true,
+  dropConfirm: true,
+  dropConsequences: ["You can't add it back: adding closed on Mon 3 Aug.", "You'll still be charged for it: the census date was Mon 31 Aug."],
   dropNote: null,
   ...patch,
 });
