@@ -68,8 +68,8 @@ Using the live page, I corrected it
 I asked for improvements, then chose six and changed one
 ([`6138b2b...4c47140`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/compare/6138b2b...4c47140)):
 
-> add 1-6, ask first for all drop except for sessions not started, and add
-> drop consequence explaining for other sessions.
+> ask first for all drop except for sessions not started, and add drop
+> consequence explaining for other sessions.
 
 The change was mine: a class that hasn't started still drops in one click and
 leaves no record, but any other drop now asks first and says what it costs,

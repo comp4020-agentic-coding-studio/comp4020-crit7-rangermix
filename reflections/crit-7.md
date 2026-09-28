@@ -1,25 +1,9 @@
-<!-- Draft by the agent from the session record: rewrite it in your own words before the cutoff. -->
-
 # Crit 7 reflection
 
 **What was the breakthrough that moved the work forward?**
 
-Making Programs & Courses the source of truth, and having the agent crawl it
-rather than type course data in. Before that, every example in the spec was a
-guess I would have had to check by hand. After it, the spec's claims became
-tests against a committed snapshot, and the snapshot argued back: a "TBA" date,
-delivery-mode rows that looked like topics, and a requirement that listed the
-courses it *excluded* all surfaced as failing tests instead of as wrong answers
-on the page. Looking at my own ANUHub session read-only did the same for the
-problem itself: the missing dates and the cut-off titles were facts on a
-screen, not opinions about a UI.
+I think this week's greatest step is by giving the AI the actual browser with ANUHub logged in, so that I only need to specify the changes I want instead of giving spec for the whole thing. I believe giving the AI the interactive env instead of just screenshots or verbal description allow it to capture the system better, and understand the pain points I wanted to improve on better.
 
 **What did this work change about who I want to be as a software developer?**
 
-I want to be the person who decides what "right" means before anything gets
-built, and then holds the work to it. The useful moments this week were the
-ones where I overruled a recommendation (a single-page app instead of server
-regions), settled a question the spec left open, or insisted the sidebar should
-show less rather than something wrong. The agent wrote most of the code; my
-job was the intent, the grounding and the corrections. I would rather get
-better at that than at typing faster.
+opus 5.5 is another step ahead of opus 5, and now it thinks more thoroughly than I do, and even if I told it that I want to enforce something, it's likely that I won't actually check it later, because it's already doing amazing job and I just don't feel necessary validating the works again. I honestly think that there will be no software developer to write code in the future - it will probably mean product designer / manager / initiator instead.
