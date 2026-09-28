@@ -32,12 +32,24 @@ I overruled its server-rendered approach:
 The first render stays on the server, since the course's CI checks run
 without JavaScript
 ([`cc2f01b`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/commit/cc2f01b)).
+When it asked whether each program needed its own demo history, I answered:
+
+> keep current but provide reset button to load separate demo history
+
 Then:
 
 > approved, write the plan, then do the implementation for M1 first, then M2.
 
+The plan broke the spec into fifteen tasks and listed twelve places where the
+spec was silent or contradicted itself, each resolved before building
+([`c52cce1`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/commit/c52cce1)).
 `CLAUDE.md` rules and stubbed contract tests came before any feature
 ([`3d20cf6`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/commit/3d20cf6)).
+The agent crawled P&C once, politely, and committed the snapshot with its
+provenance
+([`049ac3d`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/commit/049ac3d)).
+M2's date, program and per-program Reset went in only after M1 was live
+([`ebeb18e...90f1643`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit7-rangermix/compare/ebeb18e...90f1643)).
 Failures became tests, not retries:
 
 - Real P&C data broke the parser three ways; unclear requirement prose now
@@ -58,6 +70,10 @@ I asked for improvements, then chose six and changed one
 
 > add 1-6, ask first for all drop except for sessions not started, and add
 > drop consequence explaining for other sessions.
+
+The change was mine: a class that hasn't started still drops in one click and
+leaves no record, but any other drop now asks first and says what it costs,
+using ANU's census rules (no fee before census, then WD, then WN).
 
 Each change's test failed first, `pnpm check` stayed green, and CI verified
 the live site when I shipped.
